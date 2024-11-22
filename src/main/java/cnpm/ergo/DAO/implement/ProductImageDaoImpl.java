@@ -57,4 +57,13 @@ public class ProductImageDaoImpl implements IProductImage {
         query.setParameter("productId", productId);
         return query.getResultList(); // Tìm hình ảnh theo productId
     }
+
+    public List<ProductImage> findAll() {
+        // chưa implement
+        return null;
+    }
+    public int count() {
+        // chưa implement
+        return 0;
+    };
 }
