@@ -1,6 +1,7 @@
 package cnpm.ergo.entity;
 
 import java.sql.Time;
+import java.util.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -33,9 +34,7 @@ public class Question {
 	@Column(name = "content", columnDefinition = "TEXT")
     private String content;
 	@Column(name = "timestamp", columnDefinition = "DATETIME")
-	private Time timestamp;
+	private Date timestamp;
 	@Column(name = "isPending", columnDefinition = "BIT")
 	private boolean isPending;
-	
-	
 }
