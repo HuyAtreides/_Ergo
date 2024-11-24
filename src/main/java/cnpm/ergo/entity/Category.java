@@ -1,9 +1,15 @@
 package cnpm.ergo.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
+import java.util.List;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 @Entity
 @Table(name = "category")
+@NamedQuery(name = "Category.findAll", query = "SELECT c FROM Category c")
 public class Category {
 
     @Id
@@ -14,20 +20,10 @@ public class Category {
     @Column(name = "categoryName", columnDefinition = "NVARCHAR(200) NOT NULL")
     private String categoryName;
 
-    // Getters and Setters
-    public int getCategoryId() {
-        return categoryId;
-    }
+    @OneToMany(mappedBy = "category")
+    private List<Product> products;
 
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
-    }
+    public static void main(String[] args) {
 
-    public String getCategoryName() {
-        return categoryName;
-    }
-
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
     }
 }

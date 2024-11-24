@@ -24,9 +24,6 @@ public class Product {
     @Column(name = "name", columnDefinition = "NVARCHAR(200) NOT NULL")
     private String name;
 
-    @Column(name = "categoryId")
-    private int categoryId;
-
     @Column(name = "descript", columnDefinition = "TEXT")
     private String descript;
 
@@ -38,4 +35,8 @@ public class Product {
 
     @OneToMany(mappedBy = "product")
     private List<ProductImage> productImages;
+
+    @ManyToOne
+    @JoinColumn(name = "categoryId", nullable = false)
+    private Category category;
 }

@@ -96,4 +96,15 @@ public class CategoryDaoImpl implements ICategoryDao {
         Query query = em.createQuery(jpql);
         return ((Long) query.getSingleResult()).intValue(); // Đếm tổng số category
     }
+
+    public static void main(String[] args) {
+        CategoryDaoImpl categoryDaoImpl = new CategoryDaoImpl();
+        // find by id
+        System.out.println(categoryDaoImpl.findById(1));
+        // insert
+        Category category = new Category();
+        category.setCategoryName("LAPTOP");
+        categoryDaoImpl.insert(category);
+
+    }
 }

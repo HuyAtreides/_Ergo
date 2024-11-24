@@ -2,9 +2,14 @@ package cnpm.ergo.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import lombok.*;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 @Entity
 @Table(name = "blog")
+@NamedQuery(name = "Blog.findAll", query = "SELECT b FROM Blog b")
 public class Blog {
 
     @Id
@@ -24,44 +29,4 @@ public class Blog {
     @Column(name = "approval", columnDefinition = "BIT")
     private boolean approval;
 
-    // Getters and Setters
-    public int getBlogId() {
-        return blogId;
-    }
-
-    public void setBlogId(int blogId) {
-        this.blogId = blogId;
-    }
-
-    public LocalDate getPostingDate() {
-        return postingDate;
-    }
-
-    public void setPostingDate(LocalDate postingDate) {
-        this.postingDate = postingDate;
-    }
-
-    public String getBlogTitle() {
-        return blogTitle;
-    }
-
-    public void setBlogTitle(String blogTitle) {
-        this.blogTitle = blogTitle;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public boolean isApproval() {
-        return approval;
-    }
-
-    public void setApproval(boolean approval) {
-        this.approval = approval;
-    }
 }
