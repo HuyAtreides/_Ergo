@@ -1,36 +1,29 @@
 package cnpm.ergo.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
+
 import java.io.Serializable;
 
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 @Entity
 @Table(name = "product_image")
-@IdClass(ProductImageId.class) // Khóa chính phức hợp
+@NamedQuery(name = "ProductImage.findAll", query = "SELECT p FROM ProductImage p")
 public class ProductImage implements Serializable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "productImageId")
+    private int productImageId;
+
+    @Column(name = "productImage", columnDefinition = "NVARCHAR(500) NOT NULL")
+    private String productImage;
+
     @ManyToOne
     @JoinColumn(name = "productId", nullable = false)
     private Product product;
 
-    @Id
-    @Column(name = "productImage", columnDefinition = "NVARCHAR(500) NOT NULL")
-    private String productImage;
-
-    // Getters and Setters
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public String getProductImage() {
-        return productImage;
-    }
-
-    public void setProductImage(String productImage) {
-        this.productImage = productImage;
-    }
 }

@@ -5,6 +5,7 @@ import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 
+import java.awt.desktop.SystemEventListener;
 import java.util.List;
 
 import cnpm.ergo.DAO.interfaces.IProductType;
@@ -15,7 +16,7 @@ public class ProductTypeDaoImpl implements IProductType {
 
     @Override
     public void insert(ProductType productType) {
-        EntityManager em = JPAConfig.getEntityManager();
+        EntityManager em = new JPAConfig().getEntityManager();
         EntityTransaction trans = em.getTransaction();
 
         try {
@@ -87,5 +88,8 @@ public class ProductTypeDaoImpl implements IProductType {
         String jpql = "SELECT COUNT(pt) FROM ProductType pt";
         Query query = em.createQuery(jpql);
         return ((Long) query.getSingleResult()).intValue(); // Đếm tổng số loại sản phẩm
+    }
+    public static void main(String[] args) {
+        System.out.println(new ProductTypeDaoImpl().findAll());
     }
 }

@@ -1,5 +1,6 @@
 package cnpm.ergo.DAO.implement;
 
+import cnpm.ergo.entity.ProductType;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
@@ -96,5 +97,16 @@ public class ProductDaoImpl implements IProductDao {
         String jpql = "SELECT COUNT(p) FROM Product p";
         Query query = em.createQuery(jpql);
         return ((Long) query.getSingleResult()).intValue(); // Đếm tổng số sản phẩm
+    }
+    public static void main(String[] args) {
+//        ProductDaoImpl productDaoImpl = new ProductDaoImpl();
+//        Product product = new Product();
+//        List<ProductType> productTypes = new ProductTypeDaoImpl().findById(1);
+//        product.setName("Product 1");
+//        product.setCategoryId(1);
+//        product.setDescript("Description 1");
+//        product.setDelete(false);
+//        product.setProductTypes();
+//        productDaoImpl.insert(product);
     }
 }
