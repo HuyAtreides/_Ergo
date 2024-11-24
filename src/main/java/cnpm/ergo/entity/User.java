@@ -55,18 +55,18 @@ public class User implements Serializable {
 
     public static void main(String[] args) {
         RoleDAO roleDAO = new RoleDAOImpl();
-        Role role = roleDAO.getRoleById(2);
-
-        User user = new User();
-        user.setName("Nguyen Van A");
-        user.setEmail("A@gmail.com");
-        user.setPassword("123456");
-        user.setPhone("0123456789");
-        user.setAddress("Ha Noi");
-        user.setGender("Nam");
-        user.setRole(role);
-        user.setStatus("Active");
-        user.setIsDelete(false);
+//        Role role = roleDAO.getRoleById(4);
+//
+//        User user = new User();
+//        user.setName("Nguyen Van A");
+//        user.setEmail("A@gmail.com");
+//        user.setPassword("123456");
+//        user.setPhone("0123456789");
+//        user.setAddress("Ha Noi");
+//        user.setGender("Nam");
+//        user.setRole(role);
+//        user.setStatus("Active");
+//        user.setIsDelete(false);
 
     }
 }

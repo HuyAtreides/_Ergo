@@ -81,38 +81,38 @@ public class UserDAOImpl implements UserDAO {
     }
 
     public static void main(String[] args) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpa-hibernate-mysql");
-        EntityManager em = emf.createEntityManager();
-
-        // Start transaction
-        em.getTransaction().begin();
-
-        Role role = new RoleDAOImpl().getRoleById(2);
-        // Create new user
-        User user = new User();
-        user.setName("Nguyen Van B");
-        user.setPassword("123456");
-        user.setEmail("OK@gmail.com");
-        user.setPhone("0123456789");
-        user.setAddress("Ha Noi");
-        user.setGender("Nam");
-        user.setRole(role);
-        user.setStatus("Active");
-        user.setIsDelete(false);
-
-        // Save user
-        em.persist(user);
-
-        // Commit transaction
-        em.getTransaction().commit();
-
-        // Close entity manager
-        em.close();
-
-        // Close entity manager factory
-        emf.close();
-
-        System.out.println("User saved successfully!");
+//        EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpa-hibernate-mysql");
+//        EntityManager em = emf.createEntityManager();
+//
+//        // Start transaction
+//        em.getTransaction().begin();
+//
+//        Role role = new RoleDAOImpl().getRoleById(2);
+//        // Create new user
+//        User user = new User();
+//        user.setName("Nguyen Van B");
+//        user.setPassword("123456");
+//        user.setEmail("OK@gmail.com");
+//        user.setPhone("0123456789");
+//        user.setAddress("Ha Noi");
+//        user.setGender("Nam");
+//        user.setRole(role);
+//        user.setStatus("Active");
+//        user.setIsDelete(false);
+//
+//        // Save user
+//        em.persist(user);
+//
+//        // Commit transaction
+//        em.getTransaction().commit();
+//
+//        // Close entity manager
+//        em.close();
+//
+//        // Close entity manager factory
+//        emf.close();
+//
+//        System.out.println("User saved successfully!");
     }
 
 }

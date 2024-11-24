@@ -4,11 +4,14 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
+
+import java.util.Date;
 import java.util.List;
 
 import cnpm.ergo.DAO.interfaces.IBlogDao;
 import cnpm.ergo.configs.JPAConfig;
 import cnpm.ergo.entity.Blog;
+import java.time.LocalDate;
 
 public class BlogDaoImpl implements IBlogDao {
 
@@ -95,5 +98,11 @@ public class BlogDaoImpl implements IBlogDao {
         String jpql = "SELECT COUNT(b) FROM Blog b";
         Query query = em.createQuery(jpql);
         return ((Long) query.getSingleResult()).intValue(); // Đếm tổng số blog
+    }
+
+    public static void main(String[] args) {
+        BlogDaoImpl blogDaoImpl = new BlogDaoImpl();
+        // count
+        System.out.println(blogDaoImpl.count());
     }
 }

@@ -1,10 +1,12 @@
 package cnpm.ergo.DAO.implement;
 
+import cnpm.ergo.entity.Product;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 
+import java.awt.desktop.SystemEventListener;
 import java.util.List;
 
 import cnpm.ergo.DAO.interfaces.IProductType;
@@ -15,16 +17,14 @@ public class ProductTypeDaoImpl implements IProductType {
 
     @Override
     public void insert(ProductType productType) {
-        EntityManager em = JPAConfig.getEntityManager();
-        EntityTransaction trans = em.getTransaction();
-
+        EntityManager em = new JPAConfig().getEntityManager();
         try {
-            trans.begin();
+            em.getTransaction().begin();
             em.persist(productType); // Thêm mới loại sản phẩm
-            trans.commit();
+            em.getTransaction().commit();
         } catch (Exception e) {
-            trans.rollback();
-            throw e;
+            e.printStackTrace();
+            em.getTransaction().rollback();
         } finally {
             em.close();
         }
@@ -87,5 +87,16 @@ public class ProductTypeDaoImpl implements IProductType {
         String jpql = "SELECT COUNT(pt) FROM ProductType pt";
         Query query = em.createQuery(jpql);
         return ((Long) query.getSingleResult()).intValue(); // Đếm tổng số loại sản phẩm
+    }
+    public static void main(String[] args) {
+        //List all product types
+        IProductType productType = new ProductTypeDaoImpl();
+        List<ProductType> productTypes = productType.findAll();
+        for (ProductType pt : productTypes) {
+            System.out.println(pt.getMaterial());
+        }
+
+        //count product types
+        System.out.println(productType.count());
     }
 }
