@@ -1,7 +1,5 @@
 package cnpm.ergo.entity;
 
-import cnpm.ergo.DAO.implement.RoleDAOImpl;
-import cnpm.ergo.DAO.interfaces.RoleDAO;
 import jakarta.persistence.*;
 import lombok.*;
 import java.io.Serializable;
@@ -12,8 +10,9 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 @Entity
+@Table(name = "voucher")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Voucher {
+public abstract class Voucher {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int voucherId;
@@ -29,9 +28,8 @@ public class Voucher {
 
     private double discount;
 
-    @ManyToOne
-    @JoinColumn(name = "typeId", nullable = false)
-    private VoucherType type;
-
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "campaign_id", referencedColumnName = "campaign_id")
+    private MarketingCampaignEntity marketingCampaign;
     // Getters and Setters
 }

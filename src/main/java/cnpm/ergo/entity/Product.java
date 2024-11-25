@@ -38,4 +38,7 @@ public class Product {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoryId", referencedColumnName = "categoryId")
     private Category category;
+
+    @OneToOne(mappedBy = "product")
+    private Voucher voucher;
 }
