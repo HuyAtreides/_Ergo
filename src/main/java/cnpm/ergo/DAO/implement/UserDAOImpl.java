@@ -1,21 +1,17 @@
 package cnpm.ergo.DAO.implement;
 
-import cnpm.ergo.DAO.interfaces.RoleDAO;
-import cnpm.ergo.DAO.interfaces.UserDAO;
-import cnpm.ergo.entity.Employee;
-import cnpm.ergo.entity.Role;
+import cnpm.ergo.DAO.interfaces.IUserDAO;
+import cnpm.ergo.configs.JPAConfig;
 import cnpm.ergo.entity.User;
 import java.util.List;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
 
 
-public class UserDAOImpl implements UserDAO {
-    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpa-hibernate-mysql");
+public class UserDAOImpl implements IUserDAO {
+
     @Override
     public boolean addUser(User user) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAConfig.getEntityManager();
         try {
             em.getTransaction().begin();
             em.persist(user); // Thêm mới user vào database
@@ -32,7 +28,7 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public List<User> getAllUsers() {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAConfig.getEntityManager();
         List<User> users = em.createNamedQuery("User.findAll", User.class).getResultList();
         em.close();
         return users;
@@ -40,7 +36,7 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public User getUserById(int userId) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAConfig.getEntityManager();
         User user = em.find(User.class, userId);
         em.close();
         return user;
@@ -48,7 +44,7 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public boolean updateUser(User user) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAConfig.getEntityManager();
         try {
             em.getTransaction().begin();
             em.merge(user); // Cập nhật user vào database
@@ -65,7 +61,7 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public boolean deleteUser(int userId) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAConfig.getEntityManager();
         try {
             em.getTransaction().begin();
             User user = em.find(User.class, userId);

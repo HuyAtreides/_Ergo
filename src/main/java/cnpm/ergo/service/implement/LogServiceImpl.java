@@ -2,27 +2,27 @@ package cnpm.ergo.service.implement;
 
 import cnpm.ergo.DAO.implement.LogDAOImpl;
 import cnpm.ergo.DAO.implement.UserDAOImpl;
-import cnpm.ergo.DAO.interfaces.LogDAO;
+import cnpm.ergo.DAO.interfaces.ILogDAO;
 import cnpm.ergo.entity.Log;
-import cnpm.ergo.service.interfaces.LogService;
+import cnpm.ergo.service.interfaces.ILogService;
 
-public class LogServiceImpl implements LogService {
+public class LogServiceImpl implements ILogService {
     @Override
     public boolean addLog(Log log) {
-        LogDAO logDAO = new LogDAOImpl();
-        return logDAO.addLog(log);
+        ILogDAO ILogDAO = new LogDAOImpl();
+        return ILogDAO.addLog(log);
     }
 
     @Override
     public Log getLogById(int logId) {
-        LogDAO logDAO = new LogDAOImpl();
-        return logDAO.getLogById(logId);
+        ILogDAO ILogDAO = new LogDAOImpl();
+        return ILogDAO.getLogById(logId);
     }
 
     @Override
     public boolean updateLog(Log log) {
-        LogDAO logDAO = new LogDAOImpl();
-        return logDAO.updateLog(log);
+        ILogDAO ILogDAO = new LogDAOImpl();
+        return ILogDAO.updateLog(log);
     }
 
     @Override
@@ -31,12 +31,12 @@ public class LogServiceImpl implements LogService {
     }
 
     public static void main(String[] args) {
-        LogService logService = new LogServiceImpl();
+        ILogService ILogService = new LogServiceImpl();
         Log log = new Log();
         log.setContent("User login");
         log.setDateLog(java.time.LocalDateTime.now());
         log.setUser(new UserDAOImpl().getUserById(2));
-        logService.addLog(log);
+        ILogService.addLog(log);
 
     }
 

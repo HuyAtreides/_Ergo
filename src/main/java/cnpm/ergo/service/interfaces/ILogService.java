@@ -1,8 +1,8 @@
-package cnpm.ergo.DAO.interfaces;
+package cnpm.ergo.service.interfaces;
 
 import cnpm.ergo.entity.Log;
 
-public interface LogDAO {
+public interface ILogService {
     // Create
     boolean addLog(Log log);
     // Read

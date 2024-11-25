@@ -1,6 +1,7 @@
 package cnpm.ergo.DAO.implement;
 
-import cnpm.ergo.DAO.interfaces.LogDAO;
+import cnpm.ergo.DAO.interfaces.ILogDAO;
+import cnpm.ergo.configs.JPAConfig;
 import cnpm.ergo.entity.Log;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -8,11 +9,10 @@ import jakarta.persistence.Persistence;
 
 import java.time.LocalDateTime;
 
-public class LogDAOImpl implements LogDAO {
-    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpa-hibernate-mysql");
+public class LogDAOImpl implements ILogDAO {
     @Override
     public boolean addLog(Log log) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAConfig.getEntityManager();
         try {
             em.getTransaction().begin();
             em.persist(log); // Thêm mới log vào database
@@ -29,7 +29,7 @@ public class LogDAOImpl implements LogDAO {
 
     @Override
     public Log getLogById(int logId) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAConfig.getEntityManager();
         Log log = em.find(Log.class, logId);
         em.close();
         return log;
@@ -37,7 +37,7 @@ public class LogDAOImpl implements LogDAO {
 
     @Override
     public boolean updateLog(Log log) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAConfig.getEntityManager();
         try {
             em.getTransaction().begin();
             em.merge(log); // Cập nhật log vào database
@@ -53,8 +53,9 @@ public class LogDAOImpl implements LogDAO {
     }
 
     @Override
+
     public boolean deleteLog(int logId) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAConfig.getEntityManager();
         try {
             em.getTransaction().begin();
             String log = em.find(String.class, logId);
