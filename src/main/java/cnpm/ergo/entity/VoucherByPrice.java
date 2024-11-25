@@ -11,16 +11,8 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 @Entity
-public class VoucherByPrice {
-    @Id
-    private int voucherId;
-
+public class VoucherByPrice extends Voucher {
     private double lowerbound;
-
-    @OneToOne
-    @MapsId
-    @JoinColumn(name = "voucherId")
-    private Voucher voucher;
 
     // Getters and Setters
 }
