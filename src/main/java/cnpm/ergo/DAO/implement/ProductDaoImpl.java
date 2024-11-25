@@ -102,22 +102,6 @@ public class ProductDaoImpl implements IProductDao {
         return ((Long) query.getSingleResult()).intValue(); // Đếm tổng số sản phẩm
     }
     public static void main(String[] args) {
-        ProductDaoImpl productDaoImpl = new ProductDaoImpl();
-        CategoryDaoImpl categoryDaoImpl = new CategoryDaoImpl();
-        Category category = categoryDaoImpl.findById(2);
-
-        Product product = new Product();
-        product.setName("Product 1");
-        product.setCategory(category);
-        product.setDescript("Description 1");
-        product.setDelete(false);
-        productDaoImpl.insert(product);
-
-        //get all products of category
-        List<Product> products = category.getProducts();
-        for (Product p : products) {
-            System.out.println(p.getName());
-        }
 
     }
 }

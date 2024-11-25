@@ -35,7 +35,7 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<ProductImage> productImages;
 
-    @ManyToOne
-    @JoinColumn(name = "categoryId", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "categoryId", referencedColumnName = "categoryId")
     private Category category;
 }
