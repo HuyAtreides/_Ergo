@@ -1,19 +1,17 @@
 package cnpm.ergo.DAO.implement;
 
-import cnpm.ergo.DAO.interfaces.RoleDAO;
+import cnpm.ergo.DAO.interfaces.IRoleDAO;
+import cnpm.ergo.configs.JPAConfig;
 import cnpm.ergo.entity.Role;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
+
 import java.util.List;
 
-public class RoleDAOImpl implements RoleDAO {
-    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpa-hibernate-mysql");
-
+public class RoleDAOImpl implements IRoleDAO {
     @Override
     public boolean addRole(Role role) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAConfig.getEntityManager();
         try {
             em.getTransaction().begin();
             em.persist(role); // Thêm mới role vào database
@@ -29,21 +27,21 @@ public class RoleDAOImpl implements RoleDAO {
     }
     @Override
     public List<Role> getAllRoles() {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAConfig.getEntityManager();
         List<Role> roles = em.createNamedQuery("Role.findAll", Role.class).getResultList();
         em.close();
         return roles;
     }
     @Override
     public Role getRoleById(int roleId) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAConfig.getEntityManager();
         Role role = em.find(Role.class, roleId);
         em.close();
         return role;
     }
     @Override
     public boolean updateRole(Role role) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAConfig.getEntityManager();
         try {
             em.getTransaction().begin();
             em.merge(role); // Cập nhật role vào database
@@ -59,7 +57,7 @@ public class RoleDAOImpl implements RoleDAO {
     }
     @Override
     public boolean deleteRole(int roleId) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = JPAConfig.getEntityManager();
         try {
             em.getTransaction().begin();
             Role role = em.find(Role.class, roleId);
@@ -77,24 +75,24 @@ public class RoleDAOImpl implements RoleDAO {
         }
     }
     public static void main(String[] args) {
-        RoleDAO roleDAO = new RoleDAOImpl();
+        IRoleDAO IRoleDAO = new RoleDAOImpl();
         Role role = new Role();
         role.setRoleName("Manager");
-        roleDAO.addRole(role);
+        IRoleDAO.addRole(role);
 
-        List<Role> roles = roleDAO.getAllRoles();
+        List<Role> roles = IRoleDAO.getAllRoles();
         for (Role r : roles) {
             System.out.println(r.getRoleId() + " - " + r.getRoleName());
         }
 
-        Role role2 = roleDAO.getRoleById(1);
+        Role role2 = IRoleDAO.getRoleById(1);
         if (role2 != null) {
             System.out.println(role2.getRoleId() + " - " + role2.getRoleName());
             role2.setRoleName("Admin");
-            roleDAO.updateRole(role2);
+            IRoleDAO.updateRole(role2);
         }
-        roleDAO.deleteRole(1);
-        roles = roleDAO.getAllRoles();
+        IRoleDAO.deleteRole(1);
+        roles = IRoleDAO.getAllRoles();
         for (Role r : roles) {
             System.out.println(r.getRoleId() + " - " + r.getRoleName());
         }

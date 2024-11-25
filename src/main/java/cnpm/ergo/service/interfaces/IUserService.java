@@ -1,9 +1,9 @@
-package cnpm.ergo.DAO.interfaces;
+package cnpm.ergo.service.interfaces;
 
 import cnpm.ergo.entity.User;
 import java.util.List;
 
-public interface UserDAO {
+public interface IUserService {
     // Create
     boolean addUser(User user);
     // Read

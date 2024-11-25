@@ -3,7 +3,7 @@ package cnpm.ergo.DAO.interfaces;
 import cnpm.ergo.entity.Role;
 import java.util.List;
 
-public interface RoleDAO {
+public interface IRoleDAO {
     // Create
     boolean addRole(Role role);
     // Read

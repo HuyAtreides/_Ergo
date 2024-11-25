@@ -1,7 +1,5 @@
 package cnpm.ergo.entity;
 
-import cnpm.ergo.DAO.implement.RoleDAOImpl;
-import cnpm.ergo.DAO.interfaces.RoleDAO;
 import jakarta.persistence.*;
 import lombok.*;
 import java.io.Serializable;
