@@ -38,15 +38,6 @@ public class UserServiceImpl implements UserService {
     }
 
     public static void main(String[] args) {
-        UserService userService = new UserServiceImpl();
-        User user = new User();
-        user.setName("admin");
-        user.setPassword("admin");
-        userService.addUser(user);
 
-        List<User> users = userService.getAllUsers();
-        for (User u : users) {
-            System.out.println(u.getUserId() + " - " + u.getName());
-        }
     }
 }

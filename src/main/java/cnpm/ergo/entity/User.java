@@ -13,9 +13,9 @@ import java.util.List;
 @Entity
 @Table(name = "user")
 @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u")
+@Inheritance(strategy = InheritanceType.JOINED)
 
-
-public class User implements Serializable {
+public abstract class User implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,19 +54,6 @@ public class User implements Serializable {
     private Boolean isDelete;
 
     public static void main(String[] args) {
-        RoleDAO roleDAO = new RoleDAOImpl();
-//        Role role = roleDAO.getRoleById(4);
-//
-//        User user = new User();
-//        user.setName("Nguyen Van A");
-//        user.setEmail("A@gmail.com");
-//        user.setPassword("123456");
-//        user.setPhone("0123456789");
-//        user.setAddress("Ha Noi");
-//        user.setGender("Nam");
-//        user.setRole(role);
-//        user.setStatus("Active");
-//        user.setIsDelete(false);
 
     }
 }
