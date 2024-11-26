@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.util.List;
 
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -48,4 +49,7 @@ public class ProductType {
 
     @ManyToMany(mappedBy = "productTypes")
     private List<VoucherByProduct> voucher;
+
+    @OneToMany(mappedBy = "productType")
+    private List<OrderItem> orderItems;
 }
