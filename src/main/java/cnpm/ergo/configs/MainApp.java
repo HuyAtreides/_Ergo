@@ -14,14 +14,6 @@ public class MainApp {
         //get customer
         Customer customer = entityManager.find(Customer.class, 1);
 
-        //get product
-        Product product = entityManager.find(Product.class, 2);
-        //create wishlist
-        Wishlist wishlist = new Wishlist();
-        wishlist.setCustomer(customer);
-        wishlist.setDelete(false);
-        wishlist.setProducts(List.of(product));
-        entityManager.persist(wishlist);
 
         entityManager.getTransaction().commit();
         entityManager.close();
