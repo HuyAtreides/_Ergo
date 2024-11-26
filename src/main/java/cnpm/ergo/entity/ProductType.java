@@ -47,6 +47,9 @@ public class ProductType {
     @Column(name = "quantity")
     private int quantity;
 
+    @ManyToMany(mappedBy = "productTypes")
+    private List<VoucherByProduct> voucher;
+
     @OneToMany(mappedBy = "productType")
     private List<OrderItem> orderItems;
 }
