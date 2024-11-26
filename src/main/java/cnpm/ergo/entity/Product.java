@@ -16,7 +16,7 @@ import java.util.List;
 @NamedQuery(name = "product.findAll", query = "SELECT p FROM Product p")
 public class Product {
 
-    @Id
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "productId")
     private int productId;
@@ -38,5 +38,8 @@ public class Product {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoryId", referencedColumnName = "categoryId")
     private Category category;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    private List<Wishlist> wishlists;
 
 }
