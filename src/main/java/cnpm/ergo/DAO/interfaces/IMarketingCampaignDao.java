@@ -2,11 +2,11 @@ package cnpm.ergo.DAO.interfaces;
 
 import java.util.List;
 
-import cnpm.ergo.entity.MarketingCampaignEntity;
+import cnpm.ergo.entity.MarketingCampaign;
 
 public interface IMarketingCampaignDao {
-	void insert(MarketingCampaignEntity campaignEntity);
-	void update(MarketingCampaignEntity campaignEntity);
+	void insert(MarketingCampaign campaignEntity);
+	void update(MarketingCampaign campaignEntity);
 	void delete(Long campaignId);
-	List<MarketingCampaignEntity> findAll();
+	List<MarketingCampaign> findAll();
 }

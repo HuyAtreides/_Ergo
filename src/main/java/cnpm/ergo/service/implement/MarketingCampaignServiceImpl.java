@@ -4,20 +4,19 @@ import java.util.List;
 
 import cnpm.ergo.DAO.implement.MarketingCampaignDaoImpl;
 import cnpm.ergo.DAO.interfaces.IMarketingCampaignDao;
-import cnpm.ergo.entity.MarketingCampaignEntity;
+import cnpm.ergo.entity.MarketingCampaign;
 import cnpm.ergo.service.interfaces.IMarketingCampaignService;
 
 public class MarketingCampaignServiceImpl implements IMarketingCampaignService{
 
 	public IMarketingCampaignDao campaignDao = new MarketingCampaignDaoImpl();
-
 	@Override
-	public void addCampaign(MarketingCampaignEntity campaignEntity) {
+	public void addCampaign(MarketingCampaign campaignEntity) {
 		campaignDao.insert(campaignEntity);
 	}
 
 	@Override
-	public void updateCampaign(MarketingCampaignEntity campaignEntity) {
+	public void updateCampaign(MarketingCampaign campaignEntity) {
 		campaignDao.update(campaignEntity);
 	}
 
@@ -27,8 +26,8 @@ public class MarketingCampaignServiceImpl implements IMarketingCampaignService{
 	}
 
 	@Override
-	public List<MarketingCampaignEntity> findAllMarketingCampaign() {
-		List<MarketingCampaignEntity> campaignEntities = campaignDao.findAll();
+	public List<MarketingCampaign> findAllMarketingCampaign() {
+		List<MarketingCampaign> campaignEntities = campaignDao.findAll();
 		return campaignEntities;
 	}
 }

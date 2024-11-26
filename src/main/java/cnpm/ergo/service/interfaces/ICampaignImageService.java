@@ -2,10 +2,10 @@ package cnpm.ergo.service.interfaces;
 
 import java.util.List;
 
-import cnpm.ergo.entity.CampaignImageEntity;
+import cnpm.ergo.entity.CampaignImage;
 
 public interface ICampaignImageService {
-	void addImage(CampaignImageEntity campaignImage);
-    List<CampaignImageEntity> findImagesByCampaignId(Long campaignId);
+	void addImage(CampaignImage campaignImage);
+    List<CampaignImage> findImagesByCampaignId(Long campaignId);
     void deleteByCampaignId(Long campaignId);
 }

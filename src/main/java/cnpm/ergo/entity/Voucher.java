@@ -17,19 +17,16 @@ public abstract class Voucher {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int voucherId;
 
-    @Temporal(TemporalType.DATE)
     private Date dateStart;
 
-    @Temporal(TemporalType.DATE)
     private Date dateEnd;
 
-    @Column(unique = true, nullable = false)
     private String code;
 
     private double discount;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "campaign_id", referencedColumnName = "campaign_id")
-    private MarketingCampaignEntity marketingCampaign;
+    @OneToOne(mappedBy = "voucher")
+    private MarketingCampaign marketingCampaign;
+
     // Getters and Setters
 }

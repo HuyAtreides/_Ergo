@@ -39,6 +39,4 @@ public class Product {
     @JoinColumn(name = "categoryId", referencedColumnName = "categoryId")
     private Category category;
 
-    @OneToOne(mappedBy = "product")
-    private Voucher voucher;
 }

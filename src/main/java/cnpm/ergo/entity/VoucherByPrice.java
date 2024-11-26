@@ -7,6 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @Data
 @Entity
+@PrimaryKeyJoinColumn(name = "voucherByPriceId")
 public class VoucherByPrice extends Voucher {
     private double lowerbound;
 

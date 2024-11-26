@@ -2,7 +2,7 @@ package cnpm.ergo.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -46,5 +46,6 @@ public class ProductType {
     @Column(name = "quantity")
     private int quantity;
 
-
+    @ManyToMany(mappedBy = "productTypes")
+    private List<VoucherByProduct> voucher;
 }

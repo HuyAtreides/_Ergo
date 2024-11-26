@@ -2,11 +2,11 @@ package cnpm.ergo.service.interfaces;
 
 import java.util.List;
 
-import cnpm.ergo.entity.MarketingCampaignEntity;
+import cnpm.ergo.entity.MarketingCampaign;
 
 public interface IMarketingCampaignService {
-	void addCampaign(MarketingCampaignEntity campaignEntity);
-	void updateCampaign(MarketingCampaignEntity campaignEntity);
+	void addCampaign(MarketingCampaign campaignEntity);
+	void updateCampaign(MarketingCampaign campaignEntity);
 	void deleteCampaign(Long Id);
-	List<MarketingCampaignEntity> findAllMarketingCampaign();
+	List<MarketingCampaign> findAllMarketingCampaign();
 }
