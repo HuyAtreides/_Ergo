@@ -21,7 +21,7 @@ public class OrderItem {
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "productId", referencedColumnName = "productId", nullable = false)
+    @JoinColumn(name = "typeId", referencedColumnName = "typeId", nullable = false)
     private ProductType productType; 
 
     @Column(name = "quantity", nullable = false)
