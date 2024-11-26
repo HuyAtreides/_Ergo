@@ -51,6 +51,8 @@ public abstract class User implements Serializable {
     @Column(name = "isDelete", columnDefinition = "BIT")
     private Boolean isDelete;
 
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Message> messages;
     public static void main(String[] args) {
 
     }
