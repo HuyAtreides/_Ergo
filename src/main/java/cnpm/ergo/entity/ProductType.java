@@ -2,6 +2,7 @@ package cnpm.ergo.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import java.util.List;
 
 
 @NoArgsConstructor
@@ -46,5 +47,6 @@ public class ProductType {
     @Column(name = "quantity")
     private int quantity;
 
-
+    @OneToMany(mappedBy = "productType")
+    private List<OrderItem> orderItems;
 }
