@@ -34,7 +34,4 @@ public class MarketingCampaign implements Serializable {
     @OneToMany(mappedBy = "marketingCampaign", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CampaignImage> campaignImages;
 
-
-
-
 }
