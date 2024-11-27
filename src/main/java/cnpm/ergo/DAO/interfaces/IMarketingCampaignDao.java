@@ -9,4 +9,5 @@ public interface IMarketingCampaignDao {
 	void update(MarketingCampaign campaignEntity);
 	void delete(Long campaignId);
 	List<MarketingCampaign> findAll();
+	MarketingCampaign findById(Long id);
 }
