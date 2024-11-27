@@ -28,7 +28,7 @@ public class CampaignImageDaoImpl implements ICampaignImageDao{
     @Override
     public List<CampaignImage> findImagesByCampaignId(Long campaignId) {
         try {
-            return entityManager.createQuery("SELECT ci FROM CampaignImageEntity ci WHERE ci.marketingCampaign.campaignId = :campaignId", CampaignImage.class)
+            return entityManager.createQuery("SELECT ci FROM CampaignImage ci WHERE ci.marketingCampaign.campaignId = :campaignId", CampaignImage.class)
                     .setParameter("campaignId", campaignId)
                     .getResultList();
         } catch (Exception e) {
@@ -41,7 +41,7 @@ public class CampaignImageDaoImpl implements ICampaignImageDao{
         EntityTransaction transaction = entityManager.getTransaction();
         try {
             transaction.begin();
-            entityManager.createQuery("DELETE FROM CampaignImageEntity ci WHERE ci.campaignId = :campaignId")
+            entityManager.createQuery("DELETE FROM CampaignImage ci WHERE ci.campaignId = :campaignId")
                     .setParameter("campaignId", campaignId)
                     .executeUpdate();
             transaction.commit();

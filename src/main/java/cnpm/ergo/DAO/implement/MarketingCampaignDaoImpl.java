@@ -69,7 +69,7 @@ public class MarketingCampaignDaoImpl implements IMarketingCampaignDao {
 	@Override
 	public List<MarketingCampaign> findAll() {
 		try {
-			return entityManager.createQuery("SELECT m FROM MarketingCampaignEntity m", MarketingCampaign.class)
+			return entityManager.createQuery("SELECT m FROM MarketingCampaign m", MarketingCampaign.class)
 					.getResultList();
 		} catch (Exception e) {
 			throw new RuntimeException("Lỗi truy vấn: " + e.getMessage(), e);
