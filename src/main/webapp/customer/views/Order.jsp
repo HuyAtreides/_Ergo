@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <c:url value="/" var="URL"></c:url>   
 <html>
 
@@ -9,15 +10,16 @@
    <div class="card p-4 mt-3">
       <div class="first d-flex justify-content-between align-items-center mb-3">
          <div class="info">
-            <span class="order">Order - 4554645</span>                
+            <span class="order"> ${order.orderId} </span>                
          </div>           
          <img src="https://i.imgur.com/NiAVkEw.png" width="40"/>        
       </div>
       <hr>
       <div class="text d-flex justify-content-between align-items-center">
          <div>
-            <span class="d-block new mb-1">Alex Dorlew - 0585281758</span>
-            <span class="d-block address mb-3">672 Conaway Street Bryantiville Massachusetts 02327</span>
+            <span class="d-block new mb-1"> ${order.customer.name }</span>
+            <span class="d-block address mb-3">${order.streetNumber} ${order.ward}  </span>
+            <span class="d-block address mb-4"> ${order.district} ${order.cityOfProvince}</span>
          </div>
          <a href="/shippingInfo" class="edit-link">
             <img src="https://cdn-icons-png.flaticon.com/512/1250/1250615.png" width="20" alt="Edit Icon">
@@ -38,27 +40,27 @@
                     <div class="col-auto  "> <small>Receipt Voucher : 1KAU9-84UIL</small> </div>
                 </div>
                 <ul class="list-unstyled">
-				    <c:forEach var="item" items="${listItems}">
+				    <c:forEach var="item" items="${orderItems}">
 				        <li class="media">
 				            <div class="sq align-self-center">
-				                <img class="img-fluid my-auto align-self-center mr-2 mr-md-4 pl-0 p-0 m-0" src="${item.image}" width="135" height="135" />
+				                <img class="img-fluid my-auto align-self-center mr-2 mr-md-4 pl-0 p-0 m-0" src="${item.firstProductImage}" width="135" height="135" />
 				            </div>
 				            <div class="media-body my-auto text-right">
 				                <div class="row my-auto flex-column flex-md-row">
 				                    <div class="col my-auto">
-				                        <h6 class="mb-0">${item.name}</h6>
+				                        <h6 class="mb-0">${item.quantity}</h6>
 				                    </div>
 				                    <div class="col-auto my-auto">
-				                        <small>${item.rim}</small>
+				                        <small>${item.price}</small>
 				                    </div>
 				                    <div class="col my-auto">
-				                        <small>Size : ${item.size}</small>
+				                        <small>Size : </small>
 				                    </div>
 				                    <div class="col my-auto">
-				                        <small>Qty : ${item.quantity}</small>
+				                        <small>Qty :</small>
 				                    </div>
 				                    <div class="col my-auto">
-				                        <h6 class="mb-0">&#8377;${item.price}</h6>
+				                        <h6 class="mb-0">&#8377; </h6>
 				                    </div>
 				                </div>
 				            </div>

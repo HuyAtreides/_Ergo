@@ -17,6 +17,5 @@ public class VoucherByProduct extends Voucher {
             inverseJoinColumns = @JoinColumn(name = "typeId")
     )
     private List<ProductType> productTypes;
-    // Getters and Setters
 }
 

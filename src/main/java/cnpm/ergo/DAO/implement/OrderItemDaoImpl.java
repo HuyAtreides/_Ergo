@@ -2,6 +2,8 @@ package cnpm.ergo.DAO.implement;
 
 import java.util.List;
 
+import org.hibernate.Hibernate;
+
 import cnpm.ergo.DAO.interfaces.IOrderItemDao;
 import cnpm.ergo.configs.JPAConfig;
 import cnpm.ergo.entity.Order;
@@ -9,6 +11,8 @@ import cnpm.ergo.entity.OrderItem;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.NoResultException;
+import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
 
 public class OrderItemDaoImpl implements IOrderItemDao{
 
@@ -102,19 +106,16 @@ public class OrderItemDaoImpl implements IOrderItemDao{
 	@Override
 	public List<OrderItem> findAll(int orderId) {
 		EntityManager em = JPAConfig.getEntityManager();
+        String jpql = "SELECT oi FROM OrderItem oi " +
+                      "JOIN FETCH oi.order o " +
+                      "JOIN FETCH oi.productType pt " +
+                      "WHERE o.orderId = :orderId";
 
-	    try {
-	        return em.createQuery(
-	                "SELECT oi FROM OrderItem oi WHERE oi.order.orderId = :orderId", 
-	                OrderItem.class)
-	            .setParameter("orderId", orderId)
-	            .getResultList();
-	    } catch (Exception e) {
-	        throw new RuntimeException("Failed to retrieve OrderItems for orderId: " + orderId, e);
-	    } finally {
-	        em.close();
-	    }
-	}
+        TypedQuery<OrderItem> query = em.createQuery(jpql, OrderItem.class);
+        query.setParameter("orderId", orderId);
+        return query.getResultList();
+    }
+
 
 	@Override
 	public int count(int orderId) {
@@ -135,6 +136,13 @@ public class OrderItemDaoImpl implements IOrderItemDao{
 	    }
 	}
 
+	public static void main(String[] args) {
+		OrderItemDaoImpl o = new OrderItemDaoImpl();
+		List<OrderItem> oi = o.findAll(1);
+		for (OrderItem item : oi) {
+	        System.out.println(item);
+	    }
+	}
 	
 	
 }

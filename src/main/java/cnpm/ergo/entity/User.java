@@ -54,10 +54,11 @@ public abstract class User implements Serializable {
     @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Message> messages;
 
-
-    public static void main(String[] args) {
-
+    @Override
+    public String toString() {
+        return "User [id=" + userId + ", name=" + name + "]";
     }
+
 }
 
 
