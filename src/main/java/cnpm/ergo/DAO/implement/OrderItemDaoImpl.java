@@ -137,11 +137,11 @@ public class OrderItemDaoImpl implements IOrderItemDao{
 	}
 
 	public static void main(String[] args) {
-		OrderItemDaoImpl o = new OrderItemDaoImpl();
-		List<OrderItem> oi = o.findAll(1);
-		for (OrderItem item : oi) {
-	        System.out.println(item);
-	    }
+//		OrderItemDaoImpl o = new OrderItemDaoImpl();
+//		List<OrderItem> oi = o.findAll(1);
+//		for (OrderItem item : oi) {
+//	        System.out.println(item);
+//	    }
 	}
 	
 	

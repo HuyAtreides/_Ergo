@@ -51,12 +51,6 @@ public class OrderItemServiceImpl implements IOrderItemService{
 	public int count(int orderId) {
 		return orderItemDao.count(orderId);
 	}
-
-	@Override
-	public List<OrderItem> findOrderItemDetail(int orderId) {
-		List<OrderItem> orderItems = orderItemDao.findAll(orderId);
-        return orderItems;
-	}
 	
 	
 }
