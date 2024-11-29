@@ -1,9 +1,17 @@
 package cnpm.ergo.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
+import java.util.List;
 
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 @Entity
 @Table(name = "product_type")
+@NamedQuery(name = "ProductType.findAll", query = "SELECT p FROM ProductType p")
+
 public class ProductType {
 
     @Id
@@ -39,84 +47,12 @@ public class ProductType {
     @Column(name = "quantity")
     private int quantity;
 
-    // Getters and Setters
-    public int getTypeId() {
-        return typeId;
-    }
+    @ManyToMany(mappedBy = "productTypes")
+    private List<VoucherByProduct> voucher;
 
-    public void setTypeId(int typeId) {
-        this.typeId = typeId;
-    }
+    @OneToMany(mappedBy = "productType")
+    private List<OrderItem> orderItems;
 
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public double getLength() {
-        return length;
-    }
-
-    public void setLength(double length) {
-        this.length = length;
-    }
-
-    public double getWidth() {
-        return width;
-    }
-
-    public void setWidth(double width) {
-        this.width = width;
-    }
-
-    public double getHeight() {
-        return height;
-    }
-
-    public void setHeight(double height) {
-        this.height = height;
-    }
-
-    public double getWeight() {
-        return weight;
-    }
-
-    public void setWeight(double weight) {
-        this.weight = weight;
-    }
-
-    public String getMaterial() {
-        return material;
-    }
-
-    public void setMaterial(String material) {
-        this.material = material;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
+    @OneToMany(mappedBy = "productType")
+    private List<CartItem> cartItems;
 }

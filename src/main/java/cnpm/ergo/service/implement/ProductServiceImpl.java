@@ -37,9 +37,10 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public List<Product> getAllProducts() {
-        return productDao.findAll();
+    public List<Product> getAllProducts(int page, int size) {
+        return productDao.findAll(page, size);
     }
+
 
     @Override
     public List<Product> searchProductsByName(String name) {
@@ -49,6 +50,9 @@ public class ProductServiceImpl implements IProductService {
     @Override
     public int getProductCount() {
         return productDao.count();
+    }
+    public static void main(String[] args) {
+        
     }
 }
 

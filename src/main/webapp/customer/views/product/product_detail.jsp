@@ -1,0 +1,131 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<head>
+<meta charset="UTF-8">
+<title>Product Detail</title>
+</head>
+<body>
+	<section class="product-details spad">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-6 col-md-6">
+					<div class="product__details__pic">
+						<div class="product__details__pic__item">
+							<img class="product__details__pic__item--large"
+								src="${product.productImages[0].productImage}" alt="">
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-6 col-md-6">
+					<div class="product__details__text">
+						<h3>${product.name}</h3>
+						<div class="product__details__price">${product.productTypes[0].price}</div>
+						<p>${product.descript != null ? product.descript : "Không có mô tả"}</p>
+						<p>${product.category != null ? product.category.categoryName : 'Chưa có danh mục'}</p>
+						<div class="product__details__quantity">
+							<div class="quantity">
+								<button class="qty-btn minus" onclick="decrementQuantity()">-</button>
+								<input id="count" type="text"
+									value="${product.productTypes[0].quantity}" readonly>
+								<button class="qty-btn plus" onclick="incrementQuantity()">+</button>
+							</div>
+						</div>
+
+						<script>
+						    function incrementQuantity() {
+						        const countInput = document.getElementById("count");
+						        let value = parseInt(countInput.value, 10);
+						        if (!isNaN(value)) {
+						            countInput.value = value + 1; // Tăng số lượng
+						        }
+						    }
+						
+						    function decrementQuantity() {
+						        const countInput = document.getElementById("count");
+						        let value = parseInt(countInput.value, 10);
+						        if (!isNaN(value) && value > 1) {
+						            countInput.value = value - 1; // Giảm số lượng (không cho < 1)
+						        }
+						    }
+						</script>
+
+						<%-- <button class="primary-btn" onclick="submitForm(${product.productId})">THÊM VÀO GIỎ</button> --%>
+
+						<a onclick="submitForm(${product.productId}, ${check})" href="#"
+							class="primary-btn">THÊM VÀO GIỎ</a> <a href="#" id="heart-icon"
+							class="heart-icon" onclick="updateFavorite(${product.productId})">
+							<i id="heart-icon-element" class="fa-regular fa-heart"></i>
+						</a>
+					</div>
+				</div>
+				<div class="col-lg-12">
+					<div class="product__details__tab">
+						<ul class="nav nav-tabs" role="tablist">
+							<li class="nav-item"><a class="nav-link active"
+								data-toggle="tab" href="#tabs-1" role="tab" aria-selected="true">
+									Mô tả </a></li>
+							<li class="nav-item"><a class="nav-link" data-toggle="tab"
+								href="#tabs-2" role="tab" aria-selected="false"> Thông tin </a>
+							</li>
+							<li class="nav-item"><a class="nav-link" data-toggle="tab"
+								href="#tabs-3" role="tab" aria-selected="false"> Đánh giá <span>(lượt)</span>
+							</a></li>
+						</ul>
+
+						<div class="tab-content">
+							<div class="tab-pane active" id="tabs-1" role="tabpanel">
+								<div class="product__details__tab__desc">
+									<h6>MÔ TẢ SẢN PHẨM</h6>
+									<p>${product.descript}</p>
+								</div>
+							</div>
+							<div class="tab-pane" id="tabs-2" role="tabpanel">
+								<div class="product__details__tab__desc">
+									<h6>THÔNG TIN SẢN PHẨM</h6>
+										<c:forEach var="type" items="${product.productTypes}">
+											<div class="product-type">
+												<div class="product-type-card-body">
+													<p>
+													<strong>Color:</strong> ${type.color}
+													</p>
+													<p>
+														<strong>Material:</strong> ${type.material}
+													</p>
+													<p>
+														<strong>Dimensions:</strong> ${type.length} x
+														${type.width} x ${type.height}
+													</p>
+													<p>
+														<strong>Weight:</strong> ${type.weight}
+													</p>
+													<p>
+														<strong>Price:</strong> ${type.price}
+													</p>
+													<p>
+														<strong>Quantity:</strong> ${type.quantity}
+													</p>
+												</div>
+											</div>
+										</c:forEach>
+								</div>
+							</div>
+							<div class="tab-pane" id="tabs-3" role="tabpanel">
+								<div class="product__details__tab__desc">
+									<h6>ĐÁNH GIÁ SẢN PHẨM</h6>
+									<div class="reviews">
+										<!-- Hiển thị danh sách đánh giá -->
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- Product Details Section End -->
+
+</body>
+</html>

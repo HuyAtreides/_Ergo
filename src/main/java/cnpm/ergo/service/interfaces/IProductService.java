@@ -7,8 +7,8 @@ public interface IProductService {
 	void updateProduct(Product product);
 	void deleteProduct(int productId);
 	Product getProductById(int productId);
-	List<Product> getAllProducts();
 	List<Product> searchProductsByName(String name);
 	int getProductCount();
+	List<Product> getAllProducts(int page, int size);
 
 }

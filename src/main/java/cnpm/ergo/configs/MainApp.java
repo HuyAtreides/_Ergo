@@ -1,17 +1,22 @@
 package cnpm.ergo.configs;
 
+import cnpm.ergo.entity.*;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
+
+import java.util.List;
 
 public class MainApp {
     public static void main(String[] args) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpa-hibernate-mysql");
-        EntityManager em = emf.createEntityManager();
-        System.out.println("Entity Manager Factory created successfully!");
+        //insert voucher
+        EntityManager entityManager = JPAConfig.getEntityManager();
+        entityManager.getTransaction().begin();
 
-        em.close();
-        emf.close();
+        //get customer
+        Customer customer = entityManager.find(Customer.class, 1);
+
+
+        entityManager.getTransaction().commit();
+        entityManager.close();
     }
 }
 

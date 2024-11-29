@@ -1,22 +1,27 @@
 package cnpm.ergo.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 @Entity
 @Table(name = "product")
+@NamedQuery(name = "product.findAll", query = "SELECT p FROM Product p")
 public class Product {
 
-    @Id
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "productId")
     private int productId;
-
     @Column(name = "name", columnDefinition = "NVARCHAR(200) NOT NULL")
     private String name;
-
-    @Column(name = "categoryId")
-    private int categoryId;
 
     @Column(name = "descript", columnDefinition = "TEXT")
     private String descript;
@@ -30,60 +35,11 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<ProductImage> productImages;
 
-    // Getters and Setters
-    public int getProductId() {
-        return productId;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "categoryId", referencedColumnName = "categoryId")
+    private Category category;
 
-    public void setProductId(int productId) {
-        this.productId = productId;
-    }
+    @ManyToMany(fetch = FetchType.LAZY)
+    private List<Wishlist> wishlists;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    public String getDescript() {
-        return descript;
-    }
-
-    public void setDescript(String descript) {
-        this.descript = descript;
-    }
-
-    public boolean isDelete() {
-        return isDelete;
-    }
-
-    public void setDelete(boolean delete) {
-        isDelete = delete;
-    }
-
-    public List<ProductType> getProductTypes() {
-        return productTypes;
-    }
-
-    public void setProductTypes(List<ProductType> productTypes) {
-        this.productTypes = productTypes;
-    }
-
-    public List<ProductImage> getProductImages() {
-        return productImages;
-    }
-
-    public void setProductImages(List<ProductImage> productImages) {
-        this.productImages = productImages;
-    }
 }

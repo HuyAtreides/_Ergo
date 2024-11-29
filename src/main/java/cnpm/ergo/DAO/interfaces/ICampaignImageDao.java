@@ -1,0 +1,12 @@
+package cnpm.ergo.DAO.interfaces;
+
+import cnpm.ergo.entity.CampaignImage;
+
+import java.util.List;
+
+
+public interface ICampaignImageDao {
+    void addImage(CampaignImage campaignImage);
+    List<CampaignImage> findImagesByCampaignId(Long campaignId);
+    void deleteByCampaignId(Long campaignId);
+}

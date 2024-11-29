@@ -11,4 +11,5 @@ public class JPAConfig {
 		EntityManagerFactory factory = Persistence.createEntityManagerFactory("jpa-hibernate-mysql");
 		return factory.createEntityManager();
 	}
+
 }
