@@ -1,147 +1,161 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<c:url value="/" var="URL"></c:url>   
+
 <html>
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+        }
 
-<!-- Shipping info -->
+        .container {
+            max-width: 900px;
+        }
 
-<div class="container mt-5 d-flex justify-content-center">
-   <div class="card p-4 mt-3">
-      <div class="first d-flex justify-content-between align-items-center mb-3">
-         <div class="info">
-            <span class="order"> ${order.orderId} </span>                
-         </div>           
-         <img src="https://i.imgur.com/NiAVkEw.png" width="40"/>        
-      </div>
-      <hr>
-      <div class="text d-flex justify-content-between align-items-center">
-         <div>
-            <span class="d-block new mb-1"> ${order.customer.name }</span>
-            <span class="d-block address mb-3">${order.streetNumber} ${order.ward}  </span>
-            <span class="d-block address mb-4"> ${order.district} ${order.cityOfProvince}</span>
-         </div>
-         <a href="/shippingInfo" class="edit-link">
-            <img src="https://cdn-icons-png.flaticon.com/512/1250/1250615.png" width="20" alt="Edit Icon">
-         </a>
-      </div>
-   </div>
-</div>
+        .card {
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: none;
+            background-color: #fff;
+        }
 
-<!-- END shipping info -->
+        .card-header {
+            background: linear-gradient(45deg, #4facfe, #00f2fe);
+            color: #fff;
+            padding: 1rem;
+            border-bottom: none;
+            font-weight: bold;
+        }
 
-<!-- OrderItem -->
+        .card-body {
+            padding: 1.5rem;
+        }
 
-<div class="container-fluid my-5  d-flex  justify-content-center">
-        <div class="card card-1">
-            <div class="card-body">
-                <div class="row justify-content-between mb-3">
-                    <div class="col-auto"> <h6 class="color-1 mb-0 change-color">Order Item</h6> </div>
-                    <div class="col-auto  "> <small>Receipt Voucher : 1KAU9-84UIL</small> </div>
-                </div>
-                <ul class="list-unstyled">
-				    <c:forEach var="item" items="${orderItems}">
-				        <li class="media">
-				            <div class="sq align-self-center">
-				                <img class="img-fluid my-auto align-self-center mr-2 mr-md-4 pl-0 p-0 m-0" src="${item.firstProductImage}" width="135" height="135" />
-				            </div>
-				            <div class="media-body my-auto text-right">
-				                <div class="row my-auto flex-column flex-md-row">
-				                    <div class="col my-auto">
-				                        <h6 class="mb-0">${item.quantity}</h6>
-				                    </div>
-				                    <div class="col-auto my-auto">
-				                        <small>${item.price}</small>
-				                    </div>
-				                    <div class="col my-auto">
-				                        <small>Size : </small>
-				                    </div>
-				                    <div class="col my-auto">
-				                        <small>Qty :</small>
-				                    </div>
-				                    <div class="col my-auto">
-				                        <h6 class="mb-0">&#8377; </h6>
-				                    </div>
-				                </div>
-				            </div>
-				        </li>
-				    </c:forEach>
-				</ul>
+        .text-highlight {
+            color: #007bff;
+            font-weight: 600;
+        }
 
-                
-                <div class="row mt-4">
-                    <div class="col">
-                        <div class="row justify-content-between">
-                            <div class="col-auto"><p class="mb-1 text-dark"><b>Order Details</b></p></div>
-                            <div class="flex-sm-col text-right col"> <p class="mb-1"><b>Total</b></p> </div>
-                            <div class="flex-sm-col col-auto"> <p class="mb-1">&#8377;4,835</p> </div>
-                        </div>
-                        <div class="row justify-content-between">
-                            <div class="flex-sm-col text-right col"><p class="mb-1"> <b>Discount</b></p> </div>
-                            <div class="flex-sm-col col-auto"><p class="mb-1">&#8377;150</p></div>
-                        </div>
-                        <div class="row justify-content-between">
-                            <div class="flex-sm-col text-right col"><p class="mb-1"><b>GST 18%</b></p></div>
-                            <div class="flex-sm-col col-auto"><p class="mb-1">843</p></div>
-                        </div>
-                        <div class="row justify-content-between">
-                            <div class="flex-sm-col text-right col"><p class="mb-1"><b>Delivery Charges</b></p></div>
-                            <div class="flex-sm-col col-auto"><p class="mb-1">Free</p></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row invoice ">
-                    <div class="col"><p class="mb-1"> Invoice Number : 788152</p><p class="mb-1">Invoice Date : 22 Dec,2019</p><p class="mb-1">Recepits Voucher:18KU-62IIK</p></div>
-                </div>
+        /* Product List */
+        .list-group-item {
+            padding: 1rem 1.5rem;
+            border: none;
+            background-color: #f9f9f9;
+            border-bottom: 1px solid #e9ecef;
+            transition: background-color 0.3s ease;
+        }
+
+        .list-group-item:hover {
+            background-color: #f1f3f5;
+        }
+
+        .product-image {
+		    display: block;
+		    width: 20px !important;
+		    height: 20px !important;
+		    object-fit: cover !important;
+		    border-radius: 8px !important;
+		}
+
+
+
+
+        .product-details h6 {
+            font-size: 1.1rem; /* Tăng kích thước chữ */
+            margin-bottom: 0.5rem;
+        }
+
+        .product-details p {
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .card-body {
+                padding: 1rem;
+            }
+
+            .list-group-item {
+                flex-wrap: wrap;
+                text-align: center;
+            }
+
+            .list-group-item img {
+                margin-bottom: 10px;
+            }
+        }
+
+        .btn-edit {
+            background-color: #4facfe;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-edit:hover {
+            background-color: #007bff;
+            box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container mt-5">
+    <!-- Shipping Info -->
+    <div class="card mb-4">
+        <div class="card-header">
+            Thông Tin Giao Hàng
+        </div>
+        <div class="card-body d-flex justify-content-between align-items-center">
+            <div>
+                <h5 class="text-highlight mb-2">Mã đơn hàng: ${order.orderId}</h5>
+                <p class="mb-1">Khách hàng: <span class="fw-bold">${order.customer.name}</span></p>
+                <p class="small text-muted">${order.streetNumber}, ${order.ward}, ${order.district}, ${order.cityOfProvince}</p>
             </div>
-            <div class="card-footer">
-                <div class="jumbotron-fluid">
-                    <div class="row justify-content-between ">
-                        <div class="col-sm-auto col-auto my-auto"><img class="img-fluid my-auto align-self-center " src="https://i.imgur.com/7q7gIzR.png" width="115" height="115"></div>
-                        <div class="col-auto my-auto "><h2 class="mb-0 font-weight-bold">TOTAL PAID</h2></div>
-                        <div class="col-auto my-auto ml-auto"><h1 class="display-3 ">&#8377; 5,528</h1></div>
-                    </div>
-                    <div class="row mb-3 mt-3 mt-md-0">
-                        <div class="col-auto border-line"> <small class="text-white">PAN:AA02hDW7E</small></div>
-                        <div class="col-auto border-line"> <small class="text-white">CIN:UMMC20PTC </small></div>
-                        <div class="col-auto "><small class="text-white">GSTN:268FD07EXX </small> </div>
-                    </div>
-                </div>
-            </div>
+            <a href="/shippingInfo" class="btn-edit"><img src="https://cdn-icons-png.flaticon.com/512/1250/1250615.png" width="18" alt="Edit Icon">
+            </a>
         </div>
     </div>
 
-<!-- END OrderItem -->
+    <!-- Order Items -->
+    <div class="card">
+        <div class="card-header">
+            Danh Sách Sản Phẩm
+        </div>
+        <div class="card-body">
+            <ul class="list-group">
+                <c:forEach var="item" items="${orderItems}">
+                    <li class="list-group-item d-flex align-items-center">
+                        <img src="${item.productType.product.productImages[0].productImage}" 
+					     alt="Product Image" class="product-image me-3" 
+					     style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px;">
 
+                        <div class="product-details">
+                            <h6 class="mb-1">${item.productType.product.name}</h6>
+                            <p class="small text-muted mb-1">Kích thước: ${item.productType.length} x ${item.productType.width} x ${item.productType.height}</p>
+                            <p class="small text-muted mb-0">Số lượng: ${item.quantity} | Đơn giá: ${item.price}</p>
+                        </div>
+                    </li>
+                </c:forEach>
+            </ul>
+<!-- Total Price -->
+            <div class="text-end mt-3">
+                <h6 class="text-dark fw-bold">Tổng cộng: <span class="text-highlight"> ${order.actualCost}</span></h6>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>
 
-<style>
-/* Ensure both containers have the same width and are centered */
-.container, .container-fluid {
-  width: 100%; /* Full width */
-  max-width: 1200px; /* Set max width for consistency */
-  margin: 0 auto; /* Center the containers */
-  padding-left: 0;  /* Remove extra padding */
-  padding-right: 0; /* Remove extra padding */
-}
-
-.container > div, .container-fluid > div {
-  width: 100%; /* Ensure each child div takes full container width */
-  box-sizing: border-box; /* Include padding and border in width calculation */
-}
-
-.edit-link img {
-  width: 20px; /* Size of icon */
-  cursor: pointer; /* Pointer on hover */
-}
-
-.edit-link img:hover {
-  filter: brightness(1.2); /* Increase brightness on hover */
-}
-
-.edit-link {
-  margin-left: 40px; /* Spacing for the icon */
-  text-decoration: none;
-}
-</style>
 

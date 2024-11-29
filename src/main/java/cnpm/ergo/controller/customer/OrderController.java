@@ -43,12 +43,12 @@ public class OrderController extends HttpServlet {
             }
 
             List<OrderItem> orderItems = orderItemService.findAll(orderId);
-            if (orderItems == null || orderItems.isEmpty()) {
-                // Nếu không có OrderItem, bạn có thể thông báo hoặc xử lý tùy ý
-                req.setAttribute("orderItems", "No items found for this order");
-            } else {
+            if (orderItems != null && !orderItems.isEmpty()) {
                 req.setAttribute("orderItems", orderItems);
+            } else {
+                req.setAttribute("orderItems", "No items found for this order");
             }
+
 
             // Đặt thuộc tính order vào request và chuyển tiếp tới JSP
             req.setAttribute("order", order);
