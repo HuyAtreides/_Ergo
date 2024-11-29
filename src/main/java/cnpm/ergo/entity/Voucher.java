@@ -28,5 +28,11 @@ public abstract class Voucher {
     @OneToOne(mappedBy = "voucher")
     private MarketingCampaign marketingCampaign;
 
-    // Getters and Setters
+	@Override
+	public String toString() {
+		return "Voucher [voucherId=" + voucherId + ", dateStart=" + dateStart + ", dateEnd=" + dateEnd + ", code="
+				+ code + ", discount=" + discount + "]";
+	}	
+    
+    
 }
