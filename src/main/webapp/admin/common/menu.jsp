@@ -133,7 +133,7 @@
             <span class="menu-header-text">Blogs</span>
         </li>
         <li class="menu-item active">
-            <a href="blog.jsp" class="menu-link">
+            <a href="blog" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-pencil"></i>
                 <div data-i18n="Analytics">Blogs</div>
             </a>
