@@ -5,7 +5,7 @@
     <title>JSP - Hello World</title>
 </head>
 <body>
-<a href="admin/views/index.jsp">Go to Admin</a>
+<a href="admin/home">Go to Admin</a>
 <br>
 <a href="employee/views/index.jsp">Go to Employee</a>
 <br>

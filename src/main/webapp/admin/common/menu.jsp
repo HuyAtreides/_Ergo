@@ -71,7 +71,7 @@
             <span class="menu-header-text">Employees</span>
         </li>
         <li class="menu-item active">
-            <a href="employee.jsp" class="menu-link">
+            <a href="employee" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-user"></i>
                 <div data-i18n="Analytics">Employees</div>
             </a>
@@ -81,7 +81,7 @@
             <span class="menu-header-text">Customers</span>
         </li>
         <li class="menu-item active">
-            <a href="customer.jsp" class="menu-link">
+            <a href="customer" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-group"></i>
                 <div data-i18n="Analytics">Customers</div>
             </a>
@@ -91,7 +91,7 @@
             <span class="menu-header-text">Marketing Campaigns</span>
         </li>
         <li class="menu-item active">
-            <a href="marketing.jsp" class="menu-link">
+            <a href="marketing" class="menu-link">
                 <i class="menu-icon tf-icons bx bxs-megaphone"></i>
                 <div data-i18n="Analytics">Marketing Campaigns</div>
             </a>
@@ -101,7 +101,7 @@
             <span class="menu-header-text">Payment Account</span>
         </li>
         <li class="menu-item active">
-            <a href="paymentaccount.jsp" class="menu-link">
+            <a href="paymentaccount" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-wallet"></i>
                 <div data-i18n="Analytics">Payment Account</div>
             </a>
@@ -112,7 +112,7 @@
             <span class="menu-header-text">Orders</span>
         </li>
         <li class="menu-item active">
-            <a href="order.jsp" class="menu-link">
+            <a href="order" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-cart"></i>
                 <div data-i18n="Analytics">Orders</div>
             </a>
@@ -123,7 +123,7 @@
             <span class="menu-header-text">Products</span>
         </li>
         <li class="menu-item active">
-            <a href="product.jsp" class="menu-link">
+            <a href="product" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-box"></i>
                 <div data-i18n="Analytics">Products</div>
             </a>
@@ -134,7 +134,7 @@
             <span class="menu-header-text">Statistics</span>
         </li>
         <li class="menu-item active">
-            <a href="statistic.jsp" class="menu-link">
+            <a href="statistic" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-line-chart"></i>
                 <div data-i18n="Analytics">Statistics</div>
             </a>
