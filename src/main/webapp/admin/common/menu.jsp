@@ -129,6 +129,16 @@
             </a>
         </li>
 
+        <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">Blogs</span>
+        </li>
+        <li class="menu-item active">
+            <a href="blog.jsp" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-pencil"></i>
+                <div data-i18n="Analytics">Blogs</div>
+            </a>
+        </li>
+
 
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Statistics</span>
