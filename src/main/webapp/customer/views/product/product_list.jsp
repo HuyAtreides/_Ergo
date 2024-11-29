@@ -49,9 +49,22 @@
 								<div id="collapseTwo" class="accordion-collapse collapse show"
 									aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
 									<div class="accordion-body">
-										<div class="price_ranger">
-											<input type="hidden" id="slider_range" class="flat-slider" />
-											<button type="submit" class="common_btn">filter</button>
+										<div class="price_range_filter">
+											<div class="price_range_inputs">
+												<div class="range_input_group">
+													<span></span>
+													<input type="number" class="price_input" id="minPrice" placeholder="Min">
+												</div>
+												<div class="range_separator">-</div>
+												<div class="range_input_group">
+													<span></span>
+													<input type="number" class="price_input" id="maxPrice" placeholder="Max">
+												</div>
+											</div>
+											<div class="price_slider_container">
+												<div class="price_slider" id="priceSlider"></div>
+											</div>
+											<button type="button" class="price_filter_btn">Áp dụng</button>
 										</div>
 									</div>
 								</div>
@@ -194,12 +207,6 @@
 											aria-selected="true">
 											<i class="fas fa-th"></i>
 										</button>
-										<button class="nav-link" id="v-pills-profile-tab"
-											data-bs-toggle="pill" data-bs-target="#v-pills-profile"
-											type="button" role="tab" aria-controls="v-pills-profile"
-											aria-selected="false">
-											<i class="fas fa-list-ul"></i>
-										</button>
 									</div>
 									
 								</div>
@@ -253,7 +260,7 @@
 													<p class="wsus__price">
 														<c:if
 															test="${not empty product.productTypes && product.productTypes[0] != null}">
-        $${product.productTypes[0].price}
+        ${product.productTypes[0].price}
     </c:if>
 														<c:if
 															test="${empty product.productTypes || product.productTypes[0] == null}">
@@ -269,84 +276,7 @@
 								</div>
 							</div>
 
-							<!-- Nội dung Tab 2 -->
-							<div class="tab-pane fade" id="v-pills-profile" role="tabpanel"
-								aria-labelledby="v-pills-profile-tab">
-								<div class="row">
-									<c:forEach var="product" items="${products}" varStatus="status">
-										<div class="col-xl-12 list-item-wrapper" 
-											 style="animation-delay: ${status.index * 0.1}s">
-											<div class="google-list-item">
-												<!-- Phần hình ảnh -->
-												<div class="product-image-wrapper">
-													<a href="products/detail?id=${product.productId}" 
-													   class="product-image-link">
-														<img src="${product.productImages[0].productImage}" 
-															 alt="${product.name}"
-															 class="product-image" />
-														<div class="image-overlay">
-															<span class="view-details">Xem chi tiết</span>
-														</div>
-													</a>
-												</div>
-												
-												<!-- Phần thông tin sản phẩm -->
-												<div class="product-content">
-													<div class="product-info">
-														<div class="product-header">
-															<h3 class="product-title">
-																<a href="products/detail?id=${product.productId}">
-																	${product.name}
-																</a>
-															</h3>
-															<div class="product-rating">
-																<i class="material-icons">star</i>
-																<i class="material-icons">star</i>
-																<i class="material-icons">star</i>
-																<i class="material-icons">star</i>
-																<i class="material-icons">star_half</i>
-																<span class="rating-count">(124)</span>
-															</div>
-														</div>
-														
-														<div class="product-details">
-															<div class="product-meta">
-																<span class="product-price">
-																	<c:if test="${not empty product.productTypes && product.productTypes[0] != null}">
-																		$${product.productTypes[0].price}
-																	</c:if>
-																</span>
-																<span class="product-availability">
-																	<i class="material-icons">check_circle</i>
-																	Còn hàng
-																</span>
-															</div>
-															<p class="product-description">
-																Mô tả ngắn về sản phẩm sẽ được hiển thị ở đây...
-															</p>
-														</div>
-													</div>
-													
-													<div class="product-actions">
-														<button class="google-add-cart-list ripple-effect">
-															<i class="material-icons">add_shopping_cart</i>
-															<span>Thêm vào giỏ hàng</span>
-														</button>
-														<button class="google-wishlist-btn ripple-effect" 
-																title="Thêm vào yêu thích">
-															<i class="material-icons">favorite_border</i>
-														</button>
-														<button class="google-compare-btn ripple-effect" 
-																title="So sánh">
-															<i class="material-icons">compare_arrows</i>
-														</button>
-													</div>
-												</div>
-											</div>
-										</div>
-									</c:forEach>
-								</div>
-							</div>
+							
 						</div>
 
 					</div>
@@ -392,5 +322,101 @@
 	<!--============================
        VENDORS DETAILA END
     ==============================-->
-
+<script>
+//Thêm script này vào cuối file hoặc trong một file JS riêng
+document.addEventListener('DOMContentLoaded', function() {
+    const priceSlider = document.getElementById('priceSlider');
+    const minPriceInput = document.getElementById('minPrice');
+    const maxPriceInput = document.getElementById('maxPrice');
+    
+    // Khởi tạo giá trị
+    let minPrice = 0;
+    let maxPrice = 1000; // Giá trị tối đa mặc định
+    
+    // Tạo hai thumb cho slider
+    const createThumb = (position) => {
+        const thumb = document.createElement('div');
+        thumb.className = 'price-slider-thumb';
+        thumb.style.left = position + '%';
+        priceSlider.appendChild(thumb);
+        return thumb;
+    };
+    
+    const leftThumb = createThumb(0);
+    const rightThumb = createThumb(100);
+    
+    // Tạo range track
+    const range = document.createElement('div');
+    range.className = 'price-slider-range';
+    priceSlider.appendChild(range);
+    
+    // Cập nhật giá trị và vị trí của slider
+    const updateSlider = (left, right) => {
+        range.style.left = left + '%';
+        range.style.width = (right - left) + '%';
+        leftThumb.style.left = left + '%';
+        rightThumb.style.left = right + '%';
+        
+        // Cập nhật input fields
+        minPriceInput.value = Math.round((maxPrice * left) / 100);
+        maxPriceInput.value = Math.round((maxPrice * right) / 100);
+    };
+    
+    // Xử lý kéo thumb
+    let isDragging = null;
+    let startX = 0;
+    let startLeft = 0;
+    
+    const onMouseDown = (e, thumb) => {
+        isDragging = thumb;
+        startX = e.clientX;
+        startLeft = parseFloat(thumb.style.left);
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+    };
+    
+    const onMouseMove = (e) => {
+        if (!isDragging) return;
+        
+        const deltaX = e.clientX - startX;
+        const deltaPercent = (deltaX / priceSlider.offsetWidth) * 100;
+        let newLeft = startLeft + deltaPercent;
+        
+        // Giới hạn phạm vi di chuyển
+        if (isDragging === leftThumb) {
+            newLeft = Math.max(0, Math.min(parseFloat(rightThumb.style.left) - 10, newLeft));
+            updateSlider(newLeft, parseFloat(rightThumb.style.left));
+        } else {
+            newLeft = Math.max(parseFloat(leftThumb.style.left) + 10, Math.min(100, newLeft));
+            updateSlider(parseFloat(leftThumb.style.left), newLeft);
+        }
+    };
+    
+    const onMouseUp = () => {
+        isDragging = null;
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+    };
+    
+    // Xử lý input thay đổi
+    minPriceInput.addEventListener('change', () => {
+        const value = Math.max(0, Math.min(parseInt(maxPriceInput.value) - 10, parseInt(minPriceInput.value)));
+        const percent = (value / maxPrice) * 100;
+        updateSlider(percent, parseFloat(rightThumb.style.left));
+    });
+    
+    maxPriceInput.addEventListener('change', () => {
+        const value = Math.max(parseInt(minPriceInput.value) + 10, Math.min(maxPrice, parseInt(maxPriceInput.value)));
+        const percent = (value / maxPrice) * 100;
+        updateSlider(parseFloat(leftThumb.style.left), percent);
+    });
+    
+    // Thêm event listeners cho thumbs
+    leftThumb.addEventListener('mousedown', (e) => onMouseDown(e, leftThumb));
+    rightThumb.addEventListener('mousedown', (e) => onMouseDown(e, rightThumb));
+    
+    // Khởi tạo slider
+    updateSlider(0, 100);
+});
+</script>
 </body>

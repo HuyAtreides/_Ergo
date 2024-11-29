@@ -26,13 +26,6 @@
         </div>
 
         <div class="order-card">
-            <div class="shop-header">
-                <span class="mall-label">Mall</span>
-                <span class="shop-name">Oral Oasis</span>
-                <button class="chat-btn">Chat</button>
-                <button class="view-shop-btn">Xem Shop</button>
-            </div>
-
             <div class="product-info">
                 <img src="product-image.jpg" alt="Product Image" class="product-image">
                 <div class="product-details">

@@ -176,7 +176,7 @@
 							class="text-center d-flex align-items-center"
 							action="/products/search" method="get">
 							<input type="text" class="form-control border-0 bg-transparent"
-								name="q" placeholder="Search for more than 20,000 products"
+								name="keyword" placeholder=""
 								required />
 							<button type="submit" class="btn btn-transparent p-0 ms-2">
 								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"

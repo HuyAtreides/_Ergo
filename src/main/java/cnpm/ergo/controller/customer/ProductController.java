@@ -91,7 +91,7 @@ public class ProductController extends HttpServlet {
     
     private void searchProducts(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            String keyword = req.getParameter("q");
+            String keyword = req.getParameter("keyword");
             if (keyword == null || keyword.trim().isEmpty()) {
                 resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Search keyword is required");
                 return;

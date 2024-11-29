@@ -80,49 +80,24 @@ public class ProductDaoImpl implements IProductDao {
     @Override
     public List<Product> findAll(int page, int size) {
         EntityManager em = JPAConfig.getEntityManager();
-        try {
-            // Xây dựng JPQL với các join cần thiết
             String jpql = "SELECT p FROM Product p " +
                           "LEFT JOIN p.productImages " +  
                           "LEFT JOIN p.productTypes pt " + 
                           "LEFT JOIN p.category " +      
                           "WHERE p.isDelete = false"; 
-
-            // Tạo truy vấn và phân trang
             List<Product> products = em.createQuery(jpql, Product.class)
-                                       .setFirstResult((page - 1) * size)  // Tính toán vị trí bắt đầu
-                                       .setMaxResults(size)  // Số lượng sản phẩm trên mỗi trang
+                                       .setFirstResult((page - 1) * size)  
+                                       .setMaxResults(size) 
                                        .getResultList();
-            
-            // Ghi log ra console để kiểm tra kết quả
-            System.out.println("Fetched " + products.size() + " products on page " + page + ".");
-
-            // In thông tin các sản phẩm (có thể bỏ qua hoặc dùng khi cần debug)
-            for (Product product : products) {
-            	System.out.println("Product ID: " + product.getProductId(
-            			
-            			));
-                System.out.println("Name: " + product.getName());
-                if (product.getProductImages() != null && !product.getProductImages().isEmpty()) {
-                    for (ProductImage image : product.getProductImages()) {
-                        System.out.println("Image: " + image.getProductImage());
-                    }
-                }
-                
-                if (product.getProductTypes() != null && !product.getProductTypes().isEmpty()) {
-                    for (ProductType type : product.getProductTypes()) {
-                        System.out.println("Type: " + type.getColor() + " | Price: " + type.getPrice());
-                    }
-                }
-            }
-
             return products;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        } finally {
-            em.close();
-        }
+    }
+    @Override
+    public List<Product> searchByName(String name) {
+        EntityManager em = JPAConfig.getEntityManager();
+        String jpql = "SELECT p FROM Product p WHERE p.name LIKE :keyword OR p.descript LIKE :keyword";  
+        TypedQuery<Product> query = em.createQuery(jpql, Product.class);
+        query.setParameter("keyword", "%" + name + "%");  
+        return query.getResultList(); 
     }
     @Override
     public int count() {
@@ -132,14 +107,7 @@ public class ProductDaoImpl implements IProductDao {
         return ((Long) query.getSingleResult()).intValue(); 
     }
 
-    @Override
-    public List<Product> searchByName(String name) {
-        EntityManager em = JPAConfig.getEntityManager();
-        String jpql = "SELECT p FROM Product p WHERE p.name LIKE :keyword OR p.descript LIKE :keyword";  // Đảm bảo dùng :keyword
-        TypedQuery<Product> query = em.createQuery(jpql, Product.class);
-        query.setParameter("keyword", "%" + name + "%");  // Đảm bảo dùng "keyword" thay vì "name"
-        return query.getResultList(); 
-    }
+    
 
 
    
