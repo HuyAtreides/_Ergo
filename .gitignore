@@ -50,6 +50,7 @@ buildNumber.properties
 .mvn/
 
 .smarttomcat/
+src/main/webapp/product-images/
 # Eclipse m2e generat/ed files
 # Eclipse Core
 # JDT-specific (Eclipse Java Development Tools)

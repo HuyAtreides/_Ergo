@@ -13,7 +13,6 @@ import java.io.Serializable;
 @Table(name = "product_image")
 @NamedQuery(name = "ProductImage.findAll", query = "SELECT p FROM ProductImage p")
 public class ProductImage implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "productImageId")
@@ -25,5 +24,14 @@ public class ProductImage implements Serializable {
     @ManyToOne
     @JoinColumn(name = "productId", nullable = false)
     private Product product;
+
+    @Override
+    public String toString() {
+        return "ProductImage{" +
+                "id=" + productImageId +
+                ", productId=" + product.getProductId() +  // Only include the product ID to avoid cyclic reference
+                '}';
+    }
+
 
 }
