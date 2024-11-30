@@ -5,6 +5,7 @@ import java.util.List;
 import cnpm.ergo.DAO.implement.*;
 import cnpm.ergo.DAO.interfaces.IVoucherDao;
 import cnpm.ergo.entity.Order;
+import cnpm.ergo.entity.OrderItem;
 import cnpm.ergo.entity.Voucher;
 import cnpm.ergo.entity.VoucherDto;
 import cnpm.ergo.service.interfaces.IOrderService;
@@ -28,6 +29,13 @@ public class VoucherServiceImpl implements IVoucherService{
 			return null;
 		else return voucherSer.voucherByPriceForOder(order);
 	}
+	
+	
+
+	@Override
+	public List<VoucherDto> voucherByProductForOder(Order order) {
+		return voucherSer.voucherByProductForOder(order);
+	}
 
 	@Override
 	public List<VoucherDto> voucherByPriceNotForOder(Order order) {
@@ -36,5 +44,12 @@ public class VoucherServiceImpl implements IVoucherService{
 			return null;
 		else return voucherSer.voucherByPriceNotForOder(order);
 	}
+
+	@Override
+	public double CountDiscountPrice(List<OrderItem> orderItems, Voucher voucher) {
+		return voucherSer.CountDiscountPrice(orderItems, voucher);
+	}
+	
+	
 	
 }

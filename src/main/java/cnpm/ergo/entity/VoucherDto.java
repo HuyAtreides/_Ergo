@@ -20,8 +20,14 @@ public class VoucherDto {
         this.code = code;
         this.discount = discount;
     }
+    
 
-    // Getters and setters
+    public VoucherDto() {
+		super();
+	}
+
+
+	// Getters and setters
     public double getLowerbound() {
         return lowerbound;
     }

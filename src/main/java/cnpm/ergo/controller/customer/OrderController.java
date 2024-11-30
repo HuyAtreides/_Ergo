@@ -23,7 +23,7 @@ import jakarta.servlet.http.HttpServletResponse;
 @MultipartConfig(fileSizeThreshold = 1024 * 1024, 
                  maxFileSize = 1024 * 1024 * 5, 
                  maxRequestSize = 1024 * 1024 * 5 * 5)
-@WebServlet(urlPatterns = {"/customer/order", "/customer/order/voucher"})
+@WebServlet(urlPatterns = {"/customer/order", "/customer/order/voucher", "/customer/order/shippingInfo"} )
 public class OrderController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private IOrderService orderService;
@@ -46,7 +46,23 @@ public class OrderController extends HttpServlet {
     			//Order
                 int orderId = 1; 
                 Order order = orderService.findById(orderId);
-                List<VoucherDto> listVoucherCanApply = voucherService.voucherByPriceForOder(order);
+                
+                //Order Item
+                List<OrderItem> orderItems = orderItemService.findAll(orderId);
+                if (orderItems != null && !orderItems.isEmpty()) {
+                    req.setAttribute("orderItems", orderItems);
+                } else {
+                    req.setAttribute("orderItems", "No items found for this order");
+                }
+
+                //List voucher có thể áp cho order
+				List<VoucherDto> listVoucherCanApply = voucherService.voucherByPriceForOder(order);
+				List<VoucherDto> listVoucherByProduct = voucherService.voucherByProductForOder(order);
+				listVoucherCanApply.addAll(listVoucherByProduct);
+				
+				//List voucher by price chưa đủ đk áp cho order
+				List<VoucherDto> listVoucherCanNotApply = voucherService.voucherByPriceNotForOder(order);
+				
                 if (order == null) {
                     resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Order not found");
                     return;
@@ -56,29 +72,51 @@ public class OrderController extends HttpServlet {
                 String selectedVoucher = null;
                 if (req.getParameter("selectedVoucher") != null) {
                 	int voucherId = Integer.parseInt(req.getParameter("selectedVoucher"));
+                	boolean isVoucherByProduct = listVoucherByProduct.stream()
+                		    .anyMatch(voucher -> voucher.getVoucherId() == voucherId);
+                	
+                	req.setAttribute("isVoucherByProduct", isVoucherByProduct);
+                	
                     Voucher voucher = voucherService.findById(voucherId);
                     selectedVoucher = voucher.getCode();
-                    if (voucher != null) {
+                    
+                    //Voucher By Price
+                    if (voucher != null && isVoucherByProduct != true) {
                     	order.setDiscount(voucher.getDiscount());
                     	order.setVoucher(voucher);
-                    	order.setActualCost(order.getTotalCost() * (1 - order.getDiscount()));
+                    	order.setActualCost(order.getTotalCost() * (1 - order.getDiscount()) + 30000);
+                    	orderService.update(order);
+                    	req.setAttribute("voucherId", voucher.getVoucherId());
+                    	req.setAttribute("sale", order.getTotalCost() * order.getDiscount());
+                    }
+                   //Voucher By Product
+                    else if (voucher != null && isVoucherByProduct == true) {
+                    	order.setDiscount(voucher.getDiscount());
+                    	order.setVoucher(voucher);
+                    	double sale = voucherService.CountDiscountPrice(orderItems, voucher);
+                    	order.setActualCost(order.getTotalCost() - sale + 30000);
+                    	orderService.update(order);
+                    	req.setAttribute("voucherId", voucher.getVoucherId());
+                    	req.setAttribute("sale", sale);
+                    }
+                    else {
+                    	order.setDiscount(0);
+                    	order.setVoucher(null);
+                    	order.setActualCost(order.getTotalCost() + 30000);
                     	orderService.update(order);
                     }
-                }               
-
-                //Order Item
-                List<OrderItem> orderItems = orderItemService.findAll(orderId);
-                if (orderItems != null && !orderItems.isEmpty()) {
-                    req.setAttribute("orderItems", orderItems);
                 } else {
-                    req.setAttribute("orderItems", "No items found for this order");
-                }
-                            
+                	Voucher v = order.getVoucher();
+                	if (v != null) {
+                		selectedVoucher = v.getCode();
+                	}
+                }                                        
 
                 // Đặt thuộc tính order vào request và chuyển tiếp tới JSP
                 req.setAttribute("order", order);
                 req.setAttribute("selectedVoucher", selectedVoucher);
                 req.setAttribute("listVoucher", listVoucherCanApply);
+                req.setAttribute("listVoucherCanNotApply", listVoucherCanNotApply);
                 req.getRequestDispatcher("/customer/views/Order.jsp").forward(req, resp);
 
             } catch (Exception e) {
@@ -94,12 +132,16 @@ public class OrderController extends HttpServlet {
 		String url = req.getRequestURI();
     	if (url.contains("voucher")) {
     		String selectedVoucherCode = req.getParameter("selectedVoucher");
-			if (selectedVoucherCode != null) {
+			if (selectedVoucherCode != null && selectedVoucherCode != "") {
 				try {
 					Order order = orderService.findById(Integer.parseInt(req.getParameter("orderId")));
 					boolean isVoucherSelected = false;
 					int voucherCodeInt = Integer.parseInt(selectedVoucherCode);
+					
+					//List voucher có thể áp cho order
 					List<VoucherDto> listVoucherCanApply = voucherService.voucherByPriceForOder(order);
+					List<VoucherDto> listVoucherByProduct = voucherService.voucherByProductForOder(order);
+					listVoucherCanApply.addAll(listVoucherByProduct);
 					
 			        // Check if the voucherCodeInt exists in the list
 			        isVoucherSelected = listVoucherCanApply.stream()
@@ -119,6 +161,51 @@ public class OrderController extends HttpServlet {
 				resp.sendRedirect(req.getContextPath() + "/customer/order");
 			}
 		}
+    	else if (url.contains("shippingInfo")) {
+    		// Lấy giá trị từ form
+            String phone = req.getParameter("phone");
+            String cityOfProvince = req.getParameter("cityOfProvince");
+            String district = req.getParameter("district");
+            String ward = req.getParameter("ward");
+            String streetNumber = req.getParameter("streetNumber");
+            // Nếu chọn "Khác", lấy giá trị từ trường input khác
+            if ("other".equals(cityOfProvince)) {
+                cityOfProvince = req.getParameter("cityOther");
+            }
+            if ("other".equals(district)) {
+                district = req.getParameter("districtOther");
+            }
+            if ("other".equals(ward)) {
+                ward = req.getParameter("wardOther");
+            }
+            String errorMessage = "";
+            
+            if (phone == null || phone.isEmpty() || !phone.matches("\\d{10,11}")) {
+                errorMessage = "Số điện thoại không hợp lệ. Vui lòng nhập lại!";
+            } else if (cityOfProvince == null || cityOfProvince.isEmpty()) {
+                errorMessage = "Vui lòng nhập Tỉnh/Thành phố!";
+            } else if (district == null || district.isEmpty()) {
+                errorMessage = "Vui lòng nhập Quận/Huyện!";
+            } else if (ward == null || ward.isEmpty()) {
+                errorMessage = "Vui lòng nhập Phường/Xã!";
+            } else if (streetNumber == null || streetNumber.isEmpty()) {
+                errorMessage = "Vui lòng nhập Số nhà/Đường!";
+            }
+
+            if (errorMessage.isEmpty()) {
+                
+                Order order = orderService.findById(Integer.parseInt(req.getParameter("orderId")));
+                order.setPhone(phone);
+                order.setCityOfProvince(cityOfProvince);
+                order.setDistrict(district);
+                order.setWard(ward);
+                order.setStreetNumber(streetNumber);
+                
+                orderService.update(order);
+            }
+            resp.sendRedirect(req.getContextPath() + "/customer/order");
+            
+    	}
 	}
     
     
