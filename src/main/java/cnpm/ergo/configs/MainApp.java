@@ -6,6 +6,7 @@ import cnpm.ergo.service.implement.EmployeeServiceImpl;
 import cnpm.ergo.service.interfaces.IEmployeeService;
 import jakarta.persistence.EntityManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainApp {
@@ -13,21 +14,28 @@ public class MainApp {
         //insert voucher
         EntityManager entityManager = JPAConfig.getEntityManager();
         entityManager.getTransaction().begin();
-        //Get voucherByProduct by id 4
-        VoucherByProduct voucherByProduct = entityManager.find(VoucherByProduct.class, 4);
-        //get productType by id 2
-        ProductType productType = entityManager.find(ProductType.class, 2);
+        //Get all voucherByProduct List
+        List<VoucherByProduct> voucherByProductList = entityManager.createNamedQuery("VoucherByProduct.findAll", VoucherByProduct.class).getResultList();
+        //Get all voucherByPrice List
+        List<VoucherByPrice> voucherByPriceList = entityManager.createNamedQuery("VoucherByPrice.findAll", VoucherByPrice.class).getResultList();
 
-        //add productType to voucherByProduct
-        voucherByProduct.getProductTypes().add(productType);
-        productType.getVoucher().add(voucherByProduct);
+        List<Voucher>vouchers = new ArrayList<>();
+        for(VoucherByProduct voucherByProduct : voucherByProductList){
+            vouchers.add(voucherByProduct);
+        }
+        for(VoucherByPrice voucherByPrice : voucherByPriceList){
+            vouchers.add(voucherByPrice);
+        }
 
-        //update voucherByProduct
+        for(Voucher voucher : vouchers){
+            System.out.println(voucher.getVoucherId());
+            System.out.println(voucher.getCode());
+            if (voucher instanceof VoucherByProduct){
+                System.out.println("VoucherByProduct");
+            }
+            else System.out.println("VoucherByPrice");
+        }
 
-
-
-        entityManager.merge(voucherByProduct);
-        entityManager.merge(productType);
         entityManager.getTransaction().commit();
         entityManager.close();
     }

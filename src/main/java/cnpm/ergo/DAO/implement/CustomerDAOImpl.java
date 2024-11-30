@@ -1,66 +1,22 @@
 package cnpm.ergo.DAO.implement;
 
-import cnpm.ergo.DAO.interfaces.IEmployeeDAO;
+import cnpm.ergo.DAO.interfaces.ICustomerDAO;
 import cnpm.ergo.configs.JPAConfig;
-import cnpm.ergo.entity.Employee;
+import cnpm.ergo.entity.Customer;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.TypedQuery;
 
 import java.util.List;
 
-public class EmployeeDAOImpl implements IEmployeeDAO {
+public class CustomerDAOImpl implements ICustomerDAO {
 
     @Override
-    public List<Employee> findAll(int pageNo, int pageSize) {
+    public long count() {
         EntityManager entityManager = JPAConfig.getEntityManager();
         try {
-            // Begin a transaction
             entityManager.getTransaction().begin();
-
-            // Create a query to find all employees
-            TypedQuery<Employee> query = entityManager.createNamedQuery("Employee.findAll", Employee.class);
-
-            // Set the first result and max results for pagination
-            query.setFirstResult((pageNo - 1) * pageSize);
-            query.setMaxResults(pageSize);
-
-            // Get the list of employees
-            List<Employee> employees = query.getResultList();
-
-            // Commit the transaction
+            long count = entityManager.createQuery("SELECT COUNT(c) FROM Customer c where c.isDelete = false ", Long.class).getSingleResult();
             entityManager.getTransaction().commit();
-
-            return employees;
-        } catch (RuntimeException e) {
-            if (entityManager.getTransaction().isActive()) {
-                entityManager.getTransaction().rollback();
-            }
-            throw e;
-        } finally {
-            entityManager.close();
-        }
-    }
-    @Override
-    public void insert(Employee employee) {
-        EntityManager entityManager = JPAConfig.getEntityManager();
-        entityManager.getTransaction().begin();
-        entityManager.persist(employee);
-        entityManager.getTransaction().commit();
-        entityManager.close();
-    }
-
-    @Override
-    public void update(Employee employee) {
-        EntityManager entityManager = JPAConfig.getEntityManager();
-        try {
-            // Begin transaction
-            entityManager.getTransaction().begin();
-
-            // Merge the updated employee object
-            entityManager.merge(employee);
-
-            // Commit the transaction
-            entityManager.getTransaction().commit();
+            return count;
         } catch (RuntimeException e) {
             if (entityManager.getTransaction().isActive()) {
                 entityManager.getTransaction().rollback();
@@ -72,63 +28,13 @@ public class EmployeeDAOImpl implements IEmployeeDAO {
     }
 
     @Override
-    public void delete(int employeeId) {
+    public Customer getCustomerById(int id) {
         EntityManager entityManager = JPAConfig.getEntityManager();
         try {
-            // Begin transaction
             entityManager.getTransaction().begin();
-
-            // Find the employee by ID
-            Employee employee = entityManager.find(Employee.class, employeeId);
-            if (employee != null) {
-                // Set isDelete to true
-                employee.setIsDelete(true);
-                // Merge the changes
-                entityManager.merge(employee);
-            }
-
-            // Commit the transaction
+            Customer customer = entityManager.find(Customer.class, id);
             entityManager.getTransaction().commit();
-        } catch (RuntimeException e) {
-            if (entityManager.getTransaction().isActive()) {
-                entityManager.getTransaction().rollback();
-            }
-            throw e;
-        } finally {
-            entityManager.close();
-        }
-    }
-
-
-    @Override
-    public Employee findById(int employeeId) {
-        EntityManager entityManager = JPAConfig.getEntityManager();
-        try {
-            // Find employee by ID
-            entityManager.getTransaction().begin();
-            Employee employee = entityManager.find(Employee.class, employeeId);
-            entityManager.getTransaction().commit();
-            return employee;
-        } finally {
-            entityManager.close();
-        }
-    }
-
-    @Override
-    public List<Employee> findAll() {
-        EntityManager entityManager = JPAConfig.getEntityManager();
-        try {
-            // Begin a transaction
-            entityManager.getTransaction().begin();
-
-            // Use named query to find all employees
-            TypedQuery<Employee> query = entityManager.createNamedQuery("Employee.findAll", Employee.class);
-            List<Employee> employees = query.getResultList();
-
-            // Commit the transaction
-            entityManager.getTransaction().commit();
-
-            return employees;
+            return customer;
         } catch (RuntimeException e) {
             if (entityManager.getTransaction().isActive()) {
                 entityManager.getTransaction().rollback();
@@ -140,46 +46,127 @@ public class EmployeeDAOImpl implements IEmployeeDAO {
     }
 
     @Override
-    public List<Employee> searchByName(String name) {
+    public Customer getCustomerByEmail(String email) {
         EntityManager entityManager = JPAConfig.getEntityManager();
         try {
-            // Begin transaction
             entityManager.getTransaction().begin();
-
-            // Create a query to search employees by name (case insensitive)
-            List<Employee> employees = entityManager.createQuery("SELECT e FROM Employee e WHERE LOWER(e.name) LIKE LOWER(:name) and e.isDelete = false ", Employee.class)
-                    .setParameter("name", "%" + name + "%")
-                    .getResultList();
-
-            // Commit the transaction
-            entityManager.getTransaction().commit();
-
-            return employees;
-        } catch (RuntimeException e) {
-            if (entityManager.getTransaction().isActive()) {
-                entityManager.getTransaction().rollback();
-            }
-            throw e;
-        } finally {
-            entityManager.close();
-        }
-    }
-
-    @Override
-    public int count() {
-        EntityManager entityManager = JPAConfig.getEntityManager();
-        try {
-            // Begin transaction
-            entityManager.getTransaction().begin();
-
-            // Create a query to count the number of employees
-            Long count = entityManager.createQuery("SELECT COUNT(e) FROM Employee e WHERE e.isDelete = false", Long.class)
+            Customer customer = entityManager.createQuery("SELECT c FROM Customer c WHERE c.email = :email and c.isDelete != true ", Customer.class)
+                    .setParameter("email", email)
                     .getSingleResult();
-
-            // Commit the transaction
             entityManager.getTransaction().commit();
+            return customer;
+        } catch (RuntimeException e) {
+            if (entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+            throw e;
+        } finally {
+            entityManager.close();
+        }
+    }
 
-            return count.intValue();
+    @Override
+    public List<Customer> getAllCustomers() {
+        EntityManager entityManager = JPAConfig.getEntityManager();
+        try {
+            entityManager.getTransaction().begin();
+            List<Customer> customers = entityManager.createQuery("SELECT c FROM Customer c where c.isDelete = false ", Customer.class).getResultList();
+            entityManager.getTransaction().commit();
+            return customers;
+        } catch (RuntimeException e) {
+            if (entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+            throw e;
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public void insert(Customer customer) {
+        EntityManager entityManager = JPAConfig.getEntityManager();
+        try {
+            entityManager.getTransaction().begin();
+            entityManager.persist(customer);
+            entityManager.getTransaction().commit();
+        } catch (RuntimeException e) {
+            if (entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+            throw e;
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public void update(Customer customer) {
+        EntityManager entityManager = JPAConfig.getEntityManager();
+        try {
+            entityManager.getTransaction().begin();
+            entityManager.merge(customer);
+            entityManager.getTransaction().commit();
+        } catch (RuntimeException e) {
+            if (entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+            throw e;
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public void delete(int id) {
+        EntityManager entityManager = JPAConfig.getEntityManager();
+        //Just set isDelete from false to true
+        try {
+            entityManager.getTransaction().begin();
+            Customer customer = entityManager.find(Customer.class, id);
+            customer.setIsDelete(true);
+            entityManager.getTransaction().commit();
+        } catch (RuntimeException e) {
+            if (entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+            throw e;
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public List<Customer> search(String keyword) {
+        EntityManager entityManager = JPAConfig.getEntityManager();
+        try {
+            entityManager.getTransaction().begin();
+            List<Customer> customers = entityManager.createQuery("SELECT c FROM Customer c WHERE c.name LIKE :keyword and c.isDelete = false ", Customer.class)
+                    .setParameter("keyword", "%" + keyword + "%")
+                    .getResultList();
+            entityManager.getTransaction().commit();
+            return customers;
+        } catch (RuntimeException e) {
+            if (entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+            throw e;
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public List<Customer> findAll(int pageNo, int pageSize) {
+        EntityManager entityManager = JPAConfig.getEntityManager();
+        try {
+            entityManager.getTransaction().begin();
+            List<Customer> customers = entityManager.createQuery("SELECT c FROM Customer c where c.isDelete = false ", Customer.class)
+                    .setFirstResult((pageNo - 1) * pageSize)
+                    .setMaxResults(pageSize)
+                    .getResultList();
+            entityManager.getTransaction().commit();
+            return customers;
         } catch (RuntimeException e) {
             if (entityManager.getTransaction().isActive()) {
                 entityManager.getTransaction().rollback();
