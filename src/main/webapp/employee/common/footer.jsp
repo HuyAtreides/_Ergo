@@ -19,7 +19,6 @@
               class="footer-link me-4"
       >Documentation</a
       >
-
       <a
               href="https://github.com/themeselection/sneat-html-admin-template-free/issues"
               target="_blank"
