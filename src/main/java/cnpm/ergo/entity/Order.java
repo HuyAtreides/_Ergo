@@ -61,8 +61,9 @@ public class Order {
 //    @JoinColumn(name = "voucherId", referencedColumnName = "voucherId")
 //    private Voucher voucher;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<OrderItem> orderItems;
+
 
     public static void main(String[] args) {
         // create Order object

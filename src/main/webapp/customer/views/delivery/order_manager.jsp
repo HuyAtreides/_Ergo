@@ -1,76 +1,115 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Page</title>
-    <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trang Quản Lý Đơn Hàng</title>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="order-page">
-        <div class="tabs">
-            <a href="#" class="tab active">Tất cả</a>
-            <a href="#" class="tab">Chờ thanh toán</a>
-            <a href="#" class="tab">Vận chuyển</a>
-            <a href="#" class="tab">Chờ giao hàng</a>
-            <a href="#" class="tab">Hoàn thành</a>
-            <a href="#" class="tab">Đã hủy</a>
-            <a href="#" class="tab">Trả hàng/Hoàn tiền</a>
-        </div>
+	<div class="order-page">
+		<!-- Tabs for different order statuses -->
+		<div class="tabs">
+			<a
+				href="${pageContext.request.contextPath}/customer/managerorder?status=all"
+				class="tab <c:if test="${empty param.status or param.status == 'all'}">active</c:if>">Tất
+				cả</a> <a
+				href="${pageContext.request.contextPath}/customer/managerorder?status=Đã đặt hàng"
+				class="tab <c:if test="${param.status == 'Đã đặt hàng'}">active</c:if>">Đã
+				đặt hàng</a> <a
+				href="${pageContext.request.contextPath}/customer/managerorder?status=Đang vận chuyển"
+				class="tab <c:if test="${param.status == 'Đang vận chuyển'}">active</c:if>">Vận
+				chuyển</a> <a
+				href="${pageContext.request.contextPath}/customer/managerorder?status=Chờ giao hàng"
+				class="tab <c:if test="${param.status == 'Chờ giao hàng'}">active</c:if>">Chờ
+				giao hàng</a> <a
+				href="${pageContext.request.contextPath}/customer/managerorder?status=Hoàn thành"
+				class="tab <c:if test="${param.status == 'Hoàn thành'}">active</c:if>">Hoàn
+				thành</a> <a
+				href="${pageContext.request.contextPath}/customer/managerorder?status=Đã hủy"
+				class="tab <c:if test="${param.status == 'Đã hủy'}">active</c:if>">Đã
+				hủy</a>
+		</div>
 
-        <div class="search-bar">
-            <input type="text" placeholder="Bạn có thể tìm kiếm theo tên Shop, ID đơn hàng hoặc Tên Sản phẩm">
-        </div>
+		<!-- Search bar for filtering orders -->
+		<div class="search-bar">
+			<input type="text" id="searchInput"
+				placeholder="Tìm kiếm Tên Sản phẩm">
+		</div>
 
+		<!-- List of orders -->
+<!-- List of orders -->
+<div class="order-list">
+    <c:forEach var="order" items="${orders}">
         <div class="order-card">
-            <div class="product-info">
-                <img src="product-image.jpg" alt="Product Image" class="product-image">
-                <div class="product-details">
-                    <h3 class="product-title">
-                        4 Đầu Bàn Chải Đánh Răng Điện Đầu Bàn Chải Thay Thế Cho Oral B EB17 / 18 / 20 / 25 / 50
-                    </h3>
-                    <p class="product-type">Phân loại hàng: EB50A-4</p>
-                    <p class="product-quantity">x1</p>
+            <!-- Order Header -->
+            <div class="order-header">
+                <p class="order-status">${order.status}</p>
+                <div class="total-price">
+                    <span>Thành tiền:</span> <span class="price">${order.totalCost}₫</span>
                 </div>
-                <div class="product-price-info">
-                    <p class="original-price">474.700₫</p>
-                    <p class="sale-price">38.800₫</p>
+                <div class="order-date">
+                    <span>Ngày Đặt:</span>
+                    <fmt:formatDate value="${order.orderDate}" pattern="dd/MM/yyyy" />
                 </div>
             </div>
 
+            <div class="order-items">
+                <c:forEach var="item" items="${order.orderItems}">
+                    <div class="order-item">
+                        <div class="product-info">
+                            <p>Tên sản phẩm: ${item.productType.product.name}</p>
+                            <p>Màu sắc: ${item.productType.color}</p>
+                            <p>Kích thước: ${item.productType.length} x ${item.productType.width} x ${item.productType.height}</p>
+                            <p>Giá: ${item.productType.price}₫</p>
+                            <p>Số lượng: ${item.quantity}</p>
+
+                            <!-- Display product images -->
+                        <c:forEach var="image" items="${item.productType.product.productImages}">
+                            <div class="product-image">
+                                <img src="${image.productImage}" alt="Image of ${item.productType.product.name}" />
+                            </div>
+                        </c:forEach>
+                        </div>
+
+                        
+                    </div>
+                </c:forEach>
+            </div>
+
+            <!-- Order Footer -->
             <div class="order-footer">
-                <p class="delivery-status">
-                    <span class="delivery-icon">🚚</span> Giao hàng thành công
-                </p>
-                <span class="order-status">HOÀN THÀNH</span>
-                <div class="total-price">
-                    <span>Thành tiền:</span>
-                    <span class="price">42.300₫</span>
-                </div>
-                <div class="action-buttons">
-                    <button class="review-btn">Đánh Giá</button>
-                    <button class="contact-seller-btn">Liên Hệ Người Bán</button>
-                    <button class="buy-again-btn">Mua Lại</button>
-                </div>
+                <button class="review-btn">Đánh Giá</button>
+                <button class="buy-again-btn">Mua Lại</button>
             </div>
         </div>
-    </div>
-    <script>
+    </c:forEach>
+</div>
+
+
+
+
+
+		<script>
         document.addEventListener('DOMContentLoaded', function() {
-            const tabs = document.querySelectorAll('.tab');
-            
-            tabs.forEach(tab => {
-                tab.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    // Xóa class active từ tất cả các tab
-                    tabs.forEach(t => t.classList.remove('active'));
-                    
-                    // Thêm class active vào tab được click
-                    this.classList.add('active');
+            const searchInput = document.getElementById('searchInput');
+            const orderCards = document.querySelectorAll('.order-card');
+            searchInput.addEventListener('input', function() {
+                const query = searchInput.value.toLowerCase();
+                orderCards.forEach(card => {
+                    const orderId = card.querySelector('.order-id') ? card.querySelector('.order-id').textContent.toLowerCase() : '';
+                    const orderStatus = card.querySelector('.order-status') ? card.querySelector('.order-status').textContent.toLowerCase() : '';
+                    const orderDate = card.querySelector('.order-date') ? card.querySelector('.order-date').textContent.toLowerCase() : '';
+                    if (orderId.includes(query) || orderStatus.includes(query) || orderDate.includes(query)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
                 });
             });
         });
