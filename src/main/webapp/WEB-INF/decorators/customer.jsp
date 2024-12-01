@@ -22,7 +22,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="${pageContext.request.contextPath}/customer/assets/css/product.css">
   <link rel="stylesheet" href="${pageContext.request.contextPath}/customer/assets/css/order_manager.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/customer/assets/css/product_detail.css">
+   <link rel="stylesheet" href="${pageContext.request.contextPath}/customer/assets/css/product_detail.css">
+   <link rel="stylesheet" href="${pageContext.request.contextPath}/customer/assets/css/new.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/customer/assets/css/product_search.css">
     <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">

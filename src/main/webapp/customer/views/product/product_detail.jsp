@@ -136,28 +136,41 @@
 					</div>
 				</div>
 			</div>
-	
+
 			<div class="row">
 				<!-- Hiển thị sản phẩm liên quan -->
 				<c:forEach var="product" items="${relatedProducts}">
 					<div class="col-lg-3 col-md-4 col-sm-6">
 						<div class="product__item">
-							<img class="product__item__pic set-bg" src="${product.productImages[0].productImage}" alt="">
-	
-							<ul class="product__item__pic__hover">
-										<li><a href="#"><i class="fa fa-heart"></i></a></li>
-										<li><a href="#"><i class="fa fa-retweet"></i></a></li>
-										<li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-									</ul>
-						</div>
-						<div class="product__item__text">
-							<h6><a href="productdetail?id=${product.productId}">${product.name}</a></h6>
-							<h5>${product.productTypes[0].price}</h5>
+							<div class="product__item__pic">
+
+								<img src="${product.productImages[0].productImage}"
+									alt="${product.name}">
+								<ul class="product__item__pic__hover">
+									<li><a href="#"
+										onclick="updateFavorite(${product.productId})"> <i
+											class="fa fa-heart"></i>
+									</a></li>
+									<li><a href="productdetail?id=${product.productId}"> <i
+											class="fa fa-search"></i>
+									</a></li>
+									<li><a href="#"
+										onclick="submitForm(${product.productId}, ${check})"> <i
+											class="fa fa-shopping-cart"></i>
+									</a></li>
+								</ul>
+							</div>
+							<div class="product__item__text">
+								<h6>
+									<a href="productdetail?id=${product.productId}">${product.name}</a>
+								</h6>
+								<h5>${product.productTypes[0].price}</h5>
+							</div>
 						</div>
 					</div>
 				</c:forEach>
 			</div>
-	
+
 			<!-- Phân trang -->
 			<div class="row">
 				<div class="flex-c-m flex-w w-full p-t-38">
@@ -166,15 +179,14 @@
 						<button onclick="changePage(1)"
 							class="flex-c-m how-pagination1 trans-04 m-all-7">First</button>
 					</c:if>
-	
+
 					<!-- Các nút phân trang giữa -->
 					<c:forEach begin="1" end="${totalPages}" varStatus="loop">
 						<button onclick="changePage('${loop.index}')"
 							class="flex-c-m how-pagination1 trans-04 m-all-7 ${currentPage == loop.index ? 'active-pagination1' : ''}">
-							${loop.index}
-						</button>
+							${loop.index}</button>
 					</c:forEach>
-	
+
 					<!-- Nút phân trang cuối cùng -->
 					<c:if test="${currentPage < totalPages}">
 						<button onclick="changePage(${totalPages})"
@@ -184,7 +196,7 @@
 			</div>
 		</div>
 	</section>
-	
+
 	<script>
 		function changePage(pageNumber) {
 			const urlParams = new URLSearchParams(window.location.search);

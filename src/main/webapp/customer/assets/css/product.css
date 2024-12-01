@@ -7587,7 +7587,7 @@ body {
 
 /* Điều chỉnh khoảng cách giữa các cột */
 .col-xl-4.col-sm-6 {
-    padding: 15px;
+    padding: 15px !important;
 }
 
 /* Style chính cho product item */
