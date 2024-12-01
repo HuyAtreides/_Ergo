@@ -16,27 +16,27 @@ import jakarta.servlet.http.HttpSession;
 import cnpm.ergo.configs.JPAConfig;
 import cnpm.ergo.entity.Category;
 import cnpm.ergo.entity.Product;
+import cnpm.ergo.entity.Review;
 import cnpm.ergo.service.interfaces.IProductService;
 import cnpm.ergo.service.implement.ProductServiceImpl;
 import cnpm.ergo.service.interfaces.ICategoryService;
 import cnpm.ergo.service.implement.CategoryServiceImpl;
+import cnpm.ergo.service.implement.ReviewServiceImpl;
+import cnpm.ergo.service.interfaces.IReviewService;
 
-@WebServlet(urlPatterns = { "/products", "/products/detail", "/products/search" })
+@WebServlet(urlPatterns = { "/products/detail", "/products/search" })
 public class ProductController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	private final IProductService productService = new ProductServiceImpl();
 	private final ICategoryService categoryService = new CategoryServiceImpl();
-
+	private final IReviewService reviewService = new ReviewServiceImpl();
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 	    try {
 	        loadCommonAttributes(req);
 	        String action = req.getServletPath();
 	        switch (action) {
-	            case "/products":
-	                listAllProducts(req, resp);
-	                break;
 	            case "/products/detail":
 	                getProductDetail(req, resp);
 	                break;
@@ -70,13 +70,11 @@ public class ProductController extends HttpServlet {
 		        session.setAttribute("keyword", keyword);
 		        session.setAttribute("categoryName", filterCategoryName);
 		        
-		     // Get the string arrays from session
 		        String colorsStr = (String) session.getAttribute("colorsAsString");
 		        String materialsStr = (String) session.getAttribute("materialsAsString");
 		        String heightsStr = (String) session.getAttribute("heightsAsString");
 		        String lengthsStr = (String) session.getAttribute("lengthsAsString");
 
-		        // Convert comma-separated strings back to arrays if they exist
 		        String[] colors = colorsStr != null ? colorsStr.split(",") : null;
 		        String[] materials = materialsStr != null ? materialsStr.split(",") : null;
 		        String[] heights = heightsStr != null ? heightsStr.split(",") : null;
@@ -165,33 +163,6 @@ public class ProductController extends HttpServlet {
 	    return pageNumbers;
 	}
 
-
-	private void listAllProducts(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-		try {
-			int page = Integer.parseInt(req.getParameter("page") != null ? req.getParameter("page") : "1");
-			int size = Integer.parseInt(req.getParameter("size") != null ? req.getParameter("size") : "12");
-			List<Product> products = productService.getAllProducts(page, size);
-			int totalProducts = productService.getProductCount();
-			int totalPages = (int) Math.ceil((double) totalProducts / size);
-			int startPage = Math.max(1, page - 2);
-			int endPage = Math.min(totalPages, page + 2);
-
-			List<Integer> pageNumbers = new ArrayList<>();
-			for (int i = startPage; i <= endPage; i++) {
-				pageNumbers.add(i);
-			}
-			req.setAttribute("products", products);
-			req.setAttribute("currentPage", page);
-			req.setAttribute("totalPages", totalPages);
-			req.setAttribute("pageSize", size);
-			req.setAttribute("pageNumbers", pageNumbers);
-			req.getRequestDispatcher("/customer/views/product/product_list.jsp").forward(req, resp);
-		} catch (Exception e) {
-			e.printStackTrace();
-			resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unable to retrieve products");
-		}
-	}
 	private void getProductDetail(HttpServletRequest req, HttpServletResponse resp)
 	        throws ServletException, IOException {
 	    try {
@@ -207,7 +178,8 @@ public class ProductController extends HttpServlet {
 	            resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Product not found");
 	            return;
 	        }
-
+	        List<Review> reviews = reviewService.getReviewsAll(productId);
+	        req.setAttribute("reviews", reviews);
 	        int page = 1;
 	        int pageSize = 4;
 
@@ -228,8 +200,6 @@ public class ProductController extends HttpServlet {
 	                pageSize = 4;
 	            }
 	        }
-
-	        // Get related products
 	        List<Product> relatedProducts = productService.findRelatedProductsByProductId(productId, page, pageSize);
 	        
 	        if (relatedProducts == null || relatedProducts.isEmpty()) {
@@ -249,7 +219,6 @@ public class ProductController extends HttpServlet {
 	            pageNumbers.add(i);
 	        }
 
-	        // Set attributes for JSP
 	        req.setAttribute("product", product);
 	        req.setAttribute("relatedProducts", relatedProducts);
 	        req.setAttribute("totalRelatedProducts", totalRelatedProducts);
@@ -257,7 +226,6 @@ public class ProductController extends HttpServlet {
 	        req.setAttribute("currentPage", page);
 	        req.setAttribute("pageNumbers", pageNumbers);
 
-	        // Forward to the product detail JSP
 	        req.getRequestDispatcher("/customer/views/product/product_detail.jsp").forward(req, resp);
 	    } catch (Exception e) {
 	        e.printStackTrace();

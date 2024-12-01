@@ -10,6 +10,71 @@
 	text-align: center;
 	margin-bottom: 20px;
 }
+/* Container for the reviews section */
+.product-reviews {
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+/* Heading for the reviews */
+.product-reviews h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #333;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 8px;
+}
+
+/* List of reviews */
+.product-reviews ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Each review item */
+.product-reviews ul li {
+    margin-bottom: 15px;
+    padding: 10px;
+    border-bottom: 1px solid #eaeaea;
+}
+
+/* Highlight the customer's name */
+.product-reviews ul li strong {
+    font-size: 1.1rem;
+    color: #007bff; /* Blue color for emphasis */
+}
+
+/* Rating stars */
+.product-reviews ul li span {
+    font-size: 1rem;
+    color: #ffcc00; /* Gold color for stars */
+    margin-left: 10px;
+}
+
+/* Review content */
+.product-reviews ul li p {
+    margin: 10px 0;
+    font-size: 1rem;
+    color: #555;
+}
+
+/* Date of review */
+.product-reviews ul li small {
+    font-size: 0.9rem;
+    color: #999;
+}
+
+/* No reviews message */
+.product-reviews p {
+    font-size: 1.2rem;
+    color: #777;
+    text-align: center;
+    margin-top: 20px;
+}
 
 .product__details__pic__item img {
 	width: 100%;

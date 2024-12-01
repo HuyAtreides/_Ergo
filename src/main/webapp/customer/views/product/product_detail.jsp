@@ -69,8 +69,7 @@
 								href="#tabs-2" role="tab" aria-selected="false"> Thông tin </a>
 							</li>
 							<li class="nav-item"><a class="nav-link" data-toggle="tab"
-								href="#tabs-3" role="tab" aria-selected="false"> Đánh giá <span>(lượt)</span>
-							</a></li>
+								href="#tabs-3" role="tab" aria-selected="false"> Đánh giá </a></li>
 						</ul>
 
 						<div class="tab-content">
@@ -114,7 +113,19 @@
 								<div class="product__details__tab__desc">
 									<h6>ĐÁNH GIÁ SẢN PHẨM</h6>
 									<div class="reviews">
-										<!-- Hiển thị danh sách đánh giá -->
+										<c:if test="${not empty reviews}">
+											<ul>
+												<c:forEach var="review" items="${reviews}">
+													<li><strong>${review.customer.name}</strong> - <span>${review.rating}
+															stars</span>
+														<p>${review.content}</p> <small>Reviewed on:
+															${review.createAt}</small></li>
+												</c:forEach>
+											</ul>
+										</c:if>
+										<c:if test="${empty reviews}">
+											<p>No reviews for this product yet.</p>
+										</c:if>
 									</div>
 								</div>
 							</div>

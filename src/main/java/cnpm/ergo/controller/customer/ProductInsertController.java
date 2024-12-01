@@ -21,7 +21,6 @@ public class ProductInsertController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // Chuyển đến trang product_insert.jsp
         req.getRequestDispatcher("/customer/views/product/product_insert.jsp").forward(req, resp);
     }
 
