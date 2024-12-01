@@ -42,7 +42,7 @@ public class ProductController extends HttpServlet {
 	                break;
 	            case "/products/search":
 	                int page = Integer.parseInt(req.getParameter("page") != null ? req.getParameter("page") : "1");
-	                int pageSize = Integer.parseInt(req.getParameter("size") != null ? req.getParameter("size") : "18");
+	                int pageSize = Integer.parseInt(req.getParameter("size") != null ? req.getParameter("size") : "12");
 	                searchProducts(req, resp, page, pageSize);
 	                break;
 	            default:
@@ -69,10 +69,27 @@ public class ProductController extends HttpServlet {
 		        HttpSession session = req.getSession();
 		        session.setAttribute("keyword", keyword);
 		        session.setAttribute("categoryName", filterCategoryName);
-		        String[] colors = getParameterValuesOrDefault(req, "color");
-		        String[] materials = getParameterValuesOrDefault(req, "material");
-		        String[] heights = getParameterValuesOrDefault(req, "height");
-		        String[] lengths = getParameterValuesOrDefault(req, "length");
+		        
+		     // Get the string arrays from session
+		        String colorsStr = (String) session.getAttribute("colorsAsString");
+		        String materialsStr = (String) session.getAttribute("materialsAsString");
+		        String heightsStr = (String) session.getAttribute("heightsAsString");
+		        String lengthsStr = (String) session.getAttribute("lengthsAsString");
+
+		        // Convert comma-separated strings back to arrays if they exist
+		        String[] colors = colorsStr != null ? colorsStr.split(",") : null;
+		        String[] materials = materialsStr != null ? materialsStr.split(",") : null;
+		        String[] heights = heightsStr != null ? heightsStr.split(",") : null;
+		        String[] lengths = lengthsStr != null ? lengthsStr.split(",") : null;
+		        session.removeAttribute("colorsAsString");
+		        session.removeAttribute("materialsAsString");
+		        session.removeAttribute("heightsAsString");
+		        session.removeAttribute("lengthsAsString");
+		        
+		        colors = getParameterValuesOrDefault(req, "color");
+		        materials = getParameterValuesOrDefault(req, "material");
+		        heights = getParameterValuesOrDefault(req, "height");
+		        lengths = getParameterValuesOrDefault(req, "length");
 		        String minPriceParam = req.getParameter("minPrice");
 		        String maxPriceParam = req.getParameter("maxPrice");
 		        Double minPrice = (minPriceParam != null && !minPriceParam.equals("null") && !minPriceParam.isEmpty()) 
@@ -83,13 +100,14 @@ public class ProductController extends HttpServlet {
 		                : null;
 
 		        String filterPrice = (minPrice != null && maxPrice != null) ? minPrice + "-" + maxPrice : null;
-		        session.setAttribute("colors", colors);
-		        session.setAttribute("materials", materials);
-		        session.setAttribute("heights", heights);
-		        session.setAttribute("lengths", lengths);
+		        session.setAttribute("selectedColors", colors);
+		        session.setAttribute("selectedMaterials", materials);
+		        session.setAttribute("selectedHeights", heights);
+		        session.setAttribute("selectedLengths", lengths);
 		        session.setAttribute("minPrice", minPrice);
 		        session.setAttribute("maxPrice", maxPrice);
 		        session.setAttribute("pageSize", pageSize);
+		        session.setAttribute("currentPage", page);
 
 		        System.out.println("Session ID: " + session.getId());  
 		        System.out.println("Keyword from session: " + session.getAttribute("keyword"));
@@ -113,7 +131,9 @@ public class ProductController extends HttpServlet {
 		        );
 		        System.out.println("Total products: " + totalProducts);
 		        int totalPages = (int) Math.ceil((double) totalProducts / pageSize);
-		        totalPages = totalPages > 0 ? totalPages : 1; 
+		        totalPages = totalPages > 0 ? totalPages : 1;
+		        req.setAttribute("keyword", keyword);
+		        req.setAttribute("categoryName", filterCategoryName);
 		        req.setAttribute("products", filteredProducts);
 		        req.setAttribute("currentPage", page);
 		        req.setAttribute("totalPages", totalPages);

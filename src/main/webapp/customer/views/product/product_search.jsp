@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <body>
 	<section id="wsus__product_page" class="wsus__vendor_details_page">
 		<div class="container">
@@ -29,8 +30,9 @@
 											<c:forEach var="category" items="${categories}">
 												<!-- Link đến trang search với tham số categoryName -->
 												<li><a
-													href="${pageContext.request.contextPath}/products/search?categoryName=${category.categoryName}"
-													onclick="console.log('Navigating to:', this.href)">
+													href="${pageContext.request.contextPath}/products/search?categoryName=${category.categoryName}&page=${sessionScope.currentPage}&keyword=${sessionScope.keyword}&minPrice=${sessionScope.minPrice}&maxPrice=${sessionScope.maxPrice}&pageSize=${sessionScope.pageSize}"
+													onclick="console.log('Navigating to:', this.href)"
+													<c:if test="${category.categoryName == sessionScope.categoryName}">style="color:#08c"</c:if>>
 														${category.categoryName} </a></li>
 											</c:forEach>
 										</ul>
@@ -38,6 +40,29 @@
 								</div>
 							</div>
 
+							<c:if test="${not empty sessionScope.selectedColors}">
+								<c:set var="colorsAsString"
+									value="${fn:join(sessionScope.selectedColors, ',')}"
+									scope="session" />
+							</c:if>
+
+							<c:if test="${not empty sessionScope.selectedMaterials}">
+								<c:set var="materialsAsString"
+									value="${fn:join(sessionScope.selectedMaterials, ',')}"
+									scope="session" />
+							</c:if>
+
+							<c:if test="${not empty sessionScope.selectedHeights}">
+								<c:set var="heightsAsString"
+									value="${fn:join(sessionScope.selectedHeights, ',')}"
+									scope="session" />
+							</c:if>
+
+							<c:if test="${not empty sessionScope.selectedLengths}">
+								<c:set var="lengthsAsString"
+									value="${fn:join(sessionScope.selectedLengths, ',')}"
+									scope="session" />
+							</c:if>
 
 							<form action="${pageContext.request.contextPath}/products/search"
 								method="get">
@@ -91,7 +116,7 @@
 												<div class="form-check">
 													<input class="form-check-input" type="checkbox"
 														name="color" value="${color}" id="color-${color}"
-														${sessionScope.selectedColors != null && sessionScope.selectedColors.contains(color) ? 'checked' : ''}>
+														<c:if test="${fn:contains(colorsAsString, color)}">checked</c:if>>
 													<label class="form-check-label" for="color-${color}">${color}</label>
 												</div>
 											</c:forEach>
@@ -115,7 +140,7 @@
 													<input class="form-check-input" type="checkbox"
 														name="material" value="${material}"
 														id="material-${material}"
-														${sessionScope.selectedMaterials != null && sessionScope.selectedMaterials.contains(material) ? 'checked' : ''}>
+														<c:if test="${fn:contains(materialsAsString, material)}">checked</c:if>>
 													<label class="form-check-label" for="material-${material}">${material}</label>
 												</div>
 											</c:forEach>
@@ -138,14 +163,24 @@
 												<div class="form-check">
 													<input class="form-check-input" type="checkbox"
 														name="height" value="${height}" id="height-${height}"
-														${sessionScope.selectedHeights != null && sessionScope.selectedHeights.contains(height) ? 'checked' : ''}>
+														<c:if test="${fn:contains(heightsAsString, height)}">checked</c:if>>
 													<label class="form-check-label" for="height-${height}">${height}</label>
 												</div>
 											</c:forEach>
 										</div>
 									</div>
 								</div>
-
+								<input type="hidden" name="categoryName"
+									value="${sessionScope.categoryName}" /> 
+									<input type="hidden"
+									name="minPrice" value="${sessionScope.minPrice}" /> <input
+									type="hidden" name="maxPrice" value="${sessionScope.maxPrice}" />
+								<input type="hidden" name="pageSize"
+									value="${sessionScope.pageSize}" /> <input type="hidden"
+									name="keyword" value="${sessionScope.keyword}" /> <input
+									type="hidden" name="pageSize" value="${sessionScope.pageSize}" />
+								<input type="hidden" name="page"
+									value="${sessionScope.currentPage}" />
 								<div class="accordion-item">
 									<h2 class="accordion-header" id="headingLength">
 										<button class="accordion-button" type="button"
@@ -161,7 +196,7 @@
 												<div class="form-check">
 													<input class="form-check-input" type="checkbox"
 														name="length" value="${length}" id="length-${length}"
-														${sessionScope.selectedLengths != null && sessionScope.selectedLengths.contains(length) ? 'checked' : ''}>
+														<c:if test="${fn:contains(lengthsAsString, length)}">checked</c:if>>
 													<label class="form-check-label" for="length-${length}">${length}</label>
 												</div>
 											</c:forEach>
@@ -251,7 +286,7 @@
 							<ul class="pagination justify-content-center">
 								<li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
 									<a class="page-link"
-									href="?page=${currentPage - 1}&size=${pageSize}"
+									href="?page=${currentPage - 1}&size=${pageSize}&categoryName=${sessionScope.categoryName}&keyword=${sessionScope.keyword}&minPrice=${sessionScope.minPrice}&maxPrice=${sessionScope.maxPrice}"
 									aria-label="Previous"> <i class="fas fa-chevron-left"></i>
 								</a>
 								</li>
@@ -259,14 +294,15 @@
 								<!-- Hiển thị danh sách các số trang -->
 								<c:forEach var="pageNum" items="${pageNumbers}">
 									<li class="page-item ${pageNum == currentPage ? 'active' : ''}">
-										<a class="page-link" href="?page=${pageNum}&size=${pageSize}">${pageNum}</a>
+										<a class="page-link"
+										href="?page=${pageNum}&size=${pageSize}&categoryName=${sessionScope.categoryName}&keyword=${sessionScope.keyword}&minPrice=${sessionScope.minPrice}&maxPrice=${sessionScope.maxPrice}">${pageNum}</a>
 									</li>
 								</c:forEach>
 
 								<li
 									class="page-item ${currentPage == productPage.totalPages ? 'disabled' : ''}">
 									<a class="page-link"
-									href="?page=${currentPage + 1}&size=${pageSize}"
+									href="?page=${currentPage + 1}&size=${pageSize}&categoryName=${sessionScope.categoryName}&keyword=${sessionScope.keyword}&minPrice=${sessionScope.minPrice}&maxPrice=${sessionScope.maxPrice}"
 									aria-label="Next"> <i class="fas fa-chevron-right"></i>
 								</a>
 								</li>

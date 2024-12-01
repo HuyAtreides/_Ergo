@@ -139,6 +139,13 @@
 			</h4>
 			<form role="search" action="index.jsp" method="get"
 				class="d-flex mt-3 gap-0">
+				<input type="hidden" name="categoryName" value="${sessionScope.categoryName}"/>
+								<input type="hidden" name="minPrice" value="${sessionScope.minPrice}"/>
+								<input type="hidden" name="maxPrice" value="${sessionScope.maxPrice}"/>
+								<input type="hidden" name="pageSize" value="${sessionScope.pageSize}"/>
+								<input type="hidden" name="keyword" value="${sessionScope.keyword}"/>
+								<input type="hidden" name="pageSize" value="${sessionScope.pageSize}"/>
+								<input type="hidden" name="page" value ="${sessionScope.currentPage}"/>
 				<input class="form-control rounded-start rounded-0 bg-light"
 					type="email" placeholder="What are you looking for?"
 					aria-label="What are you looking for?">
