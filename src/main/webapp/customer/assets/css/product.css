@@ -8366,3 +8366,39 @@ body {
         height: 20px;
     }
 }
+
+/* Thêm vào cuối file CSS */
+#wsus__product_page .container {
+    max-width: 1400px;
+    padding: 30px 15px;
+}
+
+#wsus__product_page .wsus__product_topbarm {
+    padding: 15px 20px;
+    margin-bottom: 25px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.wsus__product_item {
+    margin-bottom: 30px;
+}
+
+/* Điều chỉnh khoảng cách giữa các cột */
+.row > [class*='col-'] {
+    padding: 0 15px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    #wsus__product_page .container {
+        max-width: 95%;
+    }
+}
+
+@media (max-width: 991px) {
+    .col-xl-10.col-lg-11 {
+        width: 100%;
+    }
+}

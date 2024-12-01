@@ -83,31 +83,31 @@
 							<div class="tab-pane" id="tabs-2" role="tabpanel">
 								<div class="product__details__tab__desc">
 									<h6>THÔNG TIN SẢN PHẨM</h6>
-										<c:forEach var="type" items="${product.productTypes}">
-											<div class="product-type">
-												<div class="product-type-card-body">
-													<p>
+									<c:forEach var="type" items="${product.productTypes}">
+										<div class="product-type">
+											<div class="product-type-card-body">
+												<p>
 													<strong>Color:</strong> ${type.color}
-													</p>
-													<p>
-														<strong>Material:</strong> ${type.material}
-													</p>
-													<p>
-														<strong>Dimensions:</strong> ${type.length} x
-														${type.width} x ${type.height}
-													</p>
-													<p>
-														<strong>Weight:</strong> ${type.weight}
-													</p>
-													<p>
-														<strong>Price:</strong> ${type.price}
-													</p>
-													<p>
-														<strong>Quantity:</strong> ${type.quantity}
-													</p>
-												</div>
+												</p>
+												<p>
+													<strong>Material:</strong> ${type.material}
+												</p>
+												<p>
+													<strong>Dimensions:</strong> ${type.length} x ${type.width}
+													x ${type.height}
+												</p>
+												<p>
+													<strong>Weight:</strong> ${type.weight}
+												</p>
+												<p>
+													<strong>Price:</strong> ${type.price}
+												</p>
+												<p>
+													<strong>Quantity:</strong> ${type.quantity}
+												</p>
 											</div>
-										</c:forEach>
+										</div>
+									</c:forEach>
 								</div>
 							</div>
 							<div class="tab-pane" id="tabs-3" role="tabpanel">
@@ -126,6 +126,71 @@
 		</div>
 	</section>
 	<!-- Product Details Section End -->
-
+	<!-- Related Product Section Begin -->
+	<section class="related-product">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="section-title related__product__title">
+						<h2>Sản phẩm liên quan</h2>
+					</div>
+				</div>
+			</div>
+	
+			<div class="row">
+				<!-- Hiển thị sản phẩm liên quan -->
+				<c:forEach var="product" items="${relatedProducts}">
+					<div class="col-lg-3 col-md-4 col-sm-6">
+						<div class="product__item">
+							<img class="product__item__pic set-bg" src="${product.productImages[0].productImage}" alt="">
+	
+							<ul class="product__item__pic__hover">
+										<li><a href="#"><i class="fa fa-heart"></i></a></li>
+										<li><a href="#"><i class="fa fa-retweet"></i></a></li>
+										<li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+									</ul>
+						</div>
+						<div class="product__item__text">
+							<h6><a href="productdetail?id=${product.productId}">${product.name}</a></h6>
+							<h5>${product.productTypes[0].price}</h5>
+						</div>
+					</div>
+				</c:forEach>
+			</div>
+	
+			<!-- Phân trang -->
+			<div class="row">
+				<div class="flex-c-m flex-w w-full p-t-38">
+					<!-- Nút phân trang đầu tiên -->
+					<c:if test="${currentPage > 1}">
+						<button onclick="changePage(1)"
+							class="flex-c-m how-pagination1 trans-04 m-all-7">First</button>
+					</c:if>
+	
+					<!-- Các nút phân trang giữa -->
+					<c:forEach begin="1" end="${totalPages}" varStatus="loop">
+						<button onclick="changePage('${loop.index}')"
+							class="flex-c-m how-pagination1 trans-04 m-all-7 ${currentPage == loop.index ? 'active-pagination1' : ''}">
+							${loop.index}
+						</button>
+					</c:forEach>
+	
+					<!-- Nút phân trang cuối cùng -->
+					<c:if test="${currentPage < totalPages}">
+						<button onclick="changePage(${totalPages})"
+							class="flex-c-m how-pagination1 trans-04 m-all-7">Last</button>
+					</c:if>
+				</div>
+			</div>
+		</div>
+	</section>
+	
+	<script>
+		function changePage(pageNumber) {
+			const urlParams = new URLSearchParams(window.location.search);
+			urlParams.set('page', pageNumber);  // Cập nhật tham số 'page' trong URL
+			window.location.search = urlParams.toString();  // Reload trang với số trang mới
+		}
+	</script>
 </body>
 </html>

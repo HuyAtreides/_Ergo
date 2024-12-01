@@ -160,36 +160,59 @@
 				</div>
 			</div>
 
-			<div
-				class="col-sm-6 offset-sm-2 offset-md-0 col-lg-5 d-none d-lg-block">
-				<div class="search-bar row bg-light p-2 my-2 rounded-4">
-					<div class="col-md-4 d-none d-md-block">
-						<select class="form-select border-0 bg-transparent">
-							<option>All Categories</option>
-							<option>Groceries</option>
-							<option>Drinks</option>
-							<option>Chocolates</option>
-						</select>
-					</div>
-					<div class="col-11 col-md-7">
-						<form id="search-form"
-							class="text-center d-flex align-items-center"
-							action="/products/search" method="get">
-							<input type="text" class="form-control border-0 bg-transparent"
-								name="keyword" placeholder=""
-								required />
-							<button type="submit" class="btn btn-transparent p-0 ms-2">
-								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-									viewBox="0 0 24 24">
-                <path fill="currentColor"
-										d="M21.71 20.29L18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a1 1 0 0 0 1.42 0a1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 7-7a7 7 0 0 1-7 7Z" />
-            </svg>
-							</button>
-						</form>
-					</div>
+			<div class="col-sm-6 offset-sm-2 offset-md-0 col-lg-5 d-none d-lg-block">
+    <div class="search-bar row bg-light p-2 my-2 rounded-4">
+        <!-- Dropdown Category -->
+        <div class="col-md-4 d-none d-md-block">
+            <select class="form-select border-0 bg-transparent" name="categoryName" onchange="filterByCategory()">
+                <option value="">All Categories</option>
+                <c:forEach var="category" items="${categories}">
+                    <option value="${category.categoryName}" ${category.categoryName == param.categoryName ? 'selected' : ''}>
+                        ${category.categoryName}
+                    </option>
+                </c:forEach>
+            </select>
+        </div>
 
-				</div>
-			</div>
+        <!-- Search Form -->
+        <div class="col-11 col-md-7">
+            <form id="search-form" class="text-center d-flex align-items-center" action="${pageContext.request.contextPath}/products/search" method="get">
+                <input type="text" class="form-control border-0 bg-transparent" name="keyword" placeholder="Search for products..." value="${sessionScope.keyword != null ? sessionScope.keyword : ''}" />
+                <input type="hidden" name="categoryName" value="${sessionScope.categoryName != null ? sessionScope.categoryName : ''}" />
+                <button type="submit" class="btn btn-transparent p-0 ms-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M21.71 20.29L18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a1 1 0 0 0 1.42 0a1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 7-7a7 7 0 0 1-7 7Z" />
+                    </svg>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Hàm này sẽ tự động gửi request khi người dùng chọn một category từ dropdown
+    function filterByCategory() {
+        const selectElement = document.querySelector('select[name="categoryName"]');
+        const categoryName = selectElement.value;  // Lấy giá trị categoryName được chọn
+        const urlParams = new URLSearchParams(window.location.search); // Lấy các tham số hiện tại trong URL
+        
+        // Thêm tham số categoryName vào URL
+        if (categoryName) {
+            urlParams.set('categoryName', categoryName); // Thêm tham số categoryName vào URL
+        } else {
+            urlParams.delete('categoryName');  // Nếu chọn "All Categories", xóa tham số categoryName
+        }
+
+        // Cập nhật URL mà không làm mất keyword
+        const keyword = document.querySelector('input[name="keyword"]').value;
+        if (keyword) {
+            urlParams.set('keyword', keyword); // Giữ lại keyword trong URL
+        }
+        
+        window.location.search = urlParams.toString(); // Chuyển hướng đến URL mới với các tham số tìm kiếm
+    }
+</script>
+
 
 			<div
 				class="col-sm-8 col-lg-4 d-flex justify-content-end gap-5 align-items-center mt-4 mt-sm-0 justify-content-center justify-content-sm-end">
