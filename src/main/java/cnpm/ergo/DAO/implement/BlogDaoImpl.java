@@ -100,9 +100,26 @@ public class BlogDaoImpl implements IBlogDao {
         return ((Long) query.getSingleResult()).intValue(); // Đếm tổng số blog
     }
 
+    @Override
+    public Integer findIdByTitle(String title) {
+        EntityManager em = JPAConfig.getEntityManager();
+        try {
+            String jpql = "SELECT b.blogId FROM Blog b WHERE b.blogTitle = :title";
+            TypedQuery<Integer> query = em.createQuery(jpql, Integer.class);
+            query.setParameter("title", title);
+            return query.getSingleResult(); // Lấy blogId theo tiêu đề
+        } catch (Exception e) {
+            return null; // Trường hợp không tìm thấy blog
+        } finally {
+            em.close();
+        }
+    }
+
     public static void main(String[] args) {
         BlogDaoImpl blogDaoImpl = new BlogDaoImpl();
         // count
         System.out.println(blogDaoImpl.count());
+        // findIdByTitle
+        System.out.println(blogDaoImpl.findIdByTitle("Sample Title"));
     }
 }

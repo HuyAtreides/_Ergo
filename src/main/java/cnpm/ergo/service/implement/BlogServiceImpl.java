@@ -49,4 +49,9 @@ public class BlogServiceImpl implements IBlogService {
     public int getBlogCount() {
         return blogDao.count();
     }
+
+    @Override
+    public Integer findIdByTitle(String title) {
+        return blogDao.findIdByTitle(title);
+    }
 }

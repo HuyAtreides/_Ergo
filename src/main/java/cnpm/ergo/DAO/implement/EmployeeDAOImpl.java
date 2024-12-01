@@ -4,6 +4,7 @@ import cnpm.ergo.DAO.interfaces.IEmployeeDAO;
 import cnpm.ergo.configs.JPAConfig;
 import cnpm.ergo.entity.Employee;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 
 import java.util.List;
@@ -189,4 +190,48 @@ public class EmployeeDAOImpl implements IEmployeeDAO {
             entityManager.close();
         }
     }
+	@Override
+	public Employee getEmployee(String email) {
+        EntityManager em = JPAConfig.getEntityManager();
+        try {
+            TypedQuery<Employee> query = em.createQuery(
+                    "SELECT a FROM Employee a WHERE a.email = :email and a.isDelete = false",
+                    Employee.class
+            );
+            query.setParameter("email", email);
+
+            // Wrap getSingleResult in a try-catch block to handle NoResultException
+            try {
+                return query.getSingleResult();
+            } catch (NoResultException e) {
+                return null; // Return null if no result is found
+            }
+        } finally {
+            em.close();
+        }
+    }
+	public static void main(String[] args) {
+	    EmployeeDAOImpl employeeDAO = new EmployeeDAOImpl();
+
+	    // Tạo đối tượng Employee mới
+	    Employee newEmployee = new Employee();
+	    newEmployee.setName("Nguyen Van A");
+	    newEmployee.setEmail("nguyenvana@gmail.com");
+	    newEmployee.setPassword("password123");
+	    newEmployee.setIsDelete(false); // Đảm bảo rằng thuộc tính isDelete được đặt là false
+
+	    // Thêm nhân viên mới vào cơ sở dữ liệu
+	    employeeDAO.insert(newEmployee);
+
+	    // Kiểm tra xem nhân viên đã được thêm thành công hay chưa
+	    Employee insertedEmployee = employeeDAO.getEmployee("nguyenvana@gmail.com");
+	    if (insertedEmployee != null) {
+	        System.out.println("Employee added successfully.");
+	        System.out.println("Name: " + insertedEmployee.getName());
+	        System.out.println("Email: " + insertedEmployee.getEmail());
+	    } else {
+	        System.out.println("Failed to add employee.");
+	    }
+	}
+
 }
