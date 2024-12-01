@@ -18,7 +18,7 @@ public class Cart {
     @Column(name = "cartId")
     private int cartId;
     
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customerId", referencedColumnName = "customerId")
     private Customer customer;
     

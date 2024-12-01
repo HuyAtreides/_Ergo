@@ -32,14 +32,14 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<ProductType> productTypes;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product",fetch = FetchType.EAGER)
     private List<ProductImage> productImages;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "categoryId", referencedColumnName = "categoryId")
     private Category category;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Wishlist> wishlists;
 
 }

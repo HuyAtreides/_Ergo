@@ -38,10 +38,10 @@ public abstract class User implements Serializable {
     @Column(name = "gender", length = 100)
     private String gender;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Log> logs;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "roleId", referencedColumnName = "roleId")
     private Role role;
 
@@ -51,7 +51,7 @@ public abstract class User implements Serializable {
     @Column(name = "isDelete", columnDefinition = "BIT")
     private Boolean isDelete;
 
-    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Message> messages;
 
 
