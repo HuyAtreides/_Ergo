@@ -9,8 +9,8 @@ import jakarta.servlet.http.*;
 
 import java.io.IOException;
 
-@WebServlet(name = "LoginController", value = "/admin/login")
-public class LoginController extends HttpServlet {
+@WebServlet(name = "AdminLoginController", value = "/admin/login")
+public class AdminLoginController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();

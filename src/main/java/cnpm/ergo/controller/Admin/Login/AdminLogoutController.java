@@ -8,8 +8,8 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebServlet(name = "LogoutController", value = "/admin/logout")
-public class LogoutController extends HttpServlet {
+@WebServlet(name = "AdminLogoutController", value = "/admin/logout")
+public class AdminLogoutController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.getSession().removeAttribute("admin");

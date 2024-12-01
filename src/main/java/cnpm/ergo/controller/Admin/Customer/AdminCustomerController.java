@@ -11,8 +11,8 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-@WebServlet(name = "CustomerController", value = "/admin/customer")
-public class CustomerController extends HttpServlet {
+@WebServlet(name = "AdminCustomerController", value = "/admin/customer")
+public class AdminCustomerController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int pageNo = 1;

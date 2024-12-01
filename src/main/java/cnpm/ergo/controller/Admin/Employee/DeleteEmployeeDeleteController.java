@@ -1,6 +1,7 @@
-package cnpm.ergo.controller.Admin.Customer;
+package cnpm.ergo.controller.Admin.Employee;
 
-import cnpm.ergo.service.implement.CustomerServiceImpl;
+import cnpm.ergo.service.interfaces.IEmployeeService;
+import cnpm.ergo.service.implement.EmployeeServiceImpl;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -8,18 +9,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import cnpm.ergo.service.interfaces.ICustomerService;
 
-@WebServlet(name = "DeleteController", value = "/DeleteController")
-public class DeleteController extends HttpServlet {
-    private ICustomerService customerService;
+@WebServlet(name = "DeleteEmployeeController", value = "/admin/employee/delete")
+public class DeleteEmployeeDeleteController extends HttpServlet {
+    private IEmployeeService employeeService;
 
     @Override
     public void init() throws ServletException {
         // Initialize the service implementation
-         customerService = new CustomerServiceImpl();
+        employeeService = new EmployeeServiceImpl();
     }
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (request.getSession().getAttribute("admin") == null) {
@@ -27,25 +26,20 @@ public class DeleteController extends HttpServlet {
             return;
         }
         try {
-            // Retrieve the userId from the request
+            // Retrieve the employeeId from the request
             int userId = Integer.parseInt(request.getParameter("userId"));
 
-            // Call the service to delete the customer
-            customerService.delete(userId);
+            // Call the service to delete the employee
+            employeeService.delete(userId);
 
-            // Redirect to the customer management page upon success
-            response.sendRedirect(request.getContextPath() + "/admin/customer");
+            // Redirect to the employee management page upon success
+            response.sendRedirect(request.getContextPath() + "/admin/employee");
 
         } catch (Exception e) {
             e.printStackTrace();
             // Forward the error details to an error page
-            request.setAttribute("errorMessage", "Failed to delete the customer. Please try again.");
+            request.setAttribute("errorMessage", "Failed to delete the employee. Please try again.");
             request.getRequestDispatcher("/errorPage.jsp").forward(request, response);
         }
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
     }
 }
