@@ -11,4 +11,5 @@ public interface IBlogDao {
     List<Blog> findAll();
     List<Blog> searchByTitle(String title);
     int count();
+	Integer findIdByTitle(String title);
 }
