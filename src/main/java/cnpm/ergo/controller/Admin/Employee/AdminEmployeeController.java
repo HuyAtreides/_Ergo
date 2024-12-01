@@ -12,8 +12,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "employeeController", value = "/admin/employee")
-public class EmployeeController extends HttpServlet {
+@WebServlet(name = "AdminEmployeeController", value = "/admin/employee")
+public class AdminEmployeeController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
