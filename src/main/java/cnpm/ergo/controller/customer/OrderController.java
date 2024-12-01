@@ -23,7 +23,7 @@ import jakarta.servlet.http.HttpServletResponse;
 @MultipartConfig(fileSizeThreshold = 1024 * 1024, 
                  maxFileSize = 1024 * 1024 * 5, 
                  maxRequestSize = 1024 * 1024 * 5 * 5)
-@WebServlet(urlPatterns = {"/customer/order", "/customer/order/voucher", "/customer/order/shippingInfo"} )
+@WebServlet(urlPatterns = {"/customer/order", "/customer/order/voucher", "/customer/order/shippingInfo", "/customer/order/paymentMethod", "/customer/confirmOrder" } )
 public class OrderController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private IOrderService orderService;
@@ -105,18 +105,49 @@ public class OrderController extends HttpServlet {
                     	order.setActualCost(order.getTotalCost() + 30000);
                     	orderService.update(order);
                     }
+                    // xử lý lỗi khi người dùng xóa ?selectedVoucher =  rồi reload
                 } else {
                 	Voucher v = order.getVoucher();
                 	if (v != null) {
                 		selectedVoucher = v.getCode();
+                		boolean isVoucherByProduct = listVoucherByProduct.stream()
+                    		    .anyMatch(voucher -> voucher.getVoucherId() == v.getVoucherId());
+                    	
+                    	req.setAttribute("isVoucherByProduct", isVoucherByProduct);
+                    	
+                    	if (isVoucherByProduct != true) {
+                    		double sale = order.getTotalCost() * order.getDiscount();
+                    		req.setAttribute("voucherId", v.getVoucherId());
+                        	req.setAttribute("sale", sale);
+                    	}
+                    	else {
+                    		double sale = voucherService.CountDiscountPrice(orderItems, v);
+                    		req.setAttribute("voucherId", v.getVoucherId());
+                        	req.setAttribute("sale", sale);
+                    	}
                 	}
-                }                                        
+                }    
+                if (req.getParameter("error") != null) {
+                	String error = req.getParameter("error");
+                	if (error.contains("1")) {
+                		req.setAttribute("errorMessage", "Thiếu thông tin giao hàng");
+                	} else if(error.contains("2")){
+                		req.setAttribute("errorMessage", "Chưa chọn phương thức thanh toán");
+                	}
+                	else {
+                		req.setAttribute("errorMessage", "LỖI HỆ THỐNG");
+                	}
+                	
+                }
 
                 // Đặt thuộc tính order vào request và chuyển tiếp tới JSP
                 req.setAttribute("order", order);
+                req.setAttribute("ship", 30000);
                 req.setAttribute("selectedVoucher", selectedVoucher);
                 req.setAttribute("listVoucher", listVoucherCanApply);
                 req.setAttribute("listVoucherCanNotApply", listVoucherCanNotApply);
+                String paymentCode = "https://img.vietqr.io/image/VCB-1025984614-compact.png?amount=" + (int)order.getActualCost() + "&addInfo=<" + "Thanh toán đơn hàng " + order.getOrderId() + ">&accountName=PHAMQUYNHTHU";
+                req.setAttribute("paymentCode", paymentCode);
                 req.getRequestDispatcher("/customer/views/Order.jsp").forward(req, resp);
 
             } catch (Exception e) {
@@ -124,6 +155,14 @@ public class OrderController extends HttpServlet {
                 e.printStackTrace();  // Hoặc sử dụng một logger để ghi lại lỗi
                 resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An error occurred while processing your request.");
             }
+    	} else if (url.contains("/customer/confirmOrder")) {
+    		Order order = orderService.findById(Integer.parseInt(req.getParameter("orderId")));
+    		String status = order.getStatus();
+			if (status.contains("thanh toán"))
+				req.getRequestDispatcher("/customer/views/confirmOrder.jsp").forward(req, resp);
+			else {
+				resp.sendRedirect(req.getContextPath() + "/customer/order?error=" + "3");
+			}
     	}
     }
 
@@ -206,7 +245,37 @@ public class OrderController extends HttpServlet {
             resp.sendRedirect(req.getContextPath() + "/customer/order");
             
     	}
+    	else if (url.contains("paymentMethod")) {
+    		// Lấy thông tin phương thức thanh toán từ form
+            String paymentMethod = req.getParameter("paymentMethod");
+            Order order = orderService.findById(Integer.parseInt(req.getParameter("orderId")));
+
+            if (order == null) {
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Không tìm thấy thông tin đơn hàng.");
+                return;
+            }
+            if (order.getPhone() == null || order.getPhone().isEmpty() || order.getCityOfProvince() == null ||order.getCityOfProvince().isEmpty() 
+            		|| order.getDistrict() == null || order.getDistrict().isEmpty() 
+            		|| order.getWard() == null || order.getWard().isEmpty() 
+            		|| order.getStreetNumber() == null || order.getStreetNumber().isEmpty()) {
+            	resp.sendRedirect(req.getContextPath() + "/customer/order?error=" + "1");
+                return;
+            }
+            if ("cod".equals(paymentMethod)) {
+                // Thanh toán khi nhận hàng
+                order.setStatus("Chưa thanh toán");
+                orderService.update(order);
+                resp.sendRedirect(req.getContextPath() + "/customer/confirmOrder?orderId=" + order.getOrderId());
+            } else if ("online".equals(paymentMethod)) {
+      
+                order.setStatus("Chưa duyệt thanh toán");
+                orderService.update(order);
+                resp.sendRedirect(req.getContextPath() + "/customer/confirmOrder?orderId=" + order.getOrderId());
+            } else {
+                // Phương thức thanh toán không hợp lệ
+            	resp.sendRedirect(req.getContextPath() + "/customer/order?error=" + "2");
+            }
+    	}
 	}
-    
     
 }

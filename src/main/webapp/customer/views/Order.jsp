@@ -321,67 +321,94 @@
     </div>
 </div>
 
-<div class="checkout-container" style="max-width: 600px; margin: auto; padding: 20px; background-color: #fff; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); border-radius: 12px; transition: box-shadow 0.3s ease; margin-top: 20px;">
-  <header class="checkout-header" style="text-align: center; font-size: 28px; font-family: 'Arial', sans-serif; font-weight: bold; margin-bottom: 20px; color: #333;">
-    Shopping Bill
-  </header>
-  
-  <!-- Shopping Bill Section -->
-  <div class="shopping-bill" style="margin-top: 20px; margin-bottom: 20px;">
-    <table class="bill-table" style="width: 100%; margin-top: 10px; border-collapse: collapse; font-size: 14px; font-family: 'Arial', sans-serif;">
-      <tbody>
-        <tr>
-          <td style="padding: 12px; text-align: left; color: #777;">Shipping fee</td>
-          <td style="padding: 12px; text-align: right;">30 000 đ</td>
-        </tr>
-        <tr>
-		    <td style="padding: 12px; text-align: left; color: #777;"> Discount: </td>
-		    <td style="padding: 12px; text-align: right;">
-		        <c:choose>
-		            <c:when test="${isVoucherByProduct == true}">
-		                - <fmt:formatNumber value="${sale}" pattern="#0"/>
-		            </c:when>
-		            <c:when test="${isVoucherByProduct == false}">
-		                - <fmt:formatNumber value="${sale}" pattern="#0"/>
-		            </c:when>
-		        </c:choose>
-		    </td>
-		</tr>
-      
-        <tr>
-          <td style="padding: 12px; text-align: left; color: #333;">Price Total</td>
-          <td style="padding: 12px; text-align: right;">${order.totalCost} đ</td>
-        </tr>
-      </tbody>
-      <tfoot>
-        <tr>
-          <td style="padding: 15px 12px; font-weight: bold; text-align: left; font-size: 16px; color: #333;">Total</td>
-          <td style="padding: 15px 12px; font-weight: bold; text-align: right; font-size: 28px; color: #388E3C; font-family: 'Arial', sans-serif;">
-            <span style="cursor: pointer; transition: transform 0.2s ease, color 0.2s ease;" 
-              onmouseover="this.style.color='#FF9800'; this.style.transform='scale(1.1)';" 
-              onmouseout="this.style.color='#388E3C'; this.style.transform='scale(1)';">
-              ${order.actualCost} đ 
-            </span>
-          </td>
-        </tr>
-      </tfoot>
-    </table>
-  </div>
 
-  <!-- Submit Button -->
-  <div class="submit-section" style="margin-top: 20px; display: flex; justify-content: flex-end;">
-    <button class="submit-button" type="submit" style="padding: 12px 24px; font-size: 16px; background-color: #4CAF50; color: white; border: none; cursor: pointer; border-radius: 6px; display: flex; justify-content: center; align-items: center; box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); transition: background-color 0.3s ease, transform 0.3s ease;" 
-      onmouseover="this.style.backgroundColor='#388E3C'; this.style.transform='scale(1.05)';" 
-      onmouseout="this.style.backgroundColor='#4CAF50'; this.style.transform='scale(1)';" 
-      onmousedown="this.style.backgroundColor='#2C6B31';">
-      <svg class="icon" style="margin-right: 8px; width: 20px; height: 20px;"><use xlink:href="#icon-shopping-bag" /></svg>Buy Now
+<form method="POST" action="${pageContext.request.contextPath}/customer/order/paymentMethod" 
+      style="background: #fff; width: 100%; max-width: 500px; padding: 30px; margin: 40px auto; border-radius: 16px; 
+             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); transition: transform 0.3s ease, box-shadow 0.3s ease;">
+    <input type="hidden" name="orderId" value="${order.orderId}" />
+    <!-- Tiêu đề -->
+    <h3 style="text-align: center; font-size: 1.3rem; color: #000; margin-bottom: 20px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+        Chọn Phương Thức Thanh Toán
+    </h3>
+
+    <!-- Ship COD (Mặc định chọn) -->
+    <div style="display: flex; align-items: center; margin-bottom: 20px;">
+        <input type="radio" id="codPayment" name="paymentMethod" value="cod" 
+               checked onchange="document.getElementById('qrContainer').style.display='none'" 
+               required style="margin-right: 10px; accent-color: #333;">
+        <label for="codPayment" style="font-size: 1rem; color: #555; cursor: pointer;">Thanh toán khi nhận hàng (Ship COD)</label>
+    </div>
+
+    <!-- Thanh toán ngay -->
+    <div style="display: flex; align-items: center; margin-bottom: 20px;">
+        <input type="radio" id="onlinePayment" name="paymentMethod" value="online" 
+               onchange="document.getElementById('qrContainer').style.display='block'" 
+               required style="margin-right: 10px; accent-color: #333;">
+        <label for="onlinePayment" style="font-size: 1rem; color: #555; cursor: pointer;">Thanh toán ngay bằng mã</label>
+    </div>
+
+    <!-- QR Code Container -->
+    <div id="qrContainer" style="display: none; text-align: center; margin-bottom: 20px;">
+        <img id="qrImage" src="${paymentCode}" alt="QR Code" style="max-width: 100%; height: auto; border-radius: 12px; border: 1px solid #ccc;">
+    </div>
+
+        <!-- Hóa đơn thanh toán -->
+        <div style="background: #fff; border-radius: 12px; padding: 20px; border: 1px solid #ccc; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); margin-bottom: 20px;">
+            <h4 style="text-align: center; margin-bottom: 15px; font-size: 1.2rem; font-weight: bold; color: #000;">Shopping Bill</h4>
+            <table style="width: 100%; font-size: 0.9rem; border-collapse: collapse; color: #333;">
+                <tbody>
+                    <tr>
+                        <td style="padding: 10px; color: #555;">Shipping Fee:</td>
+                        <td style="padding: 10px; text-align: right;"><fmt:formatNumber value= "${ship}" type="number" /> đ</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; color: #555;">Discount:</td>
+                        <td style="padding: 10px; text-align: right;">
+                            <c:choose>
+                                <c:when test="${isVoucherByProduct == true}">
+                                    - <fmt:formatNumber value="${sale}" type="number" /> đ
+                                </c:when>
+                                <c:when test="${isVoucherByProduct == false}">
+                                    - <fmt:formatNumber value="${sale}" type="number" /> đ
+                                </c:when>
+                                <c:otherwise>
+                                    - 0 đ
+                                </c:otherwise>
+                            </c:choose>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; color: #555;">Price Total:</td>
+                        <td style="padding: 10px; text-align: right;"><fmt:formatNumber value="${order.totalCost}" type="number" /> đ</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr style="font-size: 1.1rem; font-weight: bold;">
+                        <td style="padding: 10px; color: #000;">Total:</td>
+                        <td style="padding: 10px; text-align: right; color: #000;"><fmt:formatNumber value="${order.actualCost}" type="number" /> đ</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        
+        <c:if test="${not empty errorMessage}">
+		    <div style="color: red; text-align: center; margin-bottom: 20px;">
+		        ${errorMessage}
+		    </div>
+		</c:if>
+		
+        <!-- Nút Mua Ngay -->
+    <button type="submit" 
+            style="display: block; width: 100%; padding: 12px 20px; font-size: 1rem; font-weight: bold; color: #fff; 
+                   background: #333; border: none; border-radius: 8px; text-align: center; cursor: pointer; 
+                   transition: background 0.3s ease, transform 0.2s ease;"
+            onmouseover="this.style.background='#000'; this.style.transform='scale(1.05)';"
+            onmouseout="this.style.background='#333'; this.style.transform='scale(1)';"
+            onmousedown="this.style.background='#555';">
+        Mua Ngay
     </button>
-  </div>
-</div>
+</form>
 
-
-		
-		
 		<svg xmlns="http://www.w3.org/2000/svg" style="display: none">
 		  <symbol id="icon-shopping-bag" viewBox="0 0 24 24">
 		    <path d="M20 7h-4v-3c0-2.209-1.791-4-4-4s-4 1.791-4 4v3h-4l-2 17h20l-2-17zm-11-3c0-1.654 1.346-3 3-3s3 1.346 3 3v3h-6v-3zm-4.751 18l1.529-13h2.222v1.5c0 .276.224.5.5.5s.5-.224.5-.5v-1.5h6v1.5c0 .276.224.5.5.5s.5-.224.5-.5v-1.5h2.222l1.529 13h-15.502z" />
