@@ -4,6 +4,7 @@ import cnpm.ergo.DAO.interfaces.IAdministratorDAO;
 import cnpm.ergo.configs.JPAConfig;
 import cnpm.ergo.entity.Administrator;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 
 public class AdministratorDAOImpl implements IAdministratorDAO {
@@ -11,17 +12,23 @@ public class AdministratorDAOImpl implements IAdministratorDAO {
     public Administrator getAdministrator(String email) {
         EntityManager em = JPAConfig.getEntityManager();
         try {
-            // Create a typed query to find the administrator by email
-            TypedQuery<Administrator> query = em.createQuery("SELECT a FROM Administrator a WHERE a.email = :email", Administrator.class);
+            TypedQuery<Administrator> query = em.createQuery(
+                    "SELECT a FROM Administrator a WHERE a.email = :email and a.isDelete = false",
+                    Administrator.class
+            );
             query.setParameter("email", email);
 
-            // Retrieve the result (assuming email is unique, we use getSingleResult)
-            Administrator administrator = query.getSingleResult();
-            return administrator;
+            // Wrap getSingleResult in a try-catch block to handle NoResultException
+            try {
+                return query.getSingleResult();
+            } catch (NoResultException e) {
+                return null; // Return null if no result is found
+            }
         } finally {
             em.close();
         }
     }
+
 
     public static void main(String[] args) {
         AdministratorDAOImpl administratorDAO = new AdministratorDAOImpl();

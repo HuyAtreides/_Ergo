@@ -5,11 +5,11 @@
     <title>JSP - Hello World</title>
 </head>
 <body>
-<a href="admin/home">Go to Admin</a>
+<a href="admin/login">Go to Admin</a>
 <br>
-<a href="employee/views/index.jsp">Go to Employee</a>
+<a href="employee/login">Go to Employee</a>
 <br>
-<a href="customer/views/index.jsp">Go to Customer</a>
+<a href="customer/home">Go to Customer</a>
 <br>
 <a href="hello-servlet">Test he thong okok</a>
 </body>

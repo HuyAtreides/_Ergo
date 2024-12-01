@@ -11,8 +11,8 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebServlet(name = "AddController", value = "/admin/employee/add")
-public class AddController extends HttpServlet {
+@WebServlet(name = "UpdateEmployeeController", value = "/admin/employee/update")
+public class UpdateEmployeeController extends HttpServlet {
     private IEmployeeService employeeService;
 
     @Override
@@ -29,27 +29,32 @@ public class AddController extends HttpServlet {
         }
         try {
             // Retrieve form data from the request
+            int userId = Integer.parseInt(request.getParameter("userId"));
             String name = request.getParameter("name");
             String email = request.getParameter("email");
             String phone = request.getParameter("phone");
             String address = request.getParameter("address");
             String gender = request.getParameter("gender");
+            String status = request.getParameter("status");
             String password = request.getParameter("password");
 
             // Validate input fields (optional, add your validation logic here)
 
-            // Create and populate the Employee object
-            Employee employee = new Employee();
-            employee.setName(name);
-            employee.setEmail(email);
-            employee.setPhone(phone);
-            employee.setAddress(address);
-            employee.setGender(gender);
-            employee.setPassword(password);
-            employee.setStatus("Active"); // Default status
-            employee.setIsDelete(false); // Mark as not deleted
-            // Call the service to save the employee
-            employeeService.insert(employee);
+            // Retrieve the existing Employee object
+            Employee employee = employeeService.findById(userId);
+            if (employee != null) {
+                // Update the Employee object with new values
+                employee.setName(name);
+                employee.setEmail(email);
+                employee.setPhone(phone);
+                employee.setAddress(address);
+                employee.setGender(gender);
+                employee.setStatus(status);
+                employee.setPassword(password); // Update password
+
+                // Call the service to update the employee
+                employeeService.update(employee);
+            }
 
             // Redirect to the employee management page upon success
             response.sendRedirect(request.getContextPath() + "/admin/employee");
@@ -57,7 +62,7 @@ public class AddController extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             // Forward the error details to an error page
-            request.setAttribute("errorMessage", "Failed to add the employee. Please try again.");
+            request.setAttribute("errorMessage", "Failed to update the employee. Please try again.");
             request.getRequestDispatcher("/errorPage.jsp").forward(request, response);
         }
     }
