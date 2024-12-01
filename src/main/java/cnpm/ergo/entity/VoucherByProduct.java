@@ -8,6 +8,10 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 @Entity
+@NamedQuery(
+        name = "VoucherByProduct.findAll",
+        query = "SELECT c FROM VoucherByProduct c"
+)
 @PrimaryKeyJoinColumn(name = "voucherByProductId")
 public class VoucherByProduct extends Voucher {
     @ManyToMany
