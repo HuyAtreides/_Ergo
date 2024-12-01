@@ -28,29 +28,29 @@ public class DeleteVoucherController extends HttpServlet {
         voucherByProduct = new IVoucherByProductServiceImpl();
         voucherByPrice = new IVoucherByPriceServiceImpl();
     }
-    @Override
-    protected void doGet(HttpServlet request, HttpServletResponse response) throws ServletException, IOException {
-//        if (request.getSession().getAttribute("admin") == null) {
-//            response.sendRedirect(request.getContextPath() + "/admin/login");
-//            return;
+//    @Override
+//    protected void doGet(HttpServlet request, HttpServletResponse response) throws ServletException, IOException {
+////        if (request.getSession().getAttribute("admin") == null) {
+////            response.sendRedirect(request.getContextPath() + "/admin/login");
+////            return;
+////        }
+//        try {
+//            int voucherID = Integer.parseInt(request.getParameter("voucherId"));
+//            String voucherType = request.getParameter("voucherType");
+//            // Kiểm tra loại voucher và xóa tương ứng
+//            if ("PRICE".equalsIgnoreCase(voucherType)) {
+//                voucherByPrice.delete(voucherId);
+//            } else if ("PRODUCT".equalsIgnoreCase(voucherType)) {
+//                voucherByProduct.delete(voucherId);
+//            } else {
+//                return "Invalid voucher type";
+//            }
+//            return "Voucher deleted successfully!";
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return "Error occurred while deleting the voucher";
 //        }
-        try {
-            int voucherID = Integer.parseInt(request.getParameter("voucherId"));
-            String voucherType = request.getParameter("voucherType");
-            // Kiểm tra loại voucher và xóa tương ứng
-            if ("PRICE".equalsIgnoreCase(voucherType)) {
-                voucherByPrice.delete(voucherId);
-            } else if ("PRODUCT".equalsIgnoreCase(voucherType)) {
-                voucherByProduct.delete(voucherId);
-            } else {
-                return "Invalid voucher type";
-            }
-            return "Voucher deleted successfully!";
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "Error occurred while deleting the voucher";
-        }
-    }
+//    }
 
 
 }

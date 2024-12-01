@@ -1,3 +1,7 @@
+<%@ page import="cnpm.ergo.entity.VoucherByPrice" %>
+<%@ page import="cnpm.ergo.entity.VoucherByProduct" %>
+<%@ page import="cnpm.ergo.entity.Voucher" %>
+<%@ page import="java.util.List" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
@@ -140,39 +144,57 @@
             </tr>
             </thead>
             <tbody>
-            <c:forEach var="voucher" items="${vouchers}">
-                <tr>
-                    <td>${voucher.voucherId}</td>
-                    <td>${voucher.code}</td>
-                    <td>${voucher.discount}</td>
-                    <td>${voucher.dateStart}</td>
-                    <td>${voucher.dateEnd}</td>
-                    <td>${voucher.voucherType}</td>
-                    <td>
+            <%
+                List<Voucher> voucherList = (List<Voucher>) request.getAttribute("vouchers");
+                for (Voucher voucher : voucherList) {
+                    boolean isVoucherByPrice = voucher instanceof VoucherByPrice;
+            %>
+            <tr>
+                <td><%= voucher.getVoucherId() %></td>
+                <td><%= voucher.getCode() %></td>
+                <td><%= voucher.getDiscount() %></td>
+                <td><%= voucher.getDateStart() %></td>
+                <td><%= voucher.getDateEnd() %></td>
+                <td><%= voucher.getVoucherType() %></td>
+                <td>
+                    <c:choose>
+                        <c:when test="${voucher.marketingCampaign != null}">
+                            <%= voucher.getMarketingCampaign().getCampaignId() %>
+                        </c:when>
+                        <c:otherwise>
+                            Not Assigned
+                        </c:otherwise>
+                    </c:choose>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <!-- Edit Button -->
+                        <button type="button" class="btn btn-warning btn-sm"
+                                onclick="showEditVoucherModal('<%= voucher.getVoucherId() %>','<%= voucher.getVoucherType() %>')">Edit</button>
+
+                        <!-- Delete Button based on type -->
                         <c:choose>
-                            <c:when test="${voucher.marketingCampaign != null}">
-                                ${voucher.marketingCampaign.campaignId}
+                            <c:when test="<%= isVoucherByPrice %>">
+                                <form action="admin/deletePrice" method="post">
+                                    <input type="hidden" name="voucherId" value="<%= voucher.getVoucherId() %>">
+                                    <button type="submit" class="btn btn-danger btn-sm"
+                                            onclick="return confirm('Are you sure you want to delete this voucher?');">Delete</button>
+                                </form>
                             </c:when>
                             <c:otherwise>
-                                Not Assigned
+                                <form action="admin/deleteProduct" method="post">
+                                    <input type="hidden" name="voucherId" value="<%= voucher.getVoucherId() %>">
+                                    <button type="submit" class="btn btn-danger btn-sm"
+                                            onclick="return confirm('Are you sure you want to delete this voucher?');">Delete</button>
+                                </form>
                             </c:otherwise>
                         </c:choose>
-                    </td>
-                    <td>
-                        <div class="d-flex justify-content-center">
-                            <!-- Edit Button -->
-                            <button type="button" class="btn btn-warning btn-sm"
-                                    onclick="showEditVoucherModal('${voucher.voucherId}','${voucher.voucherType}')">Edit</button>
-
-                            <!-- Delete Button -->
-                            <form action="deleteVoucher" method="post">
-                                <input type="hidden" name="voucherId" value="${voucher.voucherId}">
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this voucher?');">Delete</button>
-                            </form>
-                        </div>
-                    </td>
-                </tr>
-            </c:forEach>
+                    </div>
+                </td>
+            </tr>
+            <%
+                }
+            %>
             <!-- Display message if voucher list is empty -->
             <c:if test="${empty vouchers}">
                 <tr>
@@ -334,28 +356,38 @@
     });
 </script>
 <script>
-    function openEditVoucherModal(voucherId, voucherType) {
-        // Gán giá trị vào các trường trong modal
-        document.getElementById("editVoucherId").value = voucherId;
-
-        // Hiển thị các trường tùy thuộc vào voucherType
-        if (voucherType === "PRICE") {
-            document.getElementById("voucherByPriceFields").classList.remove("d-none");
-            document.getElementById("voucherByProductFields").classList.add("d-none");
-            document.getElementById("editLowerbound").value = lowerbound || "";
-        } else if (voucherType === "PRODUCT") {
-            document.getElementById("voucherByPriceFields").classList.add("d-none");
-            document.getElementById("voucherByProductFields").classList.remove("d-none");
-
-            // Xử lý productTypes nếu cần
-            const productTypesField = document.getElementById("editProductTypes");
-            productTypesField.value = productTypes || "";
-        }
+    function showEditVoucherModal(voucherId, voucherType) {
+        console.log("Hello Tương");
+        // // Gán giá trị vào các trường trong modal
+        // document.getElementById("editVoucherId").value = voucherId;
+        //
+        // // Hiển thị các trường tùy thuộc vào voucherType
+        // if (voucherType === "PRICE") {
+        //     document.getElementById("voucherByPriceFields").classList.remove("d-none");
+        //     document.getElementById("voucherByProductFields").classList.add("d-none");
+        //     document.getElementById("editLowerbound").value = lowerbound || "";
+        // } else if (voucherType === "PRODUCT") {
+        //     document.getElementById("voucherByPriceFields").classList.add("d-none");
+        //     document.getElementById("voucherByProductFields").classList.remove("d-none");
+        //
+        //     // Xử lý productTypes nếu cần
+        //     const productTypesField = document.getElementById("editProductTypes");
+        //     productTypesField.value = productTypes || "";
+        // }
 
         // Hiển thị modal
         new bootstrap.Modal(document.getElementById("editVoucherModal")).show();
     }
 </script>
+<%--<script>--%>
+<%--    function showEditVoucherModal(voucherId, voucherType) {--%>
+<%--        $('#editVoucherId').val(voucherId);--%>
+<%--        $('#editVoucherType').val(voucherType);--%>
+<%--        // Populate other fields as necessary--%>
+<%--        $('#editVoucherModal').modal('show');--%>
+<%--    }--%>
+<%--</script>--%>
+
 
 </body>
 </html>
