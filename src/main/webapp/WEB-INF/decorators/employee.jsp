@@ -50,11 +50,6 @@
     <div class="layout-page">
       <!-- Content wrapper -->
       <div class="content-wrapper">
-        <header class="py-3">
-          <div class="container">
-            <img src="${pageContext.request.contextPath}/employee/assets/img/logo.png" alt="Logo" class="img-fluid">
-          </div>
-        </header>
         <sitemesh:write property="body"/>
       </div>
       <!-- Content wrapper -->
