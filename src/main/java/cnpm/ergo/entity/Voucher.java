@@ -28,5 +28,5 @@ public abstract class Voucher {
     @OneToOne(mappedBy = "voucher")
     private MarketingCampaign marketingCampaign;
 
-    // Getters and Setter
+    // Getters and Setters
 }

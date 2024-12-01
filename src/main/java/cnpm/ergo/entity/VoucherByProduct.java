@@ -20,7 +20,13 @@ public class VoucherByProduct extends Voucher {
             joinColumns = @JoinColumn(name = "voucherByProductId"),
             inverseJoinColumns = @JoinColumn(name = "typeId")
     )
+    
+    
     private List<ProductType> productTypes;
-    // Getters and Setters
+
+	@Override
+	public String toString() {
+		return "VoucherByProduct [productTypes=" + productTypes + "]";
+	}
 }
 
