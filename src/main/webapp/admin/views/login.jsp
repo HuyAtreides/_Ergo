@@ -30,8 +30,8 @@
         </div>
         <button type="submit" class="btn btn-primary btn-block mt-3">Login</button>
       </form>
-      <c:if test="${not empty errorMessage}">
-        <div class="alert alert-danger mt-3">${errorMessage}</div>
+      <c:if test="${not empty error}">
+        <div class="alert alert-danger mt-3">${error}</div>
       </c:if>
     </div>
   </div>
