@@ -14,5 +14,10 @@ import lombok.*;
 public class VoucherByPrice extends Voucher {
     private double lowerbound;
 
-    // Getters and Setters
+	@Override
+	public String toString() {
+		return "VoucherByPrice [lowerbound=" + lowerbound + "]";
+	}
+
+    
 }

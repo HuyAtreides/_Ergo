@@ -5,6 +5,7 @@ import java.util.List;
 import cnpm.ergo.DAO.interfaces.IOrderDao;
 import cnpm.ergo.configs.JPAConfig;
 import cnpm.ergo.entity.Order;
+import cnpm.ergo.entity.OrderItem;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
@@ -90,6 +91,11 @@ public class OrderDaoImpl implements IOrderDao{
         return ((Long) query.getSingleResult()).intValue();
 	}
 
+	public static void main(String[] args) {
+		OrderDaoImpl o = new OrderDaoImpl();
+		Order oi = o.findById(1);
+		System.out.print(oi);
+	}
 	
 	
 }
