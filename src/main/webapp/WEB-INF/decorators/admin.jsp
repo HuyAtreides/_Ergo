@@ -7,7 +7,26 @@
           name="viewport"
           content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
   />
+  <!-- build:js assets/vendor/js/core.js -->
+  <script src="${pageContext.request.contextPath}/admin/assets/vendor/libs/jquery/jquery.js"></script>
+  <script src="${pageContext.request.contextPath}/admin/assets/vendor/libs/popper/popper.js"></script>
+  <script src="${pageContext.request.contextPath}/admin/assets/vendor/js/bootstrap.js"></script>
+  <script src="${pageContext.request.contextPath}/admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
 
+  <script src="${pageContext.request.contextPath}/admin/assets/vendor/js/menu.js"></script>
+  <!-- endbuild -->
+
+  <!-- Vendors JS -->
+  <script src="${pageContext.request.contextPath}/admin/assets/vendor/libs/apex-charts/apexcharts.js"></script>
+
+  <!-- Main JS -->
+  <script src="${pageContext.request.contextPath}/admin/assets/js/main.js"></script>
+
+  <!-- Page JS -->
+  <script src="${pageContext.request.contextPath}/admin/assets/js/dashboards-analytics.js"></script>
+
+  <!-- Place this tag in your head or just before your close body tag. -->
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
   <title>Dashboard - Analytics | Sneat - Bootstrap 5 HTML Admin Template - Pro</title>
 
   <meta name="description" content="" />
@@ -46,43 +65,32 @@
   <script src="${pageContext.request.contextPath}/admin/assets/js/config.js"></script>
 </head>
 <body>
-<!-- Layout wrapper -->
-<div class="layout-wrapper layout-content-navbar">
-  <div class="layout-container">
-    <%@include file="/admin/common/menu.jsp"%>
-    <!-- Layout container -->
-    <div class="layout-page">
-      <!-- Content wrapper -->
-      <div class="content-wrapper">
+<c:choose>
+  <c:when test="${empty sessionScope['admin']}">
+    <jsp:forward page="/admin/login"/>
+    </c:when>
+    <c:otherwise>
+  <!-- Layout wrapper -->
+  <div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+      <%@include file="/admin/common/menu.jsp"%>
+      <!-- Layout container -->
+      <div class="layout-page">
+        <!-- Content wrapper -->
+        <div class="content-wrapper">
 
-        <sitemesh:write property="body"/>
+          <sitemesh:write property="body"/>
+        </div>
+        <!-- Content wrapper -->
       </div>
-      <!-- Content wrapper -->
+      <!-- / Layout page -->
     </div>
-    <!-- / Layout page -->
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
   </div>
-  <!-- Overlay -->
-  <div class="layout-overlay layout-menu-toggle"></div>
-</div>
-<!-- build:js assets/vendor/js/core.js -->
-<script src="${pageContext.request.contextPath}/admin/assets/vendor/libs/jquery/jquery.js"></script>
-<script src="${pageContext.request.contextPath}/admin/assets/vendor/libs/popper/popper.js"></script>
-<script src="${pageContext.request.contextPath}/admin/assets/vendor/js/bootstrap.js"></script>
-<script src="${pageContext.request.contextPath}/admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+  </c:otherwise>
 
-<script src="${pageContext.request.contextPath}/admin/assets/vendor/js/menu.js"></script>
-<!-- endbuild -->
+</c:choose>
 
-<!-- Vendors JS -->
-<script src="${pageContext.request.contextPath}/admin/assets/vendor/libs/apex-charts/apexcharts.js"></script>
-
-<!-- Main JS -->
-<script src="${pageContext.request.contextPath}/admin/assets/js/main.js"></script>
-
-<!-- Page JS -->
-<script src="${pageContext.request.contextPath}/admin/assets/js/dashboards-analytics.js"></script>
-
-<!-- Place this tag in your head or just before your close body tag. -->
-<script async defer src="https://buttons.github.io/buttons.js"></script>
 </body>
 </html>

@@ -120,8 +120,9 @@
             <div class="col-sm-4 col-lg-3 text-center text-sm-start">
                 <div class="main-logo">
                     <a href="index.jsp">
-                        <img src="../assets/images/logo.png" alt="logo" class="img-fluid">
+                        <img src="${pageContext.request.contextPath}/CommonImage/Logo.jpg" alt="logo" class="img-fluid" style="width: 100px; height: auto;">
                     </a>
+
                 </div>
             </div>
 
