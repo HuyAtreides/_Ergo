@@ -9,6 +9,10 @@ import java.util.List;
 @Data
 @Entity
 @PrimaryKeyJoinColumn(name = "voucherByProductId")
+@NamedQuery(name = "VoucherByProduct.findAll", query = "SELECT v FROM VoucherByProduct v")
+
+
+
 public class VoucherByProduct extends Voucher {
     @ManyToMany
     @JoinTable(
@@ -17,6 +21,9 @@ public class VoucherByProduct extends Voucher {
             inverseJoinColumns = @JoinColumn(name = "typeId")
     )
     private List<ProductType> productTypes;
-    // Getters and Setters
+	@Override
+	public String toString() {
+		return "VoucherByProduct [productTypes=" + productTypes + "]";
+	}
 }
 

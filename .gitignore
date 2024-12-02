@@ -32,6 +32,8 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+pom.xml
+
 ### VS Code ###
 .vscode/
 
@@ -48,8 +50,15 @@ buildNumber.properties
 .mvn/timing.properties
 # https://github.com/takari/maven-wrapper#usage-without-binary-jar
 .mvn/
-
+.vs/
 .smarttomcat/
+src/main/resources/META-INF/persistence.xml
+src/main/java/cnpm/ergo/configs/
+src/main/webapp/product-images/
+
+src/main/webapp/product-images/
+
+
 # Eclipse m2e generat/ed files
 # Eclipse Core
 # JDT-specific (Eclipse Java Development Tools)

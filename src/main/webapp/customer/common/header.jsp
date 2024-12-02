@@ -1,3 +1,5 @@
+  
+    
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
     <defs>
         <symbol xmlns="http://www.w3.org/2000/svg" id="link" viewBox="0 0 24 24">
@@ -120,8 +122,9 @@
             <div class="col-sm-4 col-lg-3 text-center text-sm-start">
                 <div class="main-logo">
                     <a href="index.jsp">
-                        <img src="../assets/images/logo.png" alt="logo" class="img-fluid">
+                        <img src="${pageContext.request.contextPath}/CommonImage/Logo.jpg" alt="logo" class="img-fluid" style="width: 100px; height: auto;">
                     </a>
+
                 </div>
             </div>
 

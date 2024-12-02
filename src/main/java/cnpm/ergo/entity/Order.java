@@ -71,12 +71,21 @@ public class Order {
     @JoinColumn(name = "customerId", referencedColumnName = "userId", nullable = false)
     private User customer;
 
-//    @ManyToOne
-//    @JoinColumn(name = "voucherId", referencedColumnName = "voucherId")
-//    private Voucher voucher;
+    @ManyToOne
+    @JoinColumn(name = "voucherId", referencedColumnName = "voucherId")
+    private Voucher voucher;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems;
+    
+	@Override
+	public String toString() {
+		return "Order [orderId=" + orderId + ", orderDate=" + orderDate + ", status=" + status + ", cityOfProvince="
+				+ cityOfProvince + ", district=" + district + ", ward=" + ward + ", streetNumber=" + streetNumber
+				+ ", phone=" + phone + ", totalCost=" + totalCost + ", discount=" + discount + ", actualCost="
+				+ actualCost + ", customer=" + customer + "]";
+	}
+    
 
     public static void main(String[] args) {
 //        // create Order object
@@ -110,7 +119,6 @@ public class Order {
 //        em.persist(order);
 //        em.getTransaction().commit();
 //        em.close();
-    	
     	 // Tạo đối tượng Order và thiết lập dữ liệu giả
         Order order = new Order();
         order.setOrderDate(new Date(System.currentTimeMillis()));
@@ -148,4 +156,8 @@ public class Order {
                                ", Khách hàng: " + o.getCustomer().getName());
         }
     }
+
+
+
+
 }

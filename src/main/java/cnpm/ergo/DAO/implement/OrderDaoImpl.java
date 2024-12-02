@@ -5,10 +5,12 @@ import java.util.List;
 import cnpm.ergo.DAO.interfaces.IOrderDao;
 import cnpm.ergo.configs.JPAConfig;
 import cnpm.ergo.entity.Order;
+import cnpm.ergo.entity.OrderItem;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
+import org.hibernate.bytecode.enhance.spi.EnhancementInfo;
 
 public class OrderDaoImpl implements IOrderDao{
 
@@ -82,7 +84,25 @@ public class OrderDaoImpl implements IOrderDao{
         return query.getResultList();
 	}
 
-	@Override
+        @Override
+        public List<Order> findByPage(int offset, int limit) {
+                EntityManager em = JPAConfig.getEntityManager();
+                EntityTransaction trans = em.getTransaction();
+                try {
+                        trans.begin();
+                        String jpql = "SELECT o FROM Order o";
+                        TypedQuery<Order> query = em.createQuery(jpql, Order.class).setFirstResult(offset).setMaxResults(limit);
+                        List<Order> res = query.getResultList();
+                        trans.commit();
+                        return res;
+                }
+                catch (Exception ex) {
+                        trans.rollback();
+                        throw ex;
+                }
+        }
+
+        @Override
 	public int count() {
 		EntityManager em = JPAConfig.getEntityManager();
         String jpql = "SELECT COUNT(o) FROM Order o";
@@ -90,6 +110,11 @@ public class OrderDaoImpl implements IOrderDao{
         return ((Long) query.getSingleResult()).intValue();
 	}
 
+	public static void main(String[] args) {
+		OrderDaoImpl o = new OrderDaoImpl();
+		Order oi = o.findById(1);
+		System.out.print(oi);
+	}
 	
 	
 }
