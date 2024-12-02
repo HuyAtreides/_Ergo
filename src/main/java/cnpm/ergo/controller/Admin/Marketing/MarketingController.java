@@ -1,5 +1,6 @@
 package cnpm.ergo.controller.Admin.Marketing;
 
+import cnpm.ergo.entity.MarketingCampaign;
 import cnpm.ergo.entity.Voucher;
 import cnpm.ergo.entity.VoucherByPrice;
 import cnpm.ergo.entity.VoucherByProduct;
@@ -22,20 +23,35 @@ import java.util.List;
 @WebServlet(urlPatterns = "/admin/marketing")
 public class MarketingController extends HttpServlet {
     IMarketingCampaignService marketingCampaignService = new MarketingCampaignServiceImpl();
-
+    IVoucherByPriceService voucherByPriceService = new IVoucherByPriceServiceImpl();
+    IVoucherByProductService voucherByProductService = new IVoucherByProductServiceImpl();
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int pageNo = 1;
-        int pageSize = 10;
-        if (request.getParameter("page") != null) {
-            pageNo = Integer.parseInt(request.getParameter("page"));
-        }
-        IVoucherByPriceService voucherByPriceService = new IVoucherByPriceServiceImpl();
-        IVoucherByProductService voucherByProductService = new IVoucherByProductServiceImpl();
 
         List<VoucherByPrice> voucherByPriceList = voucherByPriceService.findAll();
         List<VoucherByProduct> voucherByProductList = voucherByProductService.findAll();
         List<Voucher> vouchers = new ArrayList<>();
+        vouchers = createVouchers(vouchers);
+
+        List<MarketingCampaign> Campaigns = marketingCampaignService.findAllMarketingCampaign();
+
+//
+//        long totalvoucher = vouchers.stream().count();
+//        int totalPages = (int) Math.ceil((double) totalvoucher / pageSize);
+
+        request.setAttribute("vouchers",vouchers);
+        request.setAttribute("campaigns",Campaigns);
+
+//        request.setAttribute("currentPage", pageNo);
+//        request.setAttribute("totalPages", totalPages);
+
+        request.getRequestDispatcher("views/marketing.jsp").forward(request, response);
+    }
+
+    private List<Voucher> createVouchers(List<Voucher> vouchers)
+    {
+        List<VoucherByPrice> voucherByPriceList = voucherByPriceService.findAll();
+        List<VoucherByProduct> voucherByProductList = voucherByProductService.findAll();
 
         for(VoucherByPrice voucherByPrice : voucherByPriceList){
             vouchers.add(voucherByPrice);
@@ -43,14 +59,6 @@ public class MarketingController extends HttpServlet {
         for(VoucherByProduct voucher : voucherByProductList){
             vouchers.add(voucher);
         }
-
-        long totalvoucher = vouchers.stream().count();
-        int totalPages = (int) Math.ceil((double) totalvoucher / pageSize);
-
-        request.setAttribute("vouchers",vouchers);
-        request.setAttribute("currentPage", pageNo);
-        request.setAttribute("totalPages", totalPages);
-
-        request.getRequestDispatcher("views/marketing.jsp").forward(request, response);
+        return vouchers;
     }
 }

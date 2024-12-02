@@ -84,6 +84,7 @@ public class IVoucherByPriceDAOImpl implements IVoucherByPriceDAO {
     public VoucherByPrice findById(int Id) {
         EntityManager enma   = JPAConfig.getEntityManager();
         VoucherByPrice voucher = enma.find(VoucherByPrice.class,Id);
+        voucher.getVoucherId();
         return voucher;
     }
 

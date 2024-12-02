@@ -37,6 +37,7 @@ public abstract class Voucher {
 
     }
 
+
     protected void setVoucherType(VoucherType voucherType) {
         this.voucherType = voucherType;
     }

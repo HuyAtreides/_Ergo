@@ -17,8 +17,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-@WebServlet(urlPatterns = "/admin/editVoucher")
-public class UpdateVoucherController extends HttpServlet {
+@WebServlet(urlPatterns = "/admin/voucher/editPrice")
+public class UpdateVoucherPrice extends HttpServlet {
 
     IVoucherByProductService voucherByProduct;
     IVoucherByPriceService voucherByPrice;
@@ -26,7 +26,6 @@ public class UpdateVoucherController extends HttpServlet {
     @Override
     public void init() throws ServletException {
         // Initialize the service implementation
-        voucherByProduct = new IVoucherByProductServiceImpl();
         voucherByPrice = new IVoucherByPriceServiceImpl();
     }
 
@@ -42,23 +41,15 @@ public class UpdateVoucherController extends HttpServlet {
             double discount = Double.parseDouble(request.getParameter("discount"));
             Date dateStart = parseDate(request.getParameter("dateStart"));
             Date dateEnd = parseDate(request.getParameter("dateEnd"));
-            String voucherType = request.getParameter("voucherType");
-
+            double lowerbound = Double.parseDouble(request.getParameter("lowerbound"));
             System.out.println("test" + voucherID);
-            System.out.println(voucherType);
 
             // Validate input fields (optional, add your validation logic here)
-
-            try {
-                if ("PRICE".equals(voucherType)) {
                     VoucherByPrice voucher = voucherByPrice.findById(voucherID);
                     if (voucher == null) {
                         response.sendRedirect(request.getContextPath() + "/admin/marketing");
                         return;
-                    }
-
-                    // Tạo VoucherByPrice
-                    double lowerbound = Double.parseDouble(request.getParameter("lowerbound"));
+                        }
                     voucher.setCode(code);
                     voucher.setDiscount(discount);
                     voucher.setDateStart(dateStart);
@@ -67,45 +58,15 @@ public class UpdateVoucherController extends HttpServlet {
 
                     // Thêm vào cơ sở dữ liệu
                     voucherByPrice.update(voucher);
-                } else if ("PRODUCT".equals(voucherType)) {
-                    VoucherByProduct voucher = voucherByProduct.findById(voucherID);
-                    if (voucher == null) {
-                        response.sendRedirect(request.getContextPath() + "/admin/marketing");
-                        return;
-                    }
-                    // Tạo VoucherByProduct
-                    voucher.setCode(code);
-                    voucher.setDiscount(discount);
-                    voucher.setDateStart(dateStart);
-                    voucher.setDateEnd(dateEnd);
-//
-//                    // Xử lý danh sách productTypes
-//                    String[] productTypeIds = request.getParameterValues("productTypes");
-//                    if (productTypeIds != null) {
-//                        for (String typeId : productTypeIds) {
-//                            voucher.addProductType(Integer.parseInt(typeId)); // Phương thức addProductType cần được định nghĩa
-//                        }
-//                    }
 
-                    // Thêm vào cơ sở dữ liệu
-                    voucherByProduct.update(voucher);
-                }
 
                 // Redirect to the employee management page upon success
                 response.sendRedirect(request.getContextPath() + "/admin/marketing");
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                // Forward the error details to an error page
-                request.setAttribute("errorMessage", "Failed to update the marketing. Please try again.");
-                request.getRequestDispatcher("/test").forward(request, response);
-            }
-
         }catch (Exception e) {
             e.printStackTrace();
             // Forward the error details to an error page
-            request.setAttribute("errorMessage", "Failed to add the voucher. Please try again.");
-            request.getRequestDispatcher("/test2").forward(request, response);
+            request.setAttribute("errorMessage", "Failed to edit the voucher. Please try again.");
+            request.getRequestDispatcher("/test").forward(request, response);
         }
 
     }

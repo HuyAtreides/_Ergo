@@ -14,112 +14,112 @@
 <div class="container mt-4">
     <h1 class="text-center">Marketing Campaign Management</h1>
 
-    <!-- Button to open the modal -->
-    <div class="mb-3">
-        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addCampaignModal">Add New Campaign</button>
-    </div>
+<%--    <!-- Button to open the modal -->--%>
+<%--    <div class="mb-3">--%>
+<%--        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addCampaignModal">Add New Campaign</button>--%>
+<%--    </div>--%>
 
-    <!-- Campaign List Table -->
-    <table class="table table-bordered table-hover mt-3">
-        <thead class="table-dark">
-        <tr>
-            <th>Campaign ID</th>
-            <th>Content</th>
-            <th>Voucher</th>
-            <th>Status</th>
-            <th>Images</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        <!-- Using c:forEach to iterate through the campaign list -->
-        <c:forEach var="campaign" items="${campaigns}">
-            <tr>
-                <td>${campaign.campaignId}</td>
-                <td>${campaign.content}</td>
-                <td>
-                    <c:choose>
-                        <c:when test="${campaign.voucher != null}">
-                            ${campaign.voucher.voucherId}
-                        </c:when>
-                        <c:otherwise>
-                            No Voucher
-                        </c:otherwise>
-                    </c:choose>
-                </td>
-                <td>
-                    <c:if test="${campaign.isDelete}">
-                        Deleted
-                    </c:if>
-                    <c:if test="${!campaign.isDelete}">
-                        Active
-                    </c:if>
-                </td>
-                <td>
-                    <c:forEach var="image" items="${campaign.campaignImages}">
-                        <img src="${image.url}" alt="Campaign Image" class="img-thumbnail" style="width: 100px; height: auto;">
-                    </c:forEach>
-                </td>
-                <td>
-                    <div class="d-flex justify-content-center">
-                        <!-- Edit Button -->
-                        <form action="editCampaign" method="post" style="margin-right: 5px;">
-                            <input type="hidden" name="campaignId" value="${campaign.campaignId}">
-                            <button type="submit" class="btn btn-warning btn-sm">Edit</button>
-                        </form>
-                        <!-- Delete Button -->
-                        <form action="deleteCampaign" method="post">
-                            <input type="hidden" name="campaignId" value="${campaign.campaignId}">
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this campaign?');">Delete</button>
-                        </form>
-                    </div>
-                </td>
-            </tr>
-        </c:forEach>
-        <!-- Display message if the campaign list is empty -->
-        <c:if test="${empty campaigns}">
-            <tr>
-                <td colspan="6" class="text-center">No campaigns available!</td>
-            </tr>
-        </c:if>
-        </tbody>
-    </table>
+<%--    <!-- Campaign List Table -->--%>
+<%--    <table class="table table-bordered table-hover mt-3">--%>
+<%--        <thead class="table-dark">--%>
+<%--        <tr>--%>
+<%--            <th>Campaign ID</th>--%>
+<%--            <th>Content</th>--%>
+<%--            <th>Voucher</th>--%>
+<%--            <th>Status</th>--%>
+<%--            <th>Images</th>--%>
+<%--            <th>Actions</th>--%>
+<%--        </tr>--%>
+<%--        </thead>--%>
+<%--        <tbody>--%>
+<%--        <!-- Using c:forEach to iterate through the campaign list -->--%>
+<%--        <c:forEach var="campaign" items="${campaigns}">--%>
+<%--            <tr>--%>
+<%--                <td>${campaign.campaignId}</td>--%>
+<%--                <td>${campaign.content}</td>--%>
+<%--                <td>--%>
+<%--                    <c:choose>--%>
+<%--                        <c:when test="${campaign.voucher != null}">--%>
+<%--                            ${campaign.voucher.voucherId}--%>
+<%--                        </c:when>--%>
+<%--                        <c:otherwise>--%>
+<%--                            No Voucher--%>
+<%--                        </c:otherwise>--%>
+<%--                    </c:choose>--%>
+<%--                </td>--%>
+<%--                <td>--%>
+<%--                    <c:if test="${campaign.isDelete}">--%>
+<%--                        Deleted--%>
+<%--                    </c:if>--%>
+<%--                    <c:if test="${!campaign.isDelete}">--%>
+<%--                        Active--%>
+<%--                    </c:if>--%>
+<%--                </td>--%>
+<%--                <td>--%>
+<%--                    <c:forEach var="image" items="${campaign.campaignImages}">--%>
+<%--                        <img src="${image.url}" alt="Campaign Image" class="img-thumbnail" style="width: 100px; height: auto;">--%>
+<%--                    </c:forEach>--%>
+<%--                </td>--%>
+<%--                <td>--%>
+<%--                    <div class="d-flex justify-content-center">--%>
+<%--                        <!-- Edit Button -->--%>
+<%--                        <form action="${pageContext.request.contextPath}/admin/campaign/editCampaign" method="post" style="margin-right: 5px;">--%>
+<%--                            <input type="hidden" name="campaignId" value="${campaign.campaignId}">--%>
+<%--                            <button type="submit" class="btn btn-warning btn-sm">Edit</button>--%>
+<%--                        </form>--%>
+<%--                        <!-- Delete Button -->--%>
+<%--                        <form action="${pageContext.request.contextPath}/admin/campaign/deleteCampaign" method="post">--%>
+<%--                            <input type="hidden" name="campaignId" value="${campaign.campaignId}">--%>
+<%--                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this campaign?');">Delete</button>--%>
+<%--                        </form>--%>
+<%--                    </div>--%>
+<%--                </td>--%>
+<%--            </tr>--%>
+<%--        </c:forEach>--%>
+<%--        <!-- Display message if the campaign list is empty -->--%>
+<%--        <c:if test="${empty campaigns}">--%>
+<%--            <tr>--%>
+<%--                <td colspan="6" class="text-center">No campaigns available!</td>--%>
+<%--            </tr>--%>
+<%--        </c:if>--%>
+<%--        </tbody>--%>
+<%--    </table>--%>
 
 
-    <!-- Add Campaign Modal -->
-    <div class="modal fade" id="addCampaignModal" tabindex="-1" aria-labelledby="addCampaignModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addCampaignModalLabel">Add New Campaign</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- Form to add a new campaign -->
-                    <form action="addCampaign" method="post">
-                        <div class="mb-3">
-                            <label for="content" class="form-label">Content</label>
-                            <textarea class="form-control" id="content" name="content" required></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label for="voucherId" class="form-label">Voucher</label>
-                            <select class="form-select" id="voucherId" name="voucherId">
-                                <option value="">Select a voucher</option>
-                                <c:forEach var="voucher" items="${vouchers}">
-                                    <option value="${voucher.voucherId}">${voucher.code} - Discount: ${voucher.discount}%</option>
-                                </c:forEach>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="images" class="form-label">Campaign Images</label>
-                            <input type="file" class="form-control" id="images" name="images" multiple>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Add Campaign</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+<%--    <!-- Add Campaign Modal -->--%>
+<%--    <div class="modal fade" id="addCampaignModal" tabindex="-1" aria-labelledby="addCampaignModalLabel" aria-hidden="true">--%>
+<%--        <div class="modal-dialog">--%>
+<%--            <div class="modal-content">--%>
+<%--                <div class="modal-header">--%>
+<%--                    <h5 class="modal-title" id="addCampaignModalLabel">Add New Campaign</h5>--%>
+<%--                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>--%>
+<%--                </div>--%>
+<%--                <div class="modal-body">--%>
+<%--                    <!-- Form to add a new campaign -->--%>
+<%--                    <form action="${pageContext.request.contextPath}/admin/campaign/addCampaign" method="post">--%>
+<%--                        <div class="mb-3">--%>
+<%--                            <label for="content" class="form-label">Content</label>--%>
+<%--                            <textarea class="form-control" id="content" name="content" required></textarea>--%>
+<%--                        </div>--%>
+<%--                        <div class="mb-3">--%>
+<%--                            <label for="voucherId" class="form-label">Voucher</label>--%>
+<%--                            <select class="form-select" id="voucherId" name="voucherId">--%>
+<%--                                <option value="">Select a voucher</option>--%>
+<%--                                <c:forEach var="voucher" items="${vouchers}">--%>
+<%--                                    <option value="${voucher.voucherId}">${voucher.code} - Discount: ${voucher.discount}%</option>--%>
+<%--                                </c:forEach>--%>
+<%--                            </select>--%>
+<%--                        </div>--%>
+<%--                        <div class="mb-3">--%>
+<%--                            <label for="images" class="form-label">Campaign Images</label>--%>
+<%--                            <input type="file" class="form-control" id="images" name="images" multiple>--%>
+<%--                        </div>--%>
+<%--                        <button type="submit" class="btn btn-primary">Add Campaign</button>--%>
+<%--                    </form>--%>
+<%--                </div>--%>
+<%--            </div>--%>
+<%--        </div>--%>
+<%--    </div>--%>
 
     <!-- Voucher Management Section -->
     <div class="mt-5">
@@ -139,7 +139,6 @@
                 <th>Start Date</th>
                 <th>End Date</th>
                 <th>Type</th>
-                <th>Campaign</th>
                 <th>Actions</th>
             </tr>
             </thead>
@@ -157,33 +156,48 @@
                 <td><%= voucher.getDateEnd() %></td>
                 <td><%= voucher.getVoucherType() %></td>
                 <td>
-                    <c:choose>
-                        <c:when test="${voucher.marketingCampaign != null}">
-                            <%= voucher.getMarketingCampaign().getCampaignId() %>
-                        </c:when>
-                        <c:otherwise>
-                            Not Assigned
-                        </c:otherwise>
-                    </c:choose>
-                </td>
-                <td>
                     <div class="d-flex justify-content-center">
                         <!-- Edit Button -->
-                        <button type="button" class="btn btn-warning btn-sm"
-                                onclick="showEditVoucherModal('<%= voucher.getVoucherId() %>','<%= voucher.getVoucherType() %>')">Edit</button>
+                        <c:choose>
+                            <c:when test="<%= isVoucherByPrice %>">
+                                <button type="button" class="btn btn-warning btn-sm"
+                                        onclick="showEditVoucherModal('<%= voucher.getVoucherId() %>','Price')"
+                                        data-bs-toggle="modal" data-bs-target="#editVoucherPrice"
+                                        data-id="${voucher.getVoucherID}"
+                                        data-code="${voucher.getCode}"
+                                        data-discount="${voucher.getDiscount}"
+                                        data-dateStart="${voucher.getDateStart}"
+                                        data-dateEnd="${voucher.getDateEnd}"
+                                        data-type="Price">
+                                    Edit
+                                </button>
+                            </c:when>
+                            <c:otherwise>
+                                <button type="button" class="btn btn-warning btn-sm"
+                                        onclick="showEditVoucherModal('<%= voucher.getVoucherId() %>','Product')"
+                                        data-bs-toggle="modal" data-bs-target="#editVoucherProduct"
+                                        data-id="${voucher.getVoucherID}"
+                                        data-code="${voucher.getCode}"
+                                        data-discount="${voucher.getDiscount}"
+                                        data-dateStart="${voucher.getDateStart}"
+                                        data-dateEnd="${voucher.getDateEnd}"
+                                        data-type="Product">
+                                Edit</button>
+                            </c:otherwise>
+                        </c:choose>
 
                         <!-- Delete Button based on type -->
                         <c:choose>
                             <c:when test="<%= isVoucherByPrice %>">
-                                <form action="admin/deletePrice" method="post">
+                                <form action="voucher/deletePrice" method="get">
                                     <input type="hidden" name="voucherId" value="<%= voucher.getVoucherId() %>">
                                     <button type="submit" class="btn btn-danger btn-sm"
                                             onclick="return confirm('Are you sure you want to delete this voucher?');">Delete</button>
                                 </form>
                             </c:when>
                             <c:otherwise>
-                                <form action="admin/deleteProduct" method="post">
-                                    <input type="hidden" name="voucherId" value="<%= voucher.getVoucherId() %>">
+                                <form action="voucher/deleteProduct" method="get">
+                                    <input type="hidden" name="voucherId" value="<%=voucher.getVoucherId() %>">
                                     <button type="submit" class="btn btn-danger btn-sm"
                                             onclick="return confirm('Are you sure you want to delete this voucher?');">Delete</button>
                                 </form>
@@ -270,69 +284,100 @@
         </div>
     </div>
 
-    <!-- Edit Voucher Modal -->
-    <div class="modal fade" id="editVoucherModal" tabindex="-1" aria-labelledby="editVoucherModalLabel" aria-hidden="true">
+    <!-- Edit Voucher Price -->
+    <div class="modal fade" id="editVoucherPrice" tabindex="-1" aria-labelledby="editVoucherModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editVoucherPriceLabel">Edit Voucher</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Form to edit a voucher -->
+                    <form action="voucher/editPrice" method="post">
+                        <!-- Common Fields -->
+                        <div class="mb-3">
+                            <label for="editVoucherCode" class="form-label">Voucher Code</label>
+                            <input type="text" class="form-control" id="editVoucherCodePrice" name="code" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editVoucherDiscount" class="form-label">Discount (%)</label>
+                            <input type="number" class="form-control" id="editVoucherDiscountPrice" name="discount" step="0.01" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editVoucherDateStart" class="form-label">Start Date</label>
+                            <input type="date" class="form-control" id="editVoucherDateStartPrice" name="dateStart" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editvoucherDateEnd" class="form-label">End Date</label>
+                            <input type="date" class="form-control" id="editVoucherDateEndPrice" name="dateEnd" required>
+                        </div>
+
+                        <!-- Voucher By Price Fields -->
+                            <div class="mb-3">
+                                <label for="editVoucherLowerbound" class="form-label">Minimum Order Value</label>
+                                <input type="number" class="form-control" id="editVoucherLowerbound" name="lowerbound" step="0.01">
+
+                                <form action="voucher/editPrice" method="post">
+                                    <input type="hidden" name="voucherId">
+                                    <button type="submit" class="btn btn-danger btn-sm"
+                                    >Edit
+                                    </button>
+                                </form>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Edit Voucher Price -->
+    <div class="modal fade" id="editVoucherProduct" tabindex="-1" aria-labelledby="editVoucherModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="editVoucherModalLabel">Edit Voucher</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                    <div class="modal-body">
-                        <c:choose>
-                            <c:when test="${voucher.voucherType == 'PRICE'}">
-                                <form action="editVoucherByPrice" method="post">
-                                    <input type="hidden" name="voucherId" value="${voucher.voucherId}" />
-                                    <div class="mb-3">
-                                        <label for="editPriceCode" class="form-label">Code</label>
-                                        <input type="text" class="form-control" id="editPriceCode" name="code" value="${voucher.code}" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="editPriceDiscount" class="form-label">Discount (%)</label>
-                                        <input type="number" class="form-control" id="editPriceDiscount" name="discount" value="${voucher.discount}" step="0.01" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="editLowerbound" class="form-label">Minimum Order Value</label>
-                                        <input type="number" class="form-control" id="editLowerbound" name="lowerbound" value="${voucher.lowerbound}" required>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                <div class="modal-body">
+                    <!-- Form to edit a voucher -->
+                    <form action="voucher/editProduct" method="post">
+                        <!-- Common Fields -->
+                        <div class="mb-3">
+                            <label for="editVoucherCode" class="form-label">Voucher Code</label>
+                            <input type="text" class="form-control" id="editVoucherCode" name="code" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editVoucherDiscount" class="form-label">Discount (%)</label>
+                            <input type="number" class="form-control" id="editVoucherDiscount" name="discount" step="0.01" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editVoucherDateStart" class="form-label">Start Date</label>
+                            <input type="date" class="form-control" id="editVoucherDateStart" name="dateStart" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editvoucherDateEnd" class="form-label">End Date</label>
+                            <input type="date" class="form-control" id="editVoucherDateEnd" name="dateEnd" required>
+                        </div>
+                        <!-- Voucher By Product Fields -->
+                            <div class="mb-3">
+                                <label for="editVoucherProductTypes" class="form-label">Applicable Product Types</label>
+                                <select multiple class="form-select" id="editVoucherProductTypes" name="productTypes">
+                                    <c:forEach var="productType" items="${productTypes}">
+                                        <option value="${productType.typeId}">${productType.name}</option>
+                                    </c:forEach>
+                                </select>
+                                <form action="voucher/editProduct" method="post">
+                                    <input type="hidden" name="voucherId">
+                                    <button type="submit" class="btn btn-danger btn-sm"
+                                    >Edit
+                                    </button>
                                 </form>
-                            </c:when>
-
-
-                            <c:otherwise>
-                                <form action="editVoucherByProduct" method="post">
-                                    <input type="hidden" name="voucherId" value="${voucher.voucherId}" />
-                                    <div class="mb-3">
-                                        <label for="editProductCode" class="form-label">Code</label>
-                                        <input type="text" class="form-control" id="editProductCode" name="code" value="${voucher.code}" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="editProductDiscount" class="form-label">Discount (%)</label>
-                                        <input type="number" class="form-control" id="editProductDiscount" name="discount" value="${voucher.discount}" step="0.01" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="editProductTypes" class="form-label">Applicable Product Types</label>
-                                        <select multiple class="form-select" id="editProductTypes" name="productTypes">
-                                            <c:forEach var="productType" items="${productTypes}">
-                                                <option value="${productType.typeId}" ${voucher.productTypes.contains(productType.typeId) ? 'selected' : ''}>
-                                                        ${productType.name}
-                                                </option>
-                                            </c:forEach>
-                                        </select>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary">Save Changes</button>
-                                </form>
-                            </c:otherwise>
-                        </c:choose>
-
-                    </div>
-
-
+                            </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-
 </div>
 <!-- Bootstrap JS and Popper.js -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -357,26 +402,22 @@
 </script>
 <script>
     function showEditVoucherModal(voucherId, voucherType) {
-        console.log("Hello Tương");
-        // // Gán giá trị vào các trường trong modal
-        // document.getElementById("editVoucherId").value = voucherId;
-        //
-        // // Hiển thị các trường tùy thuộc vào voucherType
-        // if (voucherType === "PRICE") {
-        //     document.getElementById("voucherByPriceFields").classList.remove("d-none");
-        //     document.getElementById("voucherByProductFields").classList.add("d-none");
-        //     document.getElementById("editLowerbound").value = lowerbound || "";
-        // } else if (voucherType === "PRODUCT") {
-        //     document.getElementById("voucherByPriceFields").classList.add("d-none");
-        //     document.getElementById("voucherByProductFields").classList.remove("d-none");
-        //
-        //     // Xử lý productTypes nếu cần
-        //     const productTypesField = document.getElementById("editProductTypes");
-        //     productTypesField.value = productTypes || "";
-        // }
+        console.log(voucherType);
+        document.getElementById('editID').value = voucherId;
+        var priceFields = document.querySelector('.editVoucherByPriceFields');
+        var productFields = document.querySelector('.editVoucherByProductFields');
+         if (voucherType === "Price") {
+             priceFields.classList.remove("d-none");
+             productFields.classList.add("d-none");
+             new bootstrap.Modal(document.getElementById("editVoucherPrice")).show();
+         } else if (voucherType === "Product") {
+             productFields.classList.remove("d-none");
+             priceFields.classList.add("d-none");
+             new bootstrap.Modal(document.getElementById("editVoucherProduct")).show();
+         }
 
         // Hiển thị modal
-        new bootstrap.Modal(document.getElementById("editVoucherModal")).show();
+
     }
 </script>
 <%--<script>--%>
@@ -387,9 +428,29 @@
 <%--        $('#editVoucherModal').modal('show');--%>
 <%--    }--%>
 <%--</script>--%>
+<script>
+    $(document).ready(function() {
+        $('#editVoucherPrice').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var id = button.data('id');
+            var code = button.data('code');
+            var discount = button.data('discount');
+            var dateStart = button.data('dateStart');
+            var dateEnd = button.data('dateEnd');
+            var type = button.data('type');
 
+
+            var modal = $(this);
+            modal.find('#editVoucherCode').val(id);
+            modal.find('#editVoucherDiscount').val(discount);
+            modal.find('#editVoucherDateStart').val(dateStart);
+            modal.find('#editVoucherDateEnd').val(dateEnd);
+            modal.find('#editType').val(type);
+            $('#voucherType').text(type);
+        });
+    });
+</script>
 
 </body>
 </html>
-
 

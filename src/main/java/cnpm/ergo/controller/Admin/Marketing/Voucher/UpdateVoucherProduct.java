@@ -1,10 +1,10 @@
 package cnpm.ergo.controller.Admin.Marketing.Voucher;
 
-import cnpm.ergo.entity.VoucherByPrice;
 import cnpm.ergo.entity.VoucherByProduct;
-import cnpm.ergo.service.implement.IVoucherByPriceServiceImpl;
+import cnpm.ergo.entity.VoucherByProduct;
 import cnpm.ergo.service.implement.IVoucherByProductServiceImpl;
-import cnpm.ergo.service.interfaces.IVoucherByPriceService;
+import cnpm.ergo.service.implement.IVoucherByProductServiceImpl;
+import cnpm.ergo.service.interfaces.IVoucherByProductService;
 import cnpm.ergo.service.interfaces.IVoucherByProductService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -17,51 +17,39 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-@WebServlet(urlPatterns = "/admin/addVoucher")
-public class AddVoucherController extends HttpServlet {
+@WebServlet(urlPatterns = "/admin/voucher/editProduct")
+public class UpdateVoucherProduct extends HttpServlet {
+
     IVoucherByProductService voucherByProduct;
-    IVoucherByPriceService voucherByPrice;
 
     @Override
     public void init() throws ServletException {
         // Initialize the service implementation
         voucherByProduct = new IVoucherByProductServiceImpl();
-        voucherByPrice = new IVoucherByPriceServiceImpl();
-
     }
 
-    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 //        if (request.getSession().getAttribute("admin") == null) {
 //            response.sendRedirect(request.getContextPath() + "/admin/login");
 //            return;
 //        }
         try {
-            // Lấy loại voucher
-            String voucherType = request.getParameter("voucherType");
-
-            // Lấy thông tin chung từ form
+            // Retrieve form data from the request
+            int voucherID = Integer.parseInt(request.getParameter("voucherId"));
             String code = request.getParameter("code");
             double discount = Double.parseDouble(request.getParameter("discount"));
             Date dateStart = parseDate(request.getParameter("dateStart"));
             Date dateEnd = parseDate(request.getParameter("dateEnd"));
 
-            try {
-                if ("byPrice".equals(voucherType)) {
-                    // Tạo VoucherByPrice
-                    double lowerbound = Double.parseDouble(request.getParameter("lowerbound"));
-                    VoucherByPrice voucher = new VoucherByPrice();
-                    voucher.setCode(code);
-                    voucher.setDiscount(discount);
-                    voucher.setDateStart(dateStart);
-                    voucher.setDateEnd(dateEnd);
-                    voucher.setLowerbound(lowerbound);
+            System.out.println("test" + voucherID);
 
-                    // Thêm vào cơ sở dữ liệu
-                    voucherByPrice.insert(voucher);
-                } else if ("byProduct".equals(voucherType)) {
+            try {
+                    VoucherByProduct voucher = voucherByProduct.findById(voucherID);
+                    if (voucher == null) {
+                        response.sendRedirect(request.getContextPath() + "/admin/marketing");
+                        return;
+                    }
                     // Tạo VoucherByProduct
-                    VoucherByProduct voucher = new VoucherByProduct();
                     voucher.setCode(code);
                     voucher.setDiscount(discount);
                     voucher.setDateStart(dateStart);
@@ -76,9 +64,7 @@ public class AddVoucherController extends HttpServlet {
 //                    }
 
                     // Thêm vào cơ sở dữ liệu
-                    voucherByProduct.insert(voucher);
-                }
-
+                    voucherByProduct.update(voucher);
 
                 // Redirect to the employee management page upon success
                 response.sendRedirect(request.getContextPath() + "/admin/marketing");
@@ -86,16 +72,16 @@ public class AddVoucherController extends HttpServlet {
             } catch (Exception e) {
                 e.printStackTrace();
                 // Forward the error details to an error page
-                request.setAttribute("errorMessage", "Failed to add the voucher. Please try again.");
-                request.getRequestDispatcher("/errorPage.jsp").forward(request, response);
+                request.setAttribute("errorMessage", "Failed to update the voucher. Please try again.");
+                request.getRequestDispatcher("/test").forward(request, response);
             }
+
         }catch (Exception e) {
             e.printStackTrace();
             // Forward the error details to an error page
             request.setAttribute("errorMessage", "Failed to add the voucher. Please try again.");
-            request.getRequestDispatcher("/errorPage.jsp").forward(request, response);
+            request.getRequestDispatcher("/test2").forward(request, response);
         }
-
 
     }
     private Date parseDate (String dateStr){
