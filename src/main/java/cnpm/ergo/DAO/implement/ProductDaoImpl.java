@@ -179,7 +179,7 @@ public class ProductDaoImpl implements IProductDao {
 	}
 
 	@Override
-	public List<Product> findByKeywordOrCategory(String keyword, String categoryName, int page, int size) {
+	public List<Product> findByKeywordOrCategory(String keyword, String categoryName) {
 	    EntityManager em = JPAConfig.getEntityManager();
 	    try {
 	        StringBuilder jpql = new StringBuilder("SELECT DISTINCT p FROM Product p ");
@@ -201,10 +201,6 @@ public class ProductDaoImpl implements IProductDao {
 	        if (keyword != null && !keyword.isEmpty()) {
 	            query.setParameter("keyword", "%" + keyword + "%");
 	        }
-
-	        query.setFirstResult((page - 1) * size);
-	        query.setMaxResults(size);
-
 	        List<Product> products = query.getResultList();
 
 	        for (Product product : products) {
@@ -221,8 +217,7 @@ public class ProductDaoImpl implements IProductDao {
 	}
 	@Override
 	public List<Product> applyFiltersAfterKeywordOrCategory(List<Long> productIdsLong, String filterPrice,
-	                                                          String[] colors, String[] materials, String[] heights, String[] lengths,
-	                                                          int page, int size) {
+	                                                          String[] colors, String[] materials, String[] heights, String[] lengths) {
 	    if (productIdsLong == null || productIdsLong.isEmpty()) {
 	        return List.of();  
 	    }
@@ -274,8 +269,6 @@ public class ProductDaoImpl implements IProductDao {
 	            query.setParameter("lengths", List.of(lengths));
 	        }
 
-	        query.setFirstResult((page - 1) * size);
-	        query.setMaxResults(size);
 
 	        List<Product> products = query.getResultList();
 
@@ -431,25 +424,30 @@ public class ProductDaoImpl implements IProductDao {
     }
 
     public static void main(String[] args) {
-        ProductDaoImpl productRepository = new ProductDaoImpl();
-        int page = 2; // Trang bắt đầu
-        int size = 10; // Số lượng sản phẩm mỗi trang
-        
-        // Thử nghiệm với từ khóa và tên danh mục
-        String keyword = ""; // Thay bằng từ khóa thực tế
-        String categoryName = ""; // Thay bằng tên danh mục thực tế
+            List<Long> productIds = List.of(1L, 2L, 3L, 4L, 5L, 6L);
+            String filterPrice = null;  // Price range
+            String[] colors = null;
+            String[] materials =null;
+            String[] heights =null;
+            String[] lengths = null;
 
-        try {
-            List<Product> products = productRepository.findByKeywordOrCategory(keyword, categoryName, page, size);
+            int page = 2;
+            int size = 3;
 
-            System.out.println("Kết quả tìm kiếm:");
-            for (Product product : products) {
-                System.out.println("Tên sản phẩm: " + product.getName());
+            List<Product> products = new ProductDaoImpl().applyFiltersAfterKeywordOrCategory(
+                    productIds, filterPrice, colors, materials, heights, lengths);
+
+            // Print the products to verify the output
+            if (products != null && !products.isEmpty()) {
+                for (Product product : products) {
+                    System.out.println("Product ID: " + product.getProductId());
+                    for (ProductType pt : product.getProductTypes()) {
+                        System.out.println("Color: " + pt.getColor() + ", Price: " + pt.getPrice());
+                    }
+                }
+            } else {
+                System.out.println("No products found.");
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Có lỗi xảy ra trong quá trình truy vấn!");
-        }
     }
 
 }

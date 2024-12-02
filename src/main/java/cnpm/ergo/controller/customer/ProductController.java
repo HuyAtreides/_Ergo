@@ -43,7 +43,7 @@ public class ProductController extends HttpServlet {
 	            case "/products/search":
 	                int page = Integer.parseInt(req.getParameter("page") != null ? req.getParameter("page") : "1");
 	                int pageSize = Integer.parseInt(req.getParameter("size") != null ? req.getParameter("size") : "12");
-	                searchProducts(req, resp, page, pageSize);
+	                searchProducts(req, resp);
 	                break;
 	            default:
 	                resp.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -62,7 +62,7 @@ public class ProductController extends HttpServlet {
 	        req.setAttribute("heights", productService.getAllHeights());
 	        req.setAttribute("lengths", productService.getAllLengths());
 	    }
-	 private void searchProducts(HttpServletRequest req, HttpServletResponse resp, int page, int pageSize) throws ServletException, IOException {
+	 private void searchProducts(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		    try {
 		        String keyword = req.getParameter("keyword");
 		        String filterCategoryName = req.getParameter("categoryName");
@@ -88,6 +88,7 @@ public class ProductController extends HttpServlet {
 		        materials = getParameterValuesOrDefault(req, "material");
 		        heights = getParameterValuesOrDefault(req, "height");
 		        lengths = getParameterValuesOrDefault(req, "length");
+		        
 		        String minPriceParam = req.getParameter("minPrice");
 		        String maxPriceParam = req.getParameter("maxPrice");
 		        Double minPrice = (minPriceParam != null && !minPriceParam.equals("null") && !minPriceParam.isEmpty()) 
@@ -104,40 +105,67 @@ public class ProductController extends HttpServlet {
 		        session.setAttribute("selectedLengths", lengths);
 		        session.setAttribute("minPrice", minPrice);
 		        session.setAttribute("maxPrice", maxPrice);
-		        session.setAttribute("pageSize", pageSize);
-		        session.setAttribute("currentPage", page);
 
-		        System.out.println("Session ID: " + session.getId());  
-		        System.out.println("Keyword from session: " + session.getAttribute("keyword"));
+		        // Get page and pageSize from request parameters
+		        int page = 1; // Default to page 1
+		        int pageSize = 12; // Default to 12 items per page
+		        
+		        String pageParam = req.getParameter("page");
+		        if (pageParam != null && !pageParam.isEmpty()) {
+		            try {
+		                page = Integer.parseInt(pageParam);
+		            } catch (NumberFormatException e) {
+		                page = 1; // Default to page 1 if invalid
+		            }
+		        }
 
-		        List<Product> initialProducts = productService.findByKeywordOrCategory(
-		            keyword, filterCategoryName, page, pageSize
-		        );
-		        System.out.println("Found initial products: " + initialProducts.size()); 
+		        String sizeParam = req.getParameter("size");
+		        if (sizeParam != null && !sizeParam.isEmpty()) {
+		            try {
+		                pageSize = Integer.parseInt(sizeParam);
+		            } catch (NumberFormatException e) {
+		                pageSize = 12; // Default to 12 if invalid
+		            }
+		        }
+
+		        List<Product> initialProducts = productService.findByKeywordOrCategory(keyword, filterCategoryName);
 
 		        List<Long> productIds = initialProducts.stream()
 		            .map(product -> (long) product.getProductId())
 		            .collect(Collectors.toList());
 
 		        List<Product> filteredProducts = productService.applyFiltersAfterKeywordOrCategory(
-		            productIds, filterPrice, colors, materials, heights, lengths, page, pageSize
+		            productIds, filterPrice, colors, materials, heights, lengths
 		        );
-		        System.out.println("Filtered products: " + filteredProducts.size()); 
 
 		        long totalProducts = productService.getProductCount(
 		            filterCategoryName, keyword, filterPrice, colors, materials, heights, lengths
 		        );
-		        System.out.println("Total products: " + totalProducts);
+
 		        int totalPages = (int) Math.ceil((double) totalProducts / pageSize);
 		        totalPages = totalPages > 0 ? totalPages : 1;
+
+		        int startIndex = (page - 1) * pageSize;
+		        int endIndex = Math.min(startIndex + pageSize, filteredProducts.size());
+		        List<Product> paginatedProducts = filteredProducts.subList(startIndex, endIndex);
+
+		        // Set attributes for the JSP
 		        req.setAttribute("keyword", keyword);
 		        req.setAttribute("categoryName", filterCategoryName);
-		        req.setAttribute("products", filteredProducts);
+		        req.setAttribute("products", paginatedProducts);
+		        req.setAttribute("totalProducts", totalProducts);
 		        req.setAttribute("currentPage", page);
 		        req.setAttribute("totalPages", totalPages);
 		        req.setAttribute("pageSize", pageSize);
-		        req.setAttribute("totalProducts", totalProducts);
-		        req.setAttribute("pageNumbers", calculatePageNumbers(page, totalPages));
+
+		        // Generate page numbers for pagination display
+		        List<Integer> pageNumbers = new ArrayList<>();
+		        for (int i = 1; i <= totalPages; i++) {
+		            pageNumbers.add(i);
+		        }
+		        req.setAttribute("pageNumbers", pageNumbers);
+
+		        // Forward to JSP
 		        req.getRequestDispatcher("/customer/views/product/product_search.jsp").forward(req, resp);
 
 		    } catch (Exception e) {
@@ -147,6 +175,7 @@ public class ProductController extends HttpServlet {
 		    }
 		}
 
+
 	private String[] getParameterValuesOrDefault(HttpServletRequest req, String paramName) {
 	    String[] values = req.getParameterValues(paramName);
 	    if (values == null || values.length == 0) {
@@ -154,15 +183,6 @@ public class ProductController extends HttpServlet {
 	    }
 	    return values;
 	}
-
-	private List<Integer> calculatePageNumbers(int currentPage, int totalPages) {
-	    List<Integer> pageNumbers = new ArrayList<>();
-	    for (int i = 1; i <= totalPages; i++) {
-	        pageNumbers.add(i);
-	    }
-	    return pageNumbers;
-	}
-
 	private void getProductDetail(HttpServletRequest req, HttpServletResponse resp)
 	        throws ServletException, IOException {
 	    try {

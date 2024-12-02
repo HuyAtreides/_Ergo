@@ -6,7 +6,6 @@
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     margin-bottom: 30px;
     display: flex;
-    flex-direction: column;
     height: 320px; /* Tăng chiều cao tổng thể */
     position: relative;
     padding-bottom: 100px;

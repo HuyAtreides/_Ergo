@@ -61,14 +61,14 @@ public class ProductServiceImpl implements IProductService {
     }
     
     @Override
-    public List<Product> findByKeywordOrCategory(String keyword, String categoryName, int page, int size) {
-        return productDao.findByKeywordOrCategory(keyword, categoryName, page, size);
+    public List<Product> findByKeywordOrCategory(String keyword, String categoryName) {
+        return productDao.findByKeywordOrCategory(keyword, categoryName);
     }
 
     @Override
     public List<Product> applyFiltersAfterKeywordOrCategory(List<Long> productIdsLong, String filterPrice, String[] colors,
-            String[] materials, String[] heights, String[] lengths, int page, int size) {
-        return productDao.applyFiltersAfterKeywordOrCategory(productIdsLong, filterPrice, colors, materials, heights, lengths, page, size);
+            String[] materials, String[] heights, String[] lengths) {
+        return productDao.applyFiltersAfterKeywordOrCategory(productIdsLong, filterPrice, colors, materials, heights, lengths);
     }
     @Override
     public long getProductCount (String keyword, String categoryName, String filterPrice, String[] colors, String[] materials,

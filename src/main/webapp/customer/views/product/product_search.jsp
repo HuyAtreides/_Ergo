@@ -30,7 +30,7 @@
 											<c:forEach var="category" items="${categories}">
 												<!-- Link đến trang search với tham số categoryName -->
 												<li><a
-													href="${pageContext.request.contextPath}/products/search?categoryName=${category.categoryName}&page=${sessionScope.currentPage}&keyword=${sessionScope.keyword}&minPrice=${sessionScope.minPrice}&maxPrice=${sessionScope.maxPrice}&pageSize=${sessionScope.pageSize}"
+													href="${pageContext.request.contextPath}/products/search?categoryName=${category.categoryName}"
 													onclick="console.log('Navigating to:', this.href)"
 													<c:if test="${category.categoryName == sessionScope.categoryName}">style="color:#08c"</c:if>>
 														${category.categoryName} </a></li>
@@ -175,12 +175,8 @@
 									<input type="hidden"
 									name="minPrice" value="${sessionScope.minPrice}" /> <input
 									type="hidden" name="maxPrice" value="${sessionScope.maxPrice}" />
-								<input type="hidden" name="pageSize"
-									value="${sessionScope.pageSize}" /> <input type="hidden"
-									name="keyword" value="${sessionScope.keyword}" /> <input
-									type="hidden" name="pageSize" value="${sessionScope.pageSize}" />
-								<input type="hidden" name="page"
-									value="${sessionScope.currentPage}" />
+								 <input type="hidden"
+									name="keyword" value="${sessionScope.keyword}" /> 
 								<div class="accordion-item">
 									<h2 class="accordion-header" id="headingLength">
 										<button class="accordion-button" type="button"

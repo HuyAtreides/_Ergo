@@ -18,12 +18,12 @@ public interface IProductDao {
 	List<String> findAllMaterials();
 	List<Double> findAllHeights();
 	List<Double> findAllLengths();
-	List<Product> findByKeywordOrCategory(String keyword, String categoryName, int page, int size);
-	List<Product> applyFiltersAfterKeywordOrCategory(List<Long> productIdsLong, String filterPrice, String[] colors,
-			String[] materials, String[] heights, String[] lengths, int page, int size);
 	long Count(String keyword, String categoryName, String filterPrice, String[] colors, String[] materials,
 			String[] heights, String[] lengths);
 	List<Product> findRelatedProductsByProductId(int productId, int page, int pageSize);
 	long getTotalRelatedProducts(int productId);
+	List<Product> findByKeywordOrCategory(String keyword, String categoryName);
+	List<Product> applyFiltersAfterKeywordOrCategory(List<Long> productIdsLong, String filterPrice, String[] colors,
+			String[] materials, String[] heights, String[] lengths);
 }
 
