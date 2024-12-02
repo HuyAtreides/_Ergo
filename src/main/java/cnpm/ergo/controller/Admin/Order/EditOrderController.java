@@ -27,7 +27,7 @@ public class EditOrderController extends HttpServlet {
                         Order order= orderService.findById(orderId);
                         order.setStatus(newStatus);
                         orderService.update(order);
-                        res.sendRedirect("/Ergo/admin/order?page=" + page);
+                        res.sendRedirect(req.getContextPath()+"/admin/order?page=" + page);
                 }
                 catch (Exception ex) {
                         ex.printStackTrace();
