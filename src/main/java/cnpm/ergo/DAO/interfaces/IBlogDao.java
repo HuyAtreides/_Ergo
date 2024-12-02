@@ -1,5 +1,6 @@
 package cnpm.ergo.DAO.interfaces;
 
+import java.time.LocalDate;
 import java.util.List;
 import cnpm.ergo.entity.Blog;
 
@@ -12,4 +13,5 @@ public interface IBlogDao {
     List<Blog> searchByTitle(String title);
     int count();
 	Integer findIdByTitle(String title);
+	List<Blog> searchByDate(String date);
 }

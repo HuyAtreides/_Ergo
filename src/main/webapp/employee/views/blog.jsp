@@ -11,6 +11,14 @@
 <body>
 <div class="container mt-5">
     <h2 class="text-center">Blog Management</h2>
+    <div class="d-flex justify-content-between my-3">
+        <form action="${pageContext.request.contextPath}/employee/search-blog" method="get" class="form-inline">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search by title" aria-label="Search" name="title">
+            <input class="form-control mr-sm-2" type="date" name="date">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+        <a href="${pageContext.request.contextPath}/employee/blog" class="btn btn-outline-primary">Show All</a>
+    </div>
     <c:if test="${not empty successMessage}">
         <div class="alert alert-success">${successMessage}</div>
     </c:if>

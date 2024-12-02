@@ -12,4 +12,5 @@ public interface IBlogService {
     List<Blog> searchBlogsByTitle(String title);
     int getBlogCount();
 	Integer findIdByTitle(String title);
+	List<Blog> searchByDate(String date);
 }
