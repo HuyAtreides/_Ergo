@@ -84,6 +84,24 @@ public class BlogDaoImpl implements IBlogDao {
     }
 
     @Override
+    public List<Blog> findWaitBlogByPage(int offset, int limit) {
+        EntityManager em = JPAConfig.getEntityManager();
+        EntityTransaction trans = em.getTransaction();
+        try {
+            trans.begin();
+            String jpql = "SELECT b FROM Blog b where b.approval=false";
+            TypedQuery<Blog> query = em.createQuery(jpql, Blog.class).setFirstResult(offset).setMaxResults(limit);
+            List<Blog> res = query.getResultList(); // Lấy danh sách tất cả blog
+            trans.commit();
+            return res;
+        }
+        catch (Exception ex) {
+            trans.rollback();
+            throw ex;
+        }
+    }
+
+    @Override
     public List<Blog> searchByTitle(String title) {
         EntityManager em = JPAConfig.getEntityManager();
         String jpql = "SELECT b FROM Blog b WHERE b.blogTitle LIKE :title";
@@ -98,6 +116,24 @@ public class BlogDaoImpl implements IBlogDao {
         String jpql = "SELECT COUNT(b) FROM Blog b";
         Query query = em.createQuery(jpql);
         return ((Long) query.getSingleResult()).intValue(); // Đếm tổng số blog
+    }
+
+    @Override
+    public int waitBlogCount() {
+        EntityManager em = JPAConfig.getEntityManager();
+        EntityTransaction trans = em.getTransaction();
+        try {
+            trans.begin();
+            String jpql = "SELECT COUNT(b) FROM Blog b where b.approval=false";
+            Query query = em.createQuery(jpql);
+            int res = ((Long) query.getSingleResult()).intValue(); // Đếm tổng số blog
+            trans.commit();
+            return res;
+        }
+        catch (Exception ex) {
+            trans.rollback();
+            throw ex;
+        }
     }
 
     @Override

@@ -10,5 +10,6 @@ public interface IOrderService {
 	void delete(int orderId);
 	Order findById(int orderId);
 	List<Order> findAll();
+	List<Order> findByPage(int offset, int limit);
 	int count();
 }

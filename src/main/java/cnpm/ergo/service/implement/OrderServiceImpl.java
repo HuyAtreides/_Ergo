@@ -45,6 +45,11 @@ public class OrderServiceImpl implements IOrderService{
 	}
 
 	@Override
+	public List<Order> findByPage(int offset, int limit) {
+		return orderDao.findByPage(offset, limit);
+	}
+
+	@Override
 	public int count() {
 		return orderDao.count();
 	}

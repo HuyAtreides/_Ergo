@@ -41,6 +41,11 @@ public class BlogServiceImpl implements IBlogService {
     }
 
     @Override
+    public List<Blog> getWaitBlogsByPage(int offset, int limit) {
+        return blogDao.findWaitBlogByPage(offset, limit);
+    }
+
+    @Override
     public List<Blog> searchBlogsByTitle(String title) {
         return blogDao.searchByTitle(title);
     }
@@ -48,6 +53,11 @@ public class BlogServiceImpl implements IBlogService {
     @Override
     public int getBlogCount() {
         return blogDao.count();
+    }
+
+    @Override
+    public int getWaitBlogCount() {
+        return blogDao.waitBlogCount();
     }
 
     @Override
