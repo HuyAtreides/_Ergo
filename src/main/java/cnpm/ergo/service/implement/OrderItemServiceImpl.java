@@ -41,5 +41,8 @@ public class OrderItemServiceImpl implements IOrderItemService{
 		return orderItemDao.count(orderId);
 	}
 	
-	
+	@Override
+    public List<OrderItem> findByProductName(String productName) {
+        return orderItemDao.findByProductNameForOrderItem(productName);
+    }
 }

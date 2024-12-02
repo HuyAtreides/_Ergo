@@ -36,64 +36,68 @@
 				hủy</a>
 		</div>
 
-		<!-- Search bar for filtering orders -->
-		<div class="search-bar">
-			<input type="text" id="searchInput"
-				placeholder="Tìm kiếm Tên Sản phẩm">
-		</div>
+		<%-- <!-- Search bar for filtering orders -->
+		<form method="get"
+			action="${pageContext.request.contextPath}/customer/managerorder">
+			<div class="search-bar">
+				<input type="text" id="searchInput" name="productName"
+					placeholder="Tìm kiếm Tên Sản phẩm" value="${param.productName}">
+			</div>
+		</form>
+ --%>
 
 		<!-- List of orders -->
-<!-- List of orders -->
-<div class="order-list">
-    <c:forEach var="order" items="${orders}">
-        <div class="order-card">
-            <!-- Order Header -->
-            <div class="order-header">
-                <p class="order-status">${order.status}</p>
-                <div class="total-price">
-                    <span>Thành tiền:</span> <span class="price">${order.totalCost}₫</span>
-                </div>
-                <div class="order-date">
-                    <span>Ngày Đặt:</span>
-                    <fmt:formatDate value="${order.orderDate}" pattern="dd/MM/yyyy" />
-                </div>
-            </div>
+		<div class="order-list">
+			<c:forEach var="order" items="${orders}">
+				<div class="order-card">
+					<!-- Order Header -->
+					<div class="order-header">
+						<p class="order-status">${order.status}</p>
+						<div class="total-price">
+							<span>Thành tiền:</span> <span class="price">${order.totalCost}₫</span>
+						</div>
+						<div class="order-date">
+							<span>Ngày Đặt:</span>
+							<fmt:formatDate value="${order.orderDate}" pattern="dd/MM/yyyy" />
+						</div>
+					</div>
 
-            <div class="order-items">
-                <c:forEach var="item" items="${order.orderItems}">
-                    <div class="order-item">
-                        <div class="product-info">
-                            <p>Tên sản phẩm: ${item.productType.product.name}</p>
-                            <p>Màu sắc: ${item.productType.color}</p>
-                            <p>Kích thước: ${item.productType.length} x ${item.productType.width} x ${item.productType.height}</p>
-                            <p>Giá: ${item.productType.price}₫</p>
-                            <p>Số lượng: ${item.quantity}</p>
+					<div class="order-items">
+						<!-- Hiển thị orderItems tìm kiếm nếu có -->
+						<c:forEach var="item"
+							items="${orderItems != null ? orderItems : order.orderItems}">
+							<div class="order-item">
+								<div class="product-info">
+									<div class="col">
+										<c:forEach var="image"
+											items="${item.productType.product.productImages}">
+											<div class="product-image">
+												<img src="${image.productImage}"
+													alt="Image of ${item.productType.product.name}" />
+											</div>
+										</c:forEach>
+									</div>
+									<div class="col product-details">
+										<p>Tên sản phẩm: ${item.productType.product.name}</p>
+										<p>Màu sắc: ${item.productType.color}</p>
+										<p>Kích thước: ${item.productType.length} x
+											${item.productType.width} x ${item.productType.height}</p>
+										<p>Giá: ${item.productType.price}₫</p>
+										<p>Số lượng: ${item.quantity}</p>
+									</div>
+								</div>
+							</div>
+						</c:forEach>
+					</div>
 
-                            <!-- Display product images -->
-                        <c:forEach var="image" items="${item.productType.product.productImages}">
-                            <div class="product-image">
-                                <img src="${image.productImage}" alt="Image of ${item.productType.product.name}" />
-                            </div>
-                        </c:forEach>
-                        </div>
-
-                        
-                    </div>
-                </c:forEach>
-            </div>
-
-            <!-- Order Footer -->
-            <div class="order-footer">
-                <button class="review-btn">Đánh Giá</button>
-                <button class="buy-again-btn">Mua Lại</button>
-            </div>
-        </div>
-    </c:forEach>
-</div>
-
-
-
-
+					<!-- Order Footer -->
+					<div class="order-footer">
+						<button class="review-btn">Đánh Giá</button>
+						<button class="buy-again-btn">Mua Lại</button>
+					</div>
+				</div>
+			</c:forEach>
+		</div>
 
 		<script>
         document.addEventListener('DOMContentLoaded', function() {

@@ -16,7 +16,7 @@ import java.util.List;
 
 @MultipartConfig(fileSizeThreshold = 1024 * 1024,
         maxFileSize = 1024 * 1024 * 5, maxRequestSize = 1024 * 1024 * 5 * 5)
-@WebServlet(urlPatterns = {"/customer/managerorder", "/customer/managerorder/detail"})
+@WebServlet(urlPatterns = {"/customer/managerorder"})
 public class OrderManagerController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private OrderServiceImpl orderService = new OrderServiceImpl();

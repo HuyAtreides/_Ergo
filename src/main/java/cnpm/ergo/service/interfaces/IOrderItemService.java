@@ -11,4 +11,5 @@ public interface IOrderItemService {
 	void delete(Order order, int orderItemId);
 	List<OrderItem> findAll(int orderId);
 	int count(int orderId);
+	List<OrderItem> findByProductName(String productName);
 }

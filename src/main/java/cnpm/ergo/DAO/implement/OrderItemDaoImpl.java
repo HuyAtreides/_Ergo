@@ -4,6 +4,7 @@ import java.util.List;
 
 import cnpm.ergo.DAO.interfaces.IOrderItemDao;
 import cnpm.ergo.configs.JPAConfig;
+import cnpm.ergo.entity.CartItem;
 import cnpm.ergo.entity.Order;
 import cnpm.ergo.entity.OrderItem;
 import jakarta.persistence.EntityManager;
@@ -131,6 +132,41 @@ public class OrderItemDaoImpl implements IOrderItemDao{
 	    }
 	}
 
-	
+	@Override
+	public List<OrderItem> findByProductNameForOrderItem(String productName) {
+	    EntityManager em = null;
+	    try {
+	        em = JPAConfig.getEntityManager(); 
+	        return em.createQuery(
+	                "SELECT oi FROM OrderItem oi WHERE oi.productType.product.name LIKE :productName", 
+	                OrderItem.class)
+	            .setParameter("productName", "%" + productName + "%")
+	            .getResultList();
+	    } catch (Exception e) {
+	        throw new RuntimeException("Failed to retrieve OrderItems for productName: " + productName, e);
+	    } finally {
+	        if (em != null && em.isOpen()) { 
+	            em.close(); 
+	        }
+	    }
+	}
+
+
+
+	public static void main(String[] args) {
+        IOrderItemDao orderItemDao = new OrderItemDaoImpl();
+        String productName = "ghế"; 
+        List<OrderItem> orderItems = orderItemDao.findByProductNameForOrderItem(productName);
+        if (orderItems.isEmpty()) {
+            System.out.println("No OrderItems found for product: " + productName);
+        } else {
+            for (OrderItem orderItem : orderItems) {
+                System.out.println("Product Name: " + orderItem.getProductType().getProduct().getName());
+                System.out.println("Quantity: " + orderItem.getQuantity());
+                System.out.println("Price: " + orderItem.getPrice());
+                System.out.println("----");
+            }
+        }
+    }
 	
 }
