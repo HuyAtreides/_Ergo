@@ -46,17 +46,29 @@
                 <td>${order.actualCost}</td>
                 <td>
                     <div class="btn-group" role="group">
-                        <!-- Nút Delete -->
-                        <c:choose>
-                            <c:when test="${order.status == 'Đã giao hàng'}">
-                                <button class="btn btn-primary btn-sm btn-disabled" disabled>Done</button>
-                            </c:when>
-                            <c:otherwise>
-                                <button class="btn btn-primary btn-sm" data-bs-toggle="modal">Done</button>
-                            </c:otherwise>
-                        </c:choose>
                         <!-- Nút Edit -->
-                        <button class="btn btn-warning btn-sm" data-bs-toggle="modal">Edit</button>
+                        <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditOrder${order.orderId}">Edit</button>
+                        <div class="modal fade" id="modalEditOrder${order.orderId}" tabindex="-1" aria-labelledby="modalProductModal${order.orderId}" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="editProductModalLabel${order.orderId}">Confirm Edit</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="order/editstatus" method="post">
+                                            <input type="hidden" name="currentPage" value="${currentPage}">
+                                            <input type="hidden" name="orderId" value="${order.orderId}">
+                                            <input type="text" name="status" value="${order.status}">
+                                            <button type="submit" class="btn btn-primary">Confirm</button>
+                                        </form>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    </div>
+                                    <div class="modal-footer">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </td>
             </tr>
@@ -69,6 +81,12 @@
         </c:if>
         </tbody>
     </table>
+
+    <div class="col-auto">
+        <a href="home" class="btn btn-primary">Back to Home</a>
+    </div>
+
+
     <!-- Pagination Links -->
     <nav aria-label="Page navigation">
         <ul class="pagination justify-content-center">
@@ -90,6 +108,8 @@
         </ul>
     </nav>
 </div>
+
+
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>

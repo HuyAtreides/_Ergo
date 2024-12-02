@@ -16,6 +16,7 @@ public class OrderController extends HttpServlet {
         IOrderService orderService = new OrderServiceImpl();
         private static final int ORDERS_PER_PAGE = 10;
 
+        @Override
         protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
                 if (req.getSession().getAttribute("admin") == null) {
                         res.sendRedirect(req.getContextPath() + "/admin/login");
