@@ -187,16 +187,32 @@
         </ul>
     </nav>
 
+    <table class="table table-bordered table-hover mt-3">
+        <thead class="table-dark">
+        <tr>
+            <th>Product Name</th>
+            <th>Type Id</th>
+            <th>Color</th>
+            <th>Height</th>
+            <th>Length</th>
+            <th>Material</th>
+            <th>Price</th>
+            <th>Quantity</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <!-- Button to open the modal -->
+    <div class="col-auto">
+        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addProductModal">Add New Product</button>
+    </div>
 
     <div class="container mt-3">
         <div class="row justify-content-center">
             <!-- Back to home page -->
             <div class="col-auto">
                 <a href="home" class="btn btn-primary">Back to Home</a>
-            </div>
-            <!-- Button to open the modal -->
-            <div class="col-auto">
-                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addProductModal">Add New Product</button>
             </div>
         </div>
     </div>
@@ -241,6 +257,8 @@
         </div>
     </div>
 </div>
+
+
 
 
 

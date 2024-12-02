@@ -69,6 +69,12 @@
                 <div data-i18n="Analytics">Products</div>
             </a>
         </li>
+        <li class="menu-item active">
+            <a href="producttype" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-package"></i>
+                <div data-i18n="Analytics">Product Types</div>
+            </a>
+        </li>
 
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Blogs</span>
