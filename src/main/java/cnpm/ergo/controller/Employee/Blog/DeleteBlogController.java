@@ -8,6 +8,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.util.List;
@@ -18,6 +19,11 @@ public class DeleteBlogController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        if (session.getAttribute("employee") == null) {
+            response.sendRedirect(request.getContextPath() + "/employee/login");
+            return;
+        }
         String blogIdParam = request.getParameter("blogId");
         if (blogIdParam != null && !blogIdParam.trim().isEmpty()) {
             try {

@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "order_item")
 public class OrderItem {
-
     @Id
     @ManyToOne
     @JoinColumn(name = "orderId", referencedColumnName = "orderId", nullable = false)
