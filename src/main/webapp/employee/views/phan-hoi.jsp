@@ -1,5 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -11,11 +12,11 @@
 <div class="sidebar">
 </div>
 <div class="main-content">
-    <div class="section">
-        <h2 class="align-content-center">Danh sách câu hỏi chưa trả lời</h2>
+    <div class="container mt-4">
+        <h2 class="text-center">Danh sách câu hỏi chưa trả lời</h2>
         <div class="table-responsive text-nowrap">
-            <table class="table card-table">
-                <thead>
+            <table  class="table table-bordered table-hover mt-3">
+                <thead  class="table-dark">
                 <tr>
                     <th>Mã KH</th>
                     <th>Tên KH</th>
@@ -25,7 +26,6 @@
                 </tr>
                 </thead>
                 <tbody class="table-border-bottom-0">
-                <!-- Lặp qua danh sách câu hỏi chưa trả lời -->
                 <c:forEach var="question" items="${pendingQuestions}">
                     <tr>
                         <td><strong>${question.customer.userId}</strong></td>
@@ -34,12 +34,14 @@
                         <td>${question.timestamp}</td>
                         <td>
                             <div class="dropdown">
-                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
+                                        data-bs-toggle="dropdown">
                                     <i class="bx bx-dots-vertical-rounded"></i>
                                 </button>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="editQuestion?questionId=${question.questionId}"><i class="bx bx-edit-alt me-1"></i> Edit</a>
-                                    <a class="dropdown-item" href="deleteQuestion?questionId=${question.questionId}"><i class="bx bx-trash me-1"></i> Delete</a>
+                                    <a class="dropdown-item " href="/employee/chat?questionId=${question.questionId}"><i class="bx bx-edit-alt me-1"></i> Phản hồi</a>
+                                    <a class="dropdown-item" href="deleteQuestion?questionId=${question.questionId}"><i
+                                            class="bx bx-trash me-1"></i> Delete</a>
                                 </div>
                             </div>
                         </td>

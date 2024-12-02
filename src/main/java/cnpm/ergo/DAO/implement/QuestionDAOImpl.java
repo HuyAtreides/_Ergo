@@ -31,7 +31,7 @@ public class QuestionDAOImpl implements IQuestion{
     @Override
     public List<Question> findByIsPending() {
         EntityManager em = JPAConfig.getEntityManager();
-        String hql = "SELECT q FROM Question q WHERE q.isPending = false"; // HQL query
+        String hql = "SELECT q FROM Question q WHERE q.isPending = true"; // HQL query
         Query query = em.createQuery(hql);
         return query.getResultList();
     }

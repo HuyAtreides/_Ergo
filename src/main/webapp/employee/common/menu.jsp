@@ -80,15 +80,23 @@
         </li>
         <li class="menu-item">
             <a href="/employee/order-list" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                <i class="menu-icon tf-icons bx bx-cart"></i>
                 <div data-i18n="Analytics">Confirm the order</div>
             </a>
         </li>
-        <li class="menu-header small text-uppercase"><span class="menu-header-text">Response Customer</span></li>
+        <li class="menu-header small text-uppercase"><span class="menu-header-text">Response</span></li>
         <li class="menu-item">
             <a href="/employee/res" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-collection"></i>
+                <i class='menu-icon tf-icons bx bx-bell' ></i>
                 <div data-i18n="Basic">Response Customer</div>
+            </a>
+        </li>
+        <li class="menu-header small text-uppercase"><span class="menu-header-text">Blog</span></li>
+        <li class="menu-item">
+            <a href="/employee/blog" class="menu-link">
+<%--                <i class="menu-icon tf-icons bx bx-detail"></i>--%>
+                <i class='menu-icon tf-icons bx bxl-blogger' ></i>
+                <div data-i18n="Basic">Blog</div>
             </a>
         </li>
     </ul>
@@ -113,14 +121,10 @@
                     item.classList.add('active');
                 }
             }
-
-            // Lắng nghe sự kiện click
             item.addEventListener('click', function () {
-                // Loại bỏ lớp 'active' khỏi tất cả các mục menu
                 menuItems.forEach(function (menu) {
                     menu.classList.remove('active');
                 });
-                // Thêm lớp 'active' cho mục menu hiện tại
                 item.classList.add('active');
             });
         });

@@ -17,13 +17,12 @@ public class Conversation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "conversationId")
     private int conversationId;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "employeeId", referencedColumnName = "employeeId")
     private Employee employee;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customerId", referencedColumnName = "customerId")
     private Customer customer;
-
     @OneToMany(mappedBy = "conversation")
     private List<Message> messages;
 }

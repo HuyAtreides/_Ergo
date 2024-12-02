@@ -18,4 +18,5 @@ public interface IMessage {
 
     void insert(Message message);
 
+    List<Message> findByConversationId(int id);
 }

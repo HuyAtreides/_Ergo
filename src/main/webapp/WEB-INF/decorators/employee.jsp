@@ -52,14 +52,29 @@
 <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
 <script
 	src="${pageContext.request.contextPath}/employee/assets/js/config.js"></script>
+	<style>
+		body, html {
+			height: 100%;
+			margin: 0;
+		}
+		.layout-page {
+			display: flex;
+			/*justify-content: center;  !* Căn giữa theo chiều ngang *!*/
+			align-items: center;      /* Căn giữa theo chiều dọc */
+			height: 100vh;            /* Đảm bảo phần tử chiếm hết chiều cao của viewport */
+		}
+	</style>
 </head>
 <body>
 	<div class="layout-wrapper layout-content-navbar">
 		<div class="layout-container">
 			<%@include file="/employee/common/menu.jsp"%>
+
+
 			<div class="layout-page">
 				<sitemesh:write property="body" />
 			</div>
+
 		</div>
 <%--		<div class="layout-overlay layout-menu-toggle"></div>--%>
 	</div>
