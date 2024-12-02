@@ -57,9 +57,9 @@ public class Order {
     @JoinColumn(name = "customerId", referencedColumnName = "userId", nullable = false)
     private User customer;
 
-//    @ManyToOne
-//    @JoinColumn(name = "voucherId", referencedColumnName = "voucherId")
-//    private Voucher voucher;
+    @ManyToOne
+    @JoinColumn(name = "voucherId", referencedColumnName = "voucherId")
+    private Voucher voucher;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems;

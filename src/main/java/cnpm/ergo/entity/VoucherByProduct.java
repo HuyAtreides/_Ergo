@@ -9,6 +9,10 @@ import java.util.List;
 @Data
 @Entity
 @PrimaryKeyJoinColumn(name = "voucherByProductId")
+@NamedQuery(name = "VoucherByProduct.findAll", query = "SELECT v FROM VoucherByProduct v")
+
+
+
 public class VoucherByProduct extends Voucher {
     @ManyToMany
     @JoinTable(
