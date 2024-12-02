@@ -1,4 +1,5 @@
-package cnpm.ergo.controller.Admin.Customer;
+package cnpm.ergo.controller.Customer.Customer;
+
 import cnpm.ergo.entity.Customer;
 import cnpm.ergo.service.implement.CustomerServiceImpl;
 import cnpm.ergo.service.interfaces.ICustomerService;
@@ -7,6 +8,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 
 @WebServlet(name = "AddController", value = "/admin/customer/add")

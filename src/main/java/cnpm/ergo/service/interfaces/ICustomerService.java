@@ -11,6 +11,6 @@ public interface ICustomerService {
     public void update(Customer customer);
     public void delete(int id);
     public List<Customer> search(String keyword);
-    public List<Customer> findAll(int pageNo, int pageSize);
-    public long count();
+
+    public long count();public List<Customer> findAll(int pageNo, int pageSize);
 }

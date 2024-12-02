@@ -90,6 +90,7 @@ public class OrderDaoImpl implements IOrderDao{
         return ((Long) query.getSingleResult()).intValue();
 	}
 
+
 	
 	
 }
