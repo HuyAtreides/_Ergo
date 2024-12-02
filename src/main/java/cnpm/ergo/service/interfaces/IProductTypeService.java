@@ -11,4 +11,7 @@ public interface IProductTypeService {
 	ProductType getProductTypeById(int typeId);
 	List<ProductType> getAllProductTypes();
 	int getProductTypeCount();
+
+	List<ProductType> getAllProductTypesByPage(int offset, int limit);
+
 }

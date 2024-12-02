@@ -20,6 +20,7 @@ public class ProductTypeDaoImpl implements IProductType {
         EntityManager em = new JPAConfig().getEntityManager();
         try {
             em.getTransaction().begin();
+            System.out.println(productType.getProduct().getProductId());
             em.persist(productType); // Thêm mới loại sản phẩm
             em.getTransaction().commit();
         } catch (Exception e) {
@@ -88,6 +89,25 @@ public class ProductTypeDaoImpl implements IProductType {
         Query query = em.createQuery(jpql);
         return ((Long) query.getSingleResult()).intValue(); // Đếm tổng số loại sản phẩm
     }
+
+    @Override
+    public List<ProductType> findAllByPage(int offset, int limit) {
+        EntityManager em = JPAConfig.getEntityManager();
+        EntityTransaction trans = em.getTransaction();
+        try {
+            trans.begin();
+            String jpql = "SELECT pt FROM ProductType pt";
+            TypedQuery<ProductType> query = em.createQuery(jpql, ProductType.class).setFirstResult(offset).setMaxResults(limit);
+            trans.commit();
+            List<ProductType> res = query.getResultList(); // Lấy danh sách tất cả loại sản phẩm
+            return res;
+        }
+        catch (Exception ex) {
+            trans.rollback();
+            throw ex;
+        }
+    }
+
     public static void main(String[] args) {
         //List all product types
         IProductType productType = new ProductTypeDaoImpl();

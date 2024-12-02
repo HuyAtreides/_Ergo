@@ -131,6 +131,7 @@
                                             <input type="file" class="form-control" id="newImages" name="newImages" multiple>
                                         </div>
                                         <button type="submit" class="btn btn-primary">Save Changes</button>
+
                                     </form>
                                     <div class="mb-3">
                                         <label for="existingImages" class="form-label">Existing Images</label>

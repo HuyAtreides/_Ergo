@@ -10,5 +10,8 @@ public interface IProductType {
 	ProductType findById(int typeId);
 	List<ProductType> findAll();
 	int count();
+
+	List<ProductType> findAllByPage(int offset, int limit);
+
 }
 
