@@ -10,6 +10,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @WebServlet("/employee/order-list")
 public class OrderListController extends HttpServlet {
@@ -19,6 +20,11 @@ public class OrderListController extends HttpServlet {
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		HttpSession session = req.getSession();
+		if (session.getAttribute("employee") == null) {
+			resp.sendRedirect(req.getContextPath() + "/employee/login");
+			return;
+		}
 		List<Order> orders = orderService.findAll();
         req.setAttribute("orders", orders);
 		req.getRequestDispatcher("/employee/views/danh-sach-don.jsp").forward(req, resp);

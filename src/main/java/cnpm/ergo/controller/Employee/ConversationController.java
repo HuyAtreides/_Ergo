@@ -12,6 +12,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -28,6 +29,12 @@ public class ConversationController extends HttpServlet {
     private MessageDAOImpl messageDAO = new MessageDAOImpl();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
+        if (session.getAttribute("employee") == null) {
+            resp.sendRedirect(req.getContextPath() + "/employee/login");
+            return;
+        }
+
         int questionId = Integer.parseInt(req.getParameter("questionId"));
         //cập nhật Pending
         Question question =  questionDAO.findById(questionId);

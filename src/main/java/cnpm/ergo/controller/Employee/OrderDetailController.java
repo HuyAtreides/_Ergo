@@ -9,6 +9,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.util.List;
@@ -19,6 +20,11 @@ public class OrderDetailController extends HttpServlet {
     private OrderItemServiceImpl orderItemService = new OrderItemServiceImpl();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
+        if (session.getAttribute("employee") == null) {
+            resp.sendRedirect(req.getContextPath() + "/employee/login");
+            return;
+        }
         int id = Integer.parseInt(req.getParameter("orderId"));
         List<OrderItem> orderItems = orderItemService.findAll(id);
         Order order = orderService.findById(id);
@@ -34,6 +40,11 @@ public class OrderDetailController extends HttpServlet {
     }
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
+        if (session.getAttribute("employee") == null) {
+            resp.sendRedirect(req.getContextPath() + "/employee/login");
+            return;
+        }
         String orderIdStr = req.getParameter("orderId");
         int orderId = Integer.parseInt(orderIdStr);
         Order order = orderService.findById(orderId);

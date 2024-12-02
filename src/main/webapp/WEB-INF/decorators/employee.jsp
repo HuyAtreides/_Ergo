@@ -66,18 +66,33 @@
 	</style>
 </head>
 <body>
-	<div class="layout-wrapper layout-content-navbar">
-		<div class="layout-container">
-			<%@include file="/employee/common/menu.jsp"%>
 
+    <c:choose>
+        <c:when test="${empty sessionScope['employee']}">
+            <jsp:forward page="/employee/login"/>
+        </c:when>
+        <c:otherwise>
+            <!-- Layout wrapper -->
+            <div class="layout-wrapper layout-content-navbar">
+                <div class="layout-container">
+                    <%@include file="/employee/common/menu.jsp"%>
 
-			<div class="layout-page">
-				<sitemesh:write property="body" />
-			</div>
+                    <!-- Layout container -->
+                    <div class="layout-page">
+                        <!-- Content wrapper -->
+                        <div class="content-wrapper">
 
-		</div>
-<%--		<div class="layout-overlay layout-menu-toggle"></div>--%>
-	</div>
+                            <sitemesh:write property="body"/>
+                        </div>
+                        <!-- Content wrapper -->
+                    </div>
+                    <!-- / Layout page -->
+                </div>
+                <!-- Overlay -->
+                <div class="layout-overlay layout-menu-toggle"></div>
+            </div>
+        </c:otherwise>
+    </c:choose>
 	<script
 		src="${pageContext.request.contextPath}/employee/assets/vendor/libs/jquery/jquery.js"></script>
 	<script
