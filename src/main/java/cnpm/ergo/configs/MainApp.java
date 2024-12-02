@@ -19,15 +19,27 @@ public class MainApp {
         EntityManager entityManager = JPAConfig.getEntityManager();
         entityManager.getTransaction().begin();
 
-        IVoucherByProductService service = new IVoucherByProductServiceImpl();
-        VoucherByProduct product = service.findById(3);
-        product.setCode("ProductDaUpdate");
-        product.setDelete(true);
-        System.out.println("xoa");
-        service.update(product);
-//        service.delete(product);
+        Product product = new Product();
+        product.setName("IP");
 
-        System.out.println("xoa duoc");
+        ProductType productType = new ProductType();
+        productType.setProduct(product);
+        productType.setColor("pink");
+
+        ProductType productType2 = new ProductType();
+        productType2.setProduct(product);
+        productType2.setColor("black");
+        Product product1 = productType2.getProduct();
+
+        IProductService service = new ProductServiceImpl();
+        service.addProduct(product);
+
+        IProductTypeService service1 = new ProductTypeServiceImpl();
+        service1.addProductType(productType);
+        service1.addProductType(productType2);
+
+        service1.getAllProductTypes();
+
 
         entityManager.getTransaction().commit();
         entityManager.close();

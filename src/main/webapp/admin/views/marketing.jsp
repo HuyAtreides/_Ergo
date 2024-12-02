@@ -6,9 +6,17 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <title>Marketing Campaign Management</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Nhúng jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <!-- Nhúng Bootstrap nếu cần -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
 <div class="container mt-4">
@@ -158,29 +166,26 @@
                         <!-- Edit Button -->
                         <c:choose>
                             <c:when test="<%= isVoucherByPrice %>">
-                                <button type="button" class="btn btn-warning btn-sm"
-                                        onclick="showEditVoucherModal('<%= voucher.getVoucherId() %>','Price')"
-                                        data-bs-toggle="modal" data-bs-target="#editVoucherPrice"
-                                        data-id="${voucher.getVoucherID}"
-                                        data-code="${voucher.getCode}"
-                                        data-discount="${voucher.getDiscount}"
-                                        data-dateStart="${voucher.getDateStart}"
-                                        data-dateEnd="${voucher.getDateEnd}"
-                                        data-type="Price">
-                                    Edit
-                                </button>
+                                <form action="voucher/editPrice" method="get">
+                                    <input type="hidden" name="voucherId" value="<%= voucher.getVoucherId() %>">
+                                    <input type="hidden" name="voucherCode" value="<%= voucher.getCode() %>">
+                                    <input type="hidden" name="voucherDiscount" value="<%= voucher.getDiscount() %>">
+                                    <input type="hidden" name="voucherDateStart" value="<%= voucher.getDateStart() %>">
+                                    <input type="hidden" name="voucherDateEnd" value="<%= voucher.getDateEnd() %>">
+                                    <button type="submit" class="btn btn-warning btn-sm">Edit
+                                    </button>
+                                </form>
                             </c:when>
                             <c:otherwise>
-                                <button type="button" class="btn btn-warning btn-sm"
-                                        onclick="showEditVoucherModal('<%= voucher.getVoucherId() %>','Product')"
-                                        data-bs-toggle="modal" data-bs-target="#editVoucherProduct"
-                                        data-id="${voucher.getVoucherID}"
-                                        data-code="${voucher.getCode}"
-                                        data-discount="${voucher.getDiscount}"
-                                        data-dateStart="${voucher.getDateStart}"
-                                        data-dateEnd="${voucher.getDateEnd}"
-                                        data-type="Product">
-                                Edit</button>
+                                <form action="voucher/editProduct" method="get">
+                                    <input type="hidden" name="voucherId" value="<%= voucher.getVoucherId() %>">
+                                    <input type="hidden" name="voucherCode" value="<%= voucher.getCode() %>">
+                                    <input type="hidden" name="voucherDiscount" value="<%= voucher.getDiscount() %>">
+                                    <input type="hidden" name="voucherDateStart" value="<%= voucher.getDateStart() %>">
+                                    <input type="hidden" name="voucherDateEnd" value="<%= voucher.getDateEnd() %>">
+                                    <button type="submit" class="btn btn-warning btn-sm">Edit
+                                    </button>
+                                </form>
                             </c:otherwise>
                         </c:choose>
 
@@ -267,7 +272,7 @@
                                 <label for="productTypes" class="form-label">Applicable Product Types</label>
                                 <select multiple class="form-select" id="productTypes" name="productTypes">
                                     <c:forEach var="productType" items="${productTypes}">
-                                        <option value="${productType.typeId}">${productType.name}</option>
+                                        <option value="${productType.getTypeId()}">${productType.getProduct().getName()} | ${productType.getColor()}</option>
                                     </c:forEach>
                                 </select>
                                 <small class="text-muted">Hold CTRL (Windows) or CMD (Mac) to select multiple types.</small>
@@ -282,103 +287,6 @@
         </div>
     </div>
 
-    <!-- Edit Voucher Price -->
-    <div class="modal fade" id="editVoucherPrice" tabindex="-1" aria-labelledby="editVoucherModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editVoucherPriceLabel">Edit Voucher</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- Form to edit a voucher -->
-                    <form action="voucher/editPrice" method="post">
-                        <!-- Common Fields -->
-                        <div class="mb-3">
-                            <label for="editVoucherCode" class="form-label">Voucher Code</label>
-                            <input type="text" class="form-control" id="editVoucherCodePrice" name="code" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="editVoucherDiscount" class="form-label">Discount (%)</label>
-                            <input type="number" class="form-control" id="editVoucherDiscountPrice" name="discount" step="0.01" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="editVoucherDateStart" class="form-label">Start Date</label>
-                            <input type="date" class="form-control" id="editVoucherDateStartPrice" name="dateStart" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="editvoucherDateEnd" class="form-label">End Date</label>
-                            <input type="date" class="form-control" id="editVoucherDateEndPrice" name="dateEnd" required>
-                        </div>
-
-                        <!-- Voucher By Price Fields -->
-                            <div class="mb-3">
-                                <label for="editVoucherLowerbound" class="form-label">Minimum Order Value</label>
-                                <input type="number" class="form-control" id="editVoucherLowerbound" name="lowerbound" step="0.01">
-
-                                <form action="voucher/editPrice" method="post">
-                                    <input type="hidden" name="voucherId">
-                                    <button type="submit" class="btn btn-danger btn-sm"
-                                    >Edit
-                                    </button>
-                                </form>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Edit Voucher Price -->
-    <div class="modal fade" id="editVoucherProduct" tabindex="-1" aria-labelledby="editVoucherModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editVoucherModalLabel">Edit Voucher</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- Form to edit a voucher -->
-                    <form action="voucher/editProduct" method="post">
-                        <!-- Common Fields -->
-                        <div class="mb-3">
-                            <label for="editVoucherCode" class="form-label">Voucher Code</label>
-                            <input type="text" class="form-control" id="editVoucherCode" name="code" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="editVoucherDiscount" class="form-label">Discount (%)</label>
-                            <input type="number" class="form-control" id="editVoucherDiscount" name="discount" step="0.01" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="editVoucherDateStart" class="form-label">Start Date</label>
-                            <input type="date" class="form-control" id="editVoucherDateStart" name="dateStart" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="editvoucherDateEnd" class="form-label">End Date</label>
-                            <input type="date" class="form-control" id="editVoucherDateEnd" name="dateEnd" required>
-                        </div>
-                        <!-- Voucher By Product Fields -->
-                            <div class="mb-3">
-                                <label for="editVoucherProductTypes" class="form-label">Applicable Product Types</label>
-                                <select multiple class="form-select" id="editVoucherProductTypes" name="productTypes">
-                                    <c:forEach var="productType" items="${productTypes}">
-                                        <option value="${productType.typeId}">${productType.name}</option>
-                                    </c:forEach>
-                                </select>
-                                <form action="voucher/editProduct" method="post">
-                                    <input type="hidden" name="voucherId">
-                                    <button type="submit" class="btn btn-danger btn-sm"
-                                    >Edit
-                                    </button>
-                                </form>
-                            </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Bootstrap JS and Popper.js -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     // Toggle fields based on voucher type selection
     document.getElementById("voucherType").addEventListener("change", function () {
@@ -422,59 +330,7 @@
         updateFields();
     });
 </script>
-
-
-<script>
-    function showEditVoucherModal(voucherId, voucherType) {
-        console.log(voucherType);
-        document.getElementById('editID').value = voucherId;
-        var priceFields = document.querySelector('.editVoucherByPriceFields');
-        var productFields = document.querySelector('.editVoucherByProductFields');
-         if (voucherType === "Price") {
-             priceFields.classList.remove("d-none");
-             productFields.classList.add("d-none");
-             new bootstrap.Modal(document.getElementById("editVoucherPrice")).show();
-         } else if (voucherType === "Product") {
-             productFields.classList.remove("d-none");
-             priceFields.classList.add("d-none");
-             new bootstrap.Modal(document.getElementById("editVoucherProduct")).show();
-         }
-
-        // Hiển thị modal
-
-    }
-</script>
-<%--<script>--%>
-<%--    function showEditVoucherModal(voucherId, voucherType) {--%>
-<%--        $('#editVoucherId').val(voucherId);--%>
-<%--        $('#editVoucherType').val(voucherType);--%>
-<%--        // Populate other fields as necessary--%>
-<%--        $('#editVoucherModal').modal('show');--%>
-<%--    }--%>
-<%--</script>--%>
-<script>
-    $(document).ready(function() {
-        $('#editVoucherPrice').on('show.bs.modal', function(event) {
-            var button = $(event.relatedTarget); // Button that triggered the modal
-            var id = button.data('id');
-            var code = button.data('code');
-            var discount = button.data('discount');
-            var dateStart = button.data('dateStart');
-            var dateEnd = button.data('dateEnd');
-            var type = button.data('type');
-
-
-            var modal = $(this);
-            modal.find('#editVoucherCode').val(id);
-            modal.find('#editVoucherDiscount').val(discount);
-            modal.find('#editVoucherDateStart').val(dateStart);
-            modal.find('#editVoucherDateEnd').val(dateEnd);
-            modal.find('#editType').val(type);
-            $('#voucherType').text(type);
-        });
-    });
-</script>
-
+</div>
 </body>
 </html>
 

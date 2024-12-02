@@ -1,11 +1,15 @@
 package cnpm.ergo.controller.Admin.Marketing.Voucher;
 
+import cnpm.ergo.entity.ProductType;
 import cnpm.ergo.entity.VoucherByPrice;
 import cnpm.ergo.entity.VoucherByProduct;
 import cnpm.ergo.service.implement.IVoucherByPriceServiceImpl;
 import cnpm.ergo.service.implement.IVoucherByProductServiceImpl;
+import cnpm.ergo.service.implement.ProductTypeServiceImpl;
+import cnpm.ergo.service.interfaces.IProductTypeService;
 import cnpm.ergo.service.interfaces.IVoucherByPriceService;
 import cnpm.ergo.service.interfaces.IVoucherByProductService;
+import jakarta.persistence.EntityManager;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -15,18 +19,22 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @WebServlet(urlPatterns = "/admin/addVoucher")
 public class AddVoucherController extends HttpServlet {
     IVoucherByProductService voucherByProduct;
     IVoucherByPriceService voucherByPrice;
+    private EntityManager entityManager;
 
     @Override
     public void init() throws ServletException {
         // Initialize the service implementation
         voucherByProduct = new IVoucherByProductServiceImpl();
         voucherByPrice = new IVoucherByPriceServiceImpl();
+
 
     }
 
@@ -45,6 +53,16 @@ public class AddVoucherController extends HttpServlet {
             double discount = Double.parseDouble(request.getParameter("discount"));
             Date dateStart = parseDate(request.getParameter("dateStart"));
             Date dateEnd = parseDate(request.getParameter("dateEnd"));
+            String[] selectedProductTypes = request.getParameterValues("productTypes");
+            List<ProductType> productTypeList = new ArrayList<>();
+            IProductTypeService productTypeService = new ProductTypeServiceImpl();
+            if (selectedProductTypes != null) {
+                for(int i=0; i< selectedProductTypes.length;i++)
+                {
+                    ProductType type = productTypeService.getProductTypeById((Integer.parseInt(selectedProductTypes[i])));
+                    productTypeList.add(type);
+                }
+            }
 
             try {
                 if ("byPrice".equals(voucherType)) {
@@ -66,14 +84,8 @@ public class AddVoucherController extends HttpServlet {
                     voucher.setDiscount(discount);
                     voucher.setDateStart(dateStart);
                     voucher.setDateEnd(dateEnd);
+                    voucher.setProductTypes(productTypeList);
 
-//                    // Xử lý danh sách productTypes
-//                    String[] productTypeIds = request.getParameterValues("productTypes");
-//                    if (productTypeIds != null) {
-//                        for (String typeId : productTypeIds) {
-//                            voucher.addProductType(Integer.parseInt(typeId)); // Phương thức addProductType cần được định nghĩa
-//                        }
-//                    }
                     // Thêm vào cơ sở dữ liệu
                     voucherByProduct.insert(voucher);
                 }

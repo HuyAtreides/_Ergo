@@ -1,13 +1,12 @@
 package cnpm.ergo.controller.Admin.Marketing;
 
-import cnpm.ergo.entity.MarketingCampaign;
-import cnpm.ergo.entity.Voucher;
-import cnpm.ergo.entity.VoucherByPrice;
-import cnpm.ergo.entity.VoucherByProduct;
+import cnpm.ergo.entity.*;
 import cnpm.ergo.service.implement.IVoucherByPriceServiceImpl;
 import cnpm.ergo.service.implement.IVoucherByProductServiceImpl;
 import cnpm.ergo.service.implement.MarketingCampaignServiceImpl;
+import cnpm.ergo.service.implement.ProductTypeServiceImpl;
 import cnpm.ergo.service.interfaces.IMarketingCampaignService;
+import cnpm.ergo.service.interfaces.IProductTypeService;
 import cnpm.ergo.service.interfaces.IVoucherByPriceService;
 import cnpm.ergo.service.interfaces.IVoucherByProductService;
 import jakarta.servlet.ServletException;
@@ -35,12 +34,15 @@ public class MarketingController extends HttpServlet {
 
         List<MarketingCampaign> Campaigns = marketingCampaignService.findAllMarketingCampaign();
 
+        IProductTypeService productTypeService = new ProductTypeServiceImpl();
+        List<ProductType> productTypes = productTypeService.getAllProductTypes();
 //
 //        long totalvoucher = vouchers.stream().count();
 //        int totalPages = (int) Math.ceil((double) totalvoucher / pageSize);
 
         request.setAttribute("vouchers",vouchers);
         request.setAttribute("campaigns",Campaigns);
+        request.setAttribute("productTypes", productTypes);
 
 //        request.setAttribute("currentPage", pageNo);
 //        request.setAttribute("totalPages", totalPages);
