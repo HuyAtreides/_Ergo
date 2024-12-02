@@ -20,7 +20,6 @@ public class OrderServiceImpl implements IOrderService{
 	@Override
 	public void update(Order order) {
 		orderDao.update(order);
-		
 	}
 
 	@Override

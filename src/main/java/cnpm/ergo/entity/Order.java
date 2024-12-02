@@ -1,14 +1,28 @@
 package cnpm.ergo.entity;
 
+import java.sql.Date;
+import java.util.List;
+
+import cnpm.ergo.DAO.implement.OrderDaoImpl;
 import cnpm.ergo.DAO.implement.UserDAOImpl;
 import cnpm.ergo.configs.JPAConfig;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.sql.Date;
-import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -65,36 +79,73 @@ public class Order {
     private List<OrderItem> orderItems;
 
     public static void main(String[] args) {
-        // create Order object
+//        // create Order object
+//        Order order = new Order();
+//        // set orderDate
+//        order.setOrderDate(new Date(System.currentTimeMillis()));
+//        // set status
+//        order.setStatus("Đã đặt hàng");
+//        // set cityOfProvince
+//        order.setCityOfProvince("Hà Nội");
+//        // set district
+//        order.setDistrict("Cầu Giấy");
+//        // set ward
+//        order.setWard("Nghĩa Đô");
+//        // set streetNumber
+//        order.setStreetNumber("Số 1, Đại Cồ Việt");
+//        // set phone
+//        order.setPhone("0123456789");
+//        // set totalCost
+//        order.setTotalCost(1000.0);
+//        // set discount
+//        order.setDiscount(100.0);
+//        // set actualCost
+//        order.setActualCost(900.0);
+//        // set customer
+//        User customer = new UserDAOImpl().getUserById(1);
+//        order.setCustomer(customer);
+//        // insert order to database
+//        EntityManager em = JPAConfig.getEntityManager();
+//        em.getTransaction().begin();
+//        em.persist(order);
+//        em.getTransaction().commit();
+//        em.close();
+    	
+    	 // Tạo đối tượng Order và thiết lập dữ liệu giả
         Order order = new Order();
-        // set orderDate
         order.setOrderDate(new Date(System.currentTimeMillis()));
-        // set status
-        order.setStatus("Đã đặt hàng");
-        // set cityOfProvince
-        order.setCityOfProvince("Hà Nội");
-        // set district
+        order.setStatus("Chưa xác nhận");
+        order.setCityOfProvince("Quảng Ngãi");
         order.setDistrict("Cầu Giấy");
-        // set ward
         order.setWard("Nghĩa Đô");
-        // set streetNumber
         order.setStreetNumber("Số 1, Đại Cồ Việt");
-        // set phone
         order.setPhone("0123456789");
-        // set totalCost
         order.setTotalCost(1000.0);
-        // set discount
         order.setDiscount(100.0);
-        // set actualCost
         order.setActualCost(900.0);
-        // set customer
-        User customer = new UserDAOImpl().getUserById(1);
+
+        // Lấy đối tượng User (Customer) từ DB
+        User customer = new UserDAOImpl().getUserById(3);  // Giả sử bạn đã có phương thức này trong UserDAOImpl
         order.setCustomer(customer);
-        // insert order to database
+
+        // Lưu đơn hàng vào cơ sở dữ liệu
         EntityManager em = JPAConfig.getEntityManager();
-        em.getTransaction().begin();
-        em.persist(order);
-        em.getTransaction().commit();
-        em.close();
+        EntityTransaction transaction = em.getTransaction();
+        transaction.begin();
+//        em.persist(order);  // Persist order object into the database
+        transaction.commit();
+
+        // Gọi phương thức findAll để lấy tất cả các đơn hàng
+        OrderDaoImpl orderDao = new OrderDaoImpl();
+        List<Order> orders = orderDao.findAll();  // Giả sử phương thức này trả về danh sách các đơn hàng
+
+        // In ra tất cả các đơn hàng
+        System.out.println("Danh sách các đơn hàng:");
+        for (Order o : orders) {
+            System.out.println("Mã đơn hàng: " + o.getOrderId() +
+                               ", Trạng thái: " + o.getStatus() +
+                               ", Tổng tiền: " + o.getTotalCost() +
+                               ", Khách hàng: " + o.getCustomer().getName());
+        }
     }
 }
