@@ -84,6 +84,24 @@ public class BlogDaoImpl implements IBlogDao {
     }
 
     @Override
+    public List<Blog> findWaitBlogByPage(int offset, int limit) {
+        EntityManager em = JPAConfig.getEntityManager();
+        EntityTransaction trans = em.getTransaction();
+        try {
+            trans.begin();
+            String jpql = "SELECT b FROM Blog b where b.approval=false";
+            TypedQuery<Blog> query = em.createQuery(jpql, Blog.class).setFirstResult(offset).setMaxResults(limit);
+            List<Blog> res = query.getResultList(); // Lấy danh sách tất cả blog
+            trans.commit();
+            return res;
+        }
+        catch (Exception ex) {
+            trans.rollback();
+            throw ex;
+        }
+    }
+
+    @Override
     public List<Blog> searchByTitle(String title) {
         EntityManager em = JPAConfig.getEntityManager();
         String jpql = "SELECT b FROM Blog b WHERE b.blogTitle LIKE :title";
@@ -100,9 +118,44 @@ public class BlogDaoImpl implements IBlogDao {
         return ((Long) query.getSingleResult()).intValue(); // Đếm tổng số blog
     }
 
+    @Override
+    public int waitBlogCount() {
+        EntityManager em = JPAConfig.getEntityManager();
+        EntityTransaction trans = em.getTransaction();
+        try {
+            trans.begin();
+            String jpql = "SELECT COUNT(b) FROM Blog b where b.approval=false";
+            Query query = em.createQuery(jpql);
+            int res = ((Long) query.getSingleResult()).intValue(); // Đếm tổng số blog
+            trans.commit();
+            return res;
+        }
+        catch (Exception ex) {
+            trans.rollback();
+            throw ex;
+        }
+    }
+
+    @Override
+    public Integer findIdByTitle(String title) {
+        EntityManager em = JPAConfig.getEntityManager();
+        try {
+            String jpql = "SELECT b.blogId FROM Blog b WHERE b.blogTitle = :title";
+            TypedQuery<Integer> query = em.createQuery(jpql, Integer.class);
+            query.setParameter("title", title);
+            return query.getSingleResult(); // Lấy blogId theo tiêu đề
+        } catch (Exception e) {
+            return null; // Trường hợp không tìm thấy blog
+        } finally {
+            em.close();
+        }
+    }
+
     public static void main(String[] args) {
         BlogDaoImpl blogDaoImpl = new BlogDaoImpl();
         // count
         System.out.println(blogDaoImpl.count());
+        // findIdByTitle
+        System.out.println(blogDaoImpl.findIdByTitle("Sample Title"));
     }
 }

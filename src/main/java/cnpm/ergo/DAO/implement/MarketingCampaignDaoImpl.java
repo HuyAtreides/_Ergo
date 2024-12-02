@@ -75,5 +75,4 @@ public class MarketingCampaignDaoImpl implements IMarketingCampaignDao {
 			throw new RuntimeException("Lỗi truy vấn: " + e.getMessage(), e);
 		}
 	}
-
 }

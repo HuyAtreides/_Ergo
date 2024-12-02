@@ -11,10 +11,19 @@ public class MainApp {
         EntityManager entityManager = JPAConfig.getEntityManager();
         entityManager.getTransaction().begin();
 
-        //get customer
-        Customer customer = entityManager.find(Customer.class, 1);
-
-
+//        //Get voucherByProduct by id 2
+//        VoucherByProduct voucherByProduct = entityManager.find(VoucherByProduct.class, 6);
+//        //get productType by id 1
+//        ProductType productType = entityManager.find(ProductType.class, 3);
+//
+//        //add productType to voucherByProduct
+//        voucherByProduct.getProductTypes().add(productType);
+//        productType.getVoucher().add(voucherByProduct);
+//
+//        //update voucherByProduct
+//
+//        entityManager.merge(voucherByProduct);
+//        entityManager.merge(productType);
         entityManager.getTransaction().commit();
         entityManager.close();
     }
