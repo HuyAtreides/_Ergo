@@ -370,26 +370,23 @@ public class ProductDaoImpl implements IProductDao {
 
             String categoryName = currentProduct.getCategory().getCategoryName();
 
-            // JPQL truy vấn sản phẩm liên quan theo danh mục
             StringBuilder jpql = new StringBuilder("SELECT DISTINCT p FROM Product p ");
             jpql.append("LEFT JOIN FETCH p.productTypes pt ");
             jpql.append("LEFT JOIN p.category c ");
             jpql.append("WHERE p.isDelete = false ");
             jpql.append("AND c.categoryName = :categoryName ");
             jpql.append("AND p.productId != :productId ");
-            jpql.append("ORDER BY p.productId"); // Thêm sắp xếp sản phẩm (tuỳ theo nhu cầu)
+            jpql.append("ORDER BY p.productId"); 
 
             TypedQuery<Product> query = em.createQuery(jpql.toString(), Product.class);
             query.setParameter("categoryName", categoryName);
             query.setParameter("productId", productId);
 
-            // Phân trang
             query.setFirstResult((page - 1) * pageSize);
             query.setMaxResults(pageSize);
 
             List<Product> relatedProducts = query.getResultList();
 
-            // Khởi tạo các lazy-loaded thuộc tính (nếu cần thiết)
             for (Product product : relatedProducts) {
                 Hibernate.initialize(product.getProductTypes());
                 Hibernate.initialize(product.getProductImages());
@@ -433,37 +430,25 @@ public class ProductDaoImpl implements IProductDao {
         }
     }
 
-	public static void main(String[] args) {
-        ProductDaoImpl productService = new ProductDaoImpl();
+    public static void main(String[] args) {
+        ProductDaoImpl productRepository = new ProductDaoImpl();
+        int page = 2; // Trang bắt đầu
+        int size = 10; // Số lượng sản phẩm mỗi trang
+        
+        // Thử nghiệm với từ khóa và tên danh mục
+        String keyword = ""; // Thay bằng từ khóa thực tế
+        String categoryName = ""; // Thay bằng tên danh mục thực tế
 
-        String keyword = "Ghế";  
-        String categoryName = null;
-        String filterPrice = null; 
-        String[] colors = null; 
-        String[] materials = null;  
-        String[] heights = null;  
-        String[] lengths = null;  
+        try {
+            List<Product> products = productRepository.findByKeywordOrCategory(keyword, categoryName, page, size);
 
-        int pageSize = 12;  
-        int currentPage = 1;  
-
-        long productCount = productService.Count(keyword, categoryName, filterPrice, colors, materials, heights, lengths);
-        System.out.println("Tổng số sản phẩm thỏa mãn các bộ lọc: " + productCount);
-
-        int totalPages = (int) Math.ceil((double) productCount / pageSize);
-        System.out.println("Tổng số trang: " + totalPages);
-
-        for (int page = 1; page <= totalPages; page++) {
-            System.out.println("\nTrang " + page + ":");
-            List<Product> products = productService.findByKeywordOrCategory(keyword, categoryName, page, pageSize);
-
-            if (products.isEmpty()) {
-                System.out.println("Không có sản phẩm nào.");
-            } else {
-                for (Product product : products) {
-                    System.out.println("Sản phẩm: " + product.getName() + ", Mô tả: " + product.getDescript());
-                }
+            System.out.println("Kết quả tìm kiếm:");
+            for (Product product : products) {
+                System.out.println("Tên sản phẩm: " + product.getName());
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Có lỗi xảy ra trong quá trình truy vấn!");
         }
     }
 

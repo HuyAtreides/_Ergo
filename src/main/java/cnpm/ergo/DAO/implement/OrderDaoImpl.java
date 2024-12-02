@@ -132,12 +132,10 @@ public class OrderDaoImpl implements IOrderDao{
 
 	public static void main(String[] args) {
 		OrderDaoImpl dao = new OrderDaoImpl();
-        int orderId = 1;  // Thay đổi với ID của đơn hàng mà bạn muốn truy vấn
+        int orderId = 1;  
 
-        // Gọi hàm findByOrderId để lấy danh sách OrderItem
         List<OrderItem> orderItems = dao.findByOrderId(orderId);
 
-        // Kiểm tra kết quả
         if (orderItems != null && !orderItems.isEmpty()) {
             System.out.println("Order Items for Order ID: " + orderId);
             for (OrderItem item : orderItems) {

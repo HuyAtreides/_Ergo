@@ -19,11 +19,7 @@ public class OrderItemDaoImpl implements IOrderItemDao{
 
 	    try {
 	        trans.begin();
-
-	        // Liên kết Order với OrderItem
 	        orderItem.setOrder(order);
-
-	        // Thêm mới OrderItem vào cơ sở dữ liệu
 	        em.persist(orderItem);
 
 	        trans.commit();

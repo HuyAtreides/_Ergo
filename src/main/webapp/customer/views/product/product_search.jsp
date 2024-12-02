@@ -229,11 +229,11 @@
 									</select>
 									<script>
                         function updatePageSize() {
-                            const pageSize = document.getElementById('pageSizeSelect').value; // Lấy giá trị mới
+                            const pageSize = document.getElementById('pageSizeSelect').value; 
                             const url = new URL(window.location.href);
-                            url.searchParams.set('page', 1); // Đặt về trang đầu tiên
-                            url.searchParams.set('size', pageSize); // Cập nhật số lượng sản phẩm
-                            window.location.href = url.toString(); // Cập nhật URL
+                            url.searchParams.set('page', 1);
+                            url.searchParams.set('size', pageSize); 
+                            window.location.href = url.toString(); 
                         }
                     </script>
 								</div>
@@ -320,17 +320,14 @@
        VENDORS DETAILA END
     ==============================-->
 	<script>
-//Thêm script này vào cuối file hoặc trong một file JS riêng
 document.addEventListener('DOMContentLoaded', function() {
     const priceSlider = document.getElementById('priceSlider');
     const minPriceInput = document.getElementById('minPrice');
     const maxPriceInput = document.getElementById('maxPrice');
     
-    // Khởi tạo giá trị
     let minPrice = 0;
-    let maxPrice = 10000000; // Giá trị tối đa mặc định
+    let maxPrice = 10000000; 
     
-    // Tạo hai thumb cho slider
     const createThumb = (position) => {
         const thumb = document.createElement('div');
         thumb.className = 'price-slider-thumb';
@@ -342,24 +339,20 @@ document.addEventListener('DOMContentLoaded', function() {
     const leftThumb = createThumb(0);
     const rightThumb = createThumb(100);
     
-    // Tạo range track
     const range = document.createElement('div');
     range.className = 'price-slider-range';
     priceSlider.appendChild(range);
     
-    // Cập nhật giá trị và vị trí của slider
     const updateSlider = (left, right) => {
         range.style.left = left + '%';
         range.style.width = (right - left) + '%';
         leftThumb.style.left = left + '%';
         rightThumb.style.left = right + '%';
         
-        // Cập nhật input fields
         minPriceInput.value = Math.round((maxPrice * left) / 100);
         maxPriceInput.value = Math.round((maxPrice * right) / 100);
     };
     
-    // Xử lý kéo thumb
     let isDragging = null;
     let startX = 0;
     let startLeft = 0;
@@ -379,7 +372,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const deltaPercent = (deltaX / priceSlider.offsetWidth) * 100;
         let newLeft = startLeft + deltaPercent;
         
-        // Giới hạn phạm vi di chuyển
         if (isDragging === leftThumb) {
             newLeft = Math.max(0, Math.min(parseFloat(rightThumb.style.left) - 10, newLeft));
             updateSlider(newLeft, parseFloat(rightThumb.style.left));
@@ -395,7 +387,6 @@ document.addEventListener('DOMContentLoaded', function() {
         document.removeEventListener('mouseup', onMouseUp);
     };
     
-    // Xử lý input thay đổi
     minPriceInput.addEventListener('change', () => {
         const value = Math.max(0, Math.min(parseInt(maxPriceInput.value) - 10, parseInt(minPriceInput.value)));
         const percent = (value / maxPrice) * 100;
@@ -408,7 +399,6 @@ document.addEventListener('DOMContentLoaded', function() {
         updateSlider(parseFloat(leftThumb.style.left), percent);
     });
     
-    // Thêm event listeners cho thumbs
     leftThumb.addEventListener('mousedown', (e) => onMouseDown(e, leftThumb));
     rightThumb.addEventListener('mousedown', (e) => onMouseDown(e, rightThumb));
     

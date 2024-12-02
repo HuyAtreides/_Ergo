@@ -244,3 +244,19 @@ body {
     height: 100%;
     object-fit: cover;
 }
+.review-btn, .buy-again-btn {
+    background-color: #1890ff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.review-btn:hover, .buy-again-btn:hover {
+    background-color: #40a9ff;
+    transform: scale(1.05);
+}
