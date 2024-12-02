@@ -9,7 +9,9 @@ public interface IBlogDao {
     void delete(int blogId);
     Blog findById(int blogId);
     List<Blog> findAll();
+    List<Blog> findWaitBlogByPage(int offset, int limit);
     List<Blog> searchByTitle(String title);
     int count();
+    int waitBlogCount();
 	Integer findIdByTitle(String title);
 }

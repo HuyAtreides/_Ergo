@@ -9,7 +9,9 @@ public interface IBlogService {
     void deleteBlog(int blogId);
     Blog getBlogById(int blogId);
     List<Blog> getAllBlogs();
+    List<Blog> getWaitBlogsByPage(int offset, int limit);
     List<Blog> searchBlogsByTitle(String title);
     int getBlogCount();
+    int getWaitBlogCount();
 	Integer findIdByTitle(String title);
 }
