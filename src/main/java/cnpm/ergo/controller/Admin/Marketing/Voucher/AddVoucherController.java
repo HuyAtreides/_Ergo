@@ -66,7 +66,7 @@ public class AddVoucherController extends HttpServlet {
                     voucher.setDiscount(discount);
                     voucher.setDateStart(dateStart);
                     voucher.setDateEnd(dateEnd);
-//
+
 //                    // Xử lý danh sách productTypes
 //                    String[] productTypeIds = request.getParameterValues("productTypes");
 //                    if (productTypeIds != null) {
@@ -74,7 +74,6 @@ public class AddVoucherController extends HttpServlet {
 //                            voucher.addProductType(Integer.parseInt(typeId)); // Phương thức addProductType cần được định nghĩa
 //                        }
 //                    }
-
                     // Thêm vào cơ sở dữ liệu
                     voucherByProduct.insert(voucher);
                 }

@@ -1,5 +1,6 @@
 package cnpm.ergo.controller.Admin.Marketing.Voucher;
 
+import cnpm.ergo.entity.VoucherByProduct;
 import cnpm.ergo.service.implement.IVoucherByPriceServiceImpl;
 import cnpm.ergo.service.implement.IVoucherByProductServiceImpl;
 import cnpm.ergo.service.interfaces.IVoucherByPriceService;
@@ -29,10 +30,12 @@ public class DeleteProductController extends HttpServlet {
 //        }
         try {
             System.out.println("xoa san pham");
-            System.out.print(request.getParameter("voucherId").isBlank());
+            System.out.println(request.getParameter("voucherId").isBlank());
+            System.out.println(request.getParameter("voucherId"));
             int voucherID = Integer.parseInt(request.getParameter("voucherId"));
-            voucherByProduct.delete(voucherByProduct.findById(voucherID));
-
+            VoucherByProduct product = voucherByProduct.findById(voucherID);
+            product.setDelete(true);
+            voucherByProduct.update(product);
             response.sendRedirect(request.getContextPath() + "/admin/marketing");
         } catch (Exception e) {
             e.printStackTrace();

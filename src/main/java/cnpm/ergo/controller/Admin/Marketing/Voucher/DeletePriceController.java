@@ -29,6 +29,8 @@ public class DeletePriceController extends HttpServlet {
             System.out.println("xoa gia");
             System.out.println(request.getParameter("voucherId").isBlank());
             int voucherID = Integer.parseInt(request.getParameter("voucherId"));
+            System.out.println(voucherID);
+
             voucherByPrice.delete(voucherByPrice.findById(voucherID));
 
             response.sendRedirect(request.getContextPath() + "/admin/marketing");

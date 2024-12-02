@@ -19,16 +19,16 @@ public class MainApp {
         EntityManager entityManager = JPAConfig.getEntityManager();
         entityManager.getTransaction().begin();
 
+        IVoucherByProductService service = new IVoucherByProductServiceImpl();
+        VoucherByProduct product = service.findById(3);
+        product.setCode("ProductDaUpdate");
+        product.setDelete(true);
+        System.out.println("xoa");
+        service.update(product);
+//        service.delete(product);
 
-        System.out.println("test get all");
-        MarketingCampaignServiceImpl marketingCampaignService = new MarketingCampaignServiceImpl();
-        List<MarketingCampaign> Campaigns = marketingCampaignService.findAllMarketingCampaign();
-        System.out.println(Campaigns.size());
-        System.out.println("test get all");
-        for(MarketingCampaign campain : Campaigns)
-        {
-            System.out.println(campain.getCampaignId());
-        }
+        System.out.println("xoa duoc");
+
         entityManager.getTransaction().commit();
         entityManager.close();
     }

@@ -25,33 +25,9 @@ public abstract class Voucher {
 
     private double discount;
 
-    private enum VoucherType {
-        PRICE, PRODUCT
-    }
-
-    @Enumerated(EnumType.STRING)
-    private VoucherType voucherType;
-
-    public VoucherType getVoucherType() {
-        return voucherType;
-
-    }
-
-
-    protected void setVoucherType(VoucherType voucherType) {
-        this.voucherType = voucherType;
-    }
+    private boolean isDelete;
 
     @OneToOne(mappedBy = "voucher")
     private MarketingCampaign marketingCampaign;
 
-    @PrePersist
-    @PreUpdate
-    private void setVoucherTypeAutomatically() {
-        if (this instanceof VoucherByPrice) {
-            this.voucherType = VoucherType.PRICE;
-        } else if (this instanceof VoucherByProduct) {
-            this.voucherType = VoucherType.PRODUCT;
-        }
-    }
 }

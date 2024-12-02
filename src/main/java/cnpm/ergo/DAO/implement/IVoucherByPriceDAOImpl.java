@@ -7,6 +7,7 @@ import cnpm.ergo.entity.VoucherByPrice;
 import cnpm.ergo.entity.VoucherByProduct;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 
 import java.util.List;
@@ -59,7 +60,8 @@ public class IVoucherByPriceDAOImpl implements IVoucherByPriceDAO {
         EntityTransaction trans = enma.getTransaction();
         try {
             trans.begin();
-            enma.remove(voucher);
+            voucher.setDelete(true);
+            enma.merge(voucher);
             trans.commit();
 
         } catch (Exception e )
@@ -83,9 +85,15 @@ public class IVoucherByPriceDAOImpl implements IVoucherByPriceDAO {
     @Override
     public VoucherByPrice findById(int Id) {
         EntityManager enma   = JPAConfig.getEntityManager();
-        VoucherByPrice voucher = enma.find(VoucherByPrice.class,Id);
-        voucher.getVoucherId();
-        return voucher;
+        try {
+            VoucherByPrice voucher = enma.find(VoucherByPrice.class,Id);
+            return voucher;
+        }
+        catch (NoResultException e)
+        {
+            return null;
+        }
+
     }
 
     @Override

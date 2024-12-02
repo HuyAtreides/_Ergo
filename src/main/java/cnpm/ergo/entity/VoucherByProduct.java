@@ -10,7 +10,7 @@ import java.util.List;
 @Entity
 @NamedQuery(
         name = "VoucherByProduct.findAll",
-        query = "SELECT c FROM VoucherByProduct c"
+        query = "SELECT c FROM VoucherByProduct c where c.isDelete = false"
 )
 @PrimaryKeyJoinColumn(name = "voucherByProductId")
 public class VoucherByProduct extends Voucher {

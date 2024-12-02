@@ -9,7 +9,7 @@ import lombok.*;
 @Entity
 @NamedQuery(
         name = "VoucherByPrice.findAll",
-        query = "SELECT c FROM VoucherByPrice c"
+        query = "SELECT c FROM VoucherByPrice c where c.isDelete = false "
 )
 
 @PrimaryKeyJoinColumn(name = "voucherByPriceId")

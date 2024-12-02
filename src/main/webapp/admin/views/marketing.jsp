@@ -138,7 +138,6 @@
                 <th>Discount (%)</th>
                 <th>Start Date</th>
                 <th>End Date</th>
-                <th>Type</th>
                 <th>Actions</th>
             </tr>
             </thead>
@@ -154,7 +153,6 @@
                 <td><%= voucher.getDiscount() %></td>
                 <td><%= voucher.getDateStart() %></td>
                 <td><%= voucher.getDateEnd() %></td>
-                <td><%= voucher.getVoucherType() %></td>
                 <td>
                     <div class="d-flex justify-content-center">
                         <!-- Edit Button -->
@@ -197,7 +195,7 @@
                             </c:when>
                             <c:otherwise>
                                 <form action="voucher/deleteProduct" method="get">
-                                    <input type="hidden" name="voucherId" value="<%=voucher.getVoucherId() %>">
+                                    <input type="hidden" name="voucherId" value="<%= voucher.getVoucherId() %>">
                                     <button type="submit" class="btn btn-danger btn-sm"
                                             onclick="return confirm('Are you sure you want to delete this voucher?');">Delete</button>
                                 </form>
@@ -400,6 +398,32 @@
         }
     });
 </script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const voucherType = document.getElementById("voucherType");
+        const byPriceFields = document.querySelector(".voucherByPriceFields");
+        const byProductFields = document.querySelector(".voucherByProductFields");
+
+        // Hàm hiển thị các trường theo lựa chọn
+        function updateFields() {
+            if (voucherType.value === "byPrice") {
+                byPriceFields.classList.remove("d-none");
+                byProductFields.classList.add("d-none");
+            } else {
+                byPriceFields.classList.add("d-none");
+                byProductFields.classList.remove("d-none");
+            }
+        }
+
+        // Gọi hàm khi thay đổi lựa chọn
+        voucherType.addEventListener("change", updateFields);
+
+        // Đặt trạng thái ban đầu khi load
+        updateFields();
+    });
+</script>
+
+
 <script>
     function showEditVoucherModal(voucherId, voucherType) {
         console.log(voucherType);
