@@ -92,6 +92,8 @@ public class IVoucherByPriceDAOImpl implements IVoucherByPriceDAO {
         catch (NoResultException e)
         {
             return null;
+        }finally {
+            enma.close();
         }
 
     }

@@ -96,6 +96,9 @@ public class IVoucherByProductDAOImpl implements IVoucherByProductDAO {
             System.out.println("khoong  duoc san pham");
             return null;
         }
+        finally {
+            enma.close();
+        }
     }
 
     @Override

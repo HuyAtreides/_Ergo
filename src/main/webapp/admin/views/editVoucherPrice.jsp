@@ -32,7 +32,7 @@
                     <!-- Common Fields -->
                     <div class="mb-3">
                         <label for="editVoucherCodePrice" class="form-label">Voucher Code</label>
-                        <input type="text" class="form-control" id="editVoucherCodePrice" name="editVoucherCodePrice" value="${editVoucherCodePrice}" required>
+                        <input type="text" class="form-control" id="editVoucherCodePrice" name="editVoucherCodePrice" required>
                     </div>
                     <div class="mb-3">
                         <label for="editVoucherDiscountPrice" class="form-label">Discount (%)</label>

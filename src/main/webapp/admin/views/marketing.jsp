@@ -22,112 +22,130 @@
 <div class="container mt-4">
     <h1 class="text-center">Marketing Campaign Management</h1>
 
-<%--    <!-- Button to open the modal -->--%>
-<%--    <div class="mb-3">--%>
-<%--        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addCampaignModal">Add New Campaign</button>--%>
-<%--    </div>--%>
+    <!-- Button to open the modal -->
+    <div class="mb-3">
+        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addCampaignModal">Add New Campaign</button>
+    </div>
 
-<%--    <!-- Campaign List Table -->--%>
-<%--    <table class="table table-bordered table-hover mt-3">--%>
-<%--        <thead class="table-dark">--%>
-<%--        <tr>--%>
-<%--            <th>Campaign ID</th>--%>
-<%--            <th>Content</th>--%>
-<%--            <th>Voucher</th>--%>
-<%--            <th>Status</th>--%>
-<%--            <th>Images</th>--%>
-<%--            <th>Actions</th>--%>
-<%--        </tr>--%>
-<%--        </thead>--%>
-<%--        <tbody>--%>
-<%--        <!-- Using c:forEach to iterate through the campaign list -->--%>
-<%--        <c:forEach var="campaign" items="${campaigns}">--%>
-<%--            <tr>--%>
-<%--                <td>${campaign.campaignId}</td>--%>
-<%--                <td>${campaign.content}</td>--%>
-<%--                <td>--%>
-<%--                    <c:choose>--%>
-<%--                        <c:when test="${campaign.voucher != null}">--%>
-<%--                            ${campaign.voucher.voucherId}--%>
-<%--                        </c:when>--%>
-<%--                        <c:otherwise>--%>
-<%--                            No Voucher--%>
-<%--                        </c:otherwise>--%>
-<%--                    </c:choose>--%>
-<%--                </td>--%>
-<%--                <td>--%>
-<%--                    <c:if test="${campaign.isDelete}">--%>
-<%--                        Deleted--%>
-<%--                    </c:if>--%>
-<%--                    <c:if test="${!campaign.isDelete}">--%>
-<%--                        Active--%>
-<%--                    </c:if>--%>
-<%--                </td>--%>
-<%--                <td>--%>
-<%--                    <c:forEach var="image" items="${campaign.campaignImages}">--%>
-<%--                        <img src="${image.url}" alt="Campaign Image" class="img-thumbnail" style="width: 100px; height: auto;">--%>
-<%--                    </c:forEach>--%>
-<%--                </td>--%>
-<%--                <td>--%>
-<%--                    <div class="d-flex justify-content-center">--%>
-<%--                        <!-- Edit Button -->--%>
-<%--                        <form action="${pageContext.request.contextPath}/admin/campaign/editCampaign" method="post" style="margin-right: 5px;">--%>
+    <!-- Campaign List Table -->
+    <table class="table table-bordered table-hover mt-3">
+        <thead class="table-dark">
+        <tr>
+            <th>Campaign ID</th>
+            <th>Content</th>
+            <th>Voucher</th>
+            <th>Status</th>
+            <th>Images</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Using c:forEach to iterate through the campaign list -->
+        <c:forEach var="campaign" items="${campaigns}">
+            <tr>
+                <td>${campaign.campaignId}</td>
+                <td>${campaign.content}</td>
+                <td>
+                    <c:choose>
+                        <c:when test="${campaign.voucher != null}">
+                            ${campaign.voucher.voucherId}
+                        </c:when>
+                        <c:otherwise>
+                            No Voucher
+                        </c:otherwise>
+                    </c:choose>
+                </td>
+                <td>
+                    <c:if test="${campaign.isDelete}">
+                        Deleted
+                    </c:if>
+                    <c:if test="${!campaign.isDelete}">
+                        Active
+                    </c:if>
+                </td>
+                <td>
+                    <c:choose>
+                        <c:when test="${campaign.getCampaignImages() != null && campaign.getCampaignImages().size()>0}">
+                            ${campaign.getCampaignImages().get(0).getImagePath()}
+                        </c:when>
+                        <c:otherwise>
+                            No Image
+                        </c:otherwise>
+                    </c:choose>
+
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <!-- Edit Button -->
+                        <form action="${pageContext.request.contextPath}/admin/campaign/editCampaign" method="get" style="margin-right: 5px;">
+                            <input type="hidden" name="campaignId" value="${campaign.getCampaignId()}">
+                            <input type="hidden" name="content" value="${campaign.getContent()}">
+
+                            <c:choose>
+                                <c:when test="${campaign.getCampaignImages() != null && campaign.getCampaignImages().size()>0}">
+                                    <input type="hidden" name="image" value="${campaign.getCampaignImages().get(0).getImagePath()}">
+                                </c:when>
+                                <c:otherwise>
+                                    <input type="hidden" name="image" value="Rong">
+                                </c:otherwise>
+                            </c:choose>
 <%--                            <input type="hidden" name="campaignId" value="${campaign.campaignId}">--%>
-<%--                            <button type="submit" class="btn btn-warning btn-sm">Edit</button>--%>
-<%--                        </form>--%>
-<%--                        <!-- Delete Button -->--%>
-<%--                        <form action="${pageContext.request.contextPath}/admin/campaign/deleteCampaign" method="post">--%>
-<%--                            <input type="hidden" name="campaignId" value="${campaign.campaignId}">--%>
-<%--                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this campaign?');">Delete</button>--%>
-<%--                        </form>--%>
-<%--                    </div>--%>
-<%--                </td>--%>
-<%--            </tr>--%>
-<%--        </c:forEach>--%>
-<%--        <!-- Display message if the campaign list is empty -->--%>
-<%--        <c:if test="${empty campaigns}">--%>
-<%--            <tr>--%>
-<%--                <td colspan="6" class="text-center">No campaigns available!</td>--%>
-<%--            </tr>--%>
-<%--        </c:if>--%>
-<%--        </tbody>--%>
-<%--    </table>--%>
+
+                            <button type="submit" class="btn btn-warning btn-sm">Edit</button>
+                        </form>
+                        <!-- Delete Button -->
+                        <form action="${pageContext.request.contextPath}/admin/campaign/deleteCampaign" method="post">
+                            <input type="hidden" name="campaignId" value="${campaign.campaignId}">
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this campaign?');">Delete</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        </c:forEach>
+        <!-- Display message if the campaign list is empty -->
+        <c:if test="${empty campaigns}">
+            <tr>
+                <td colspan="6" class="text-center">No campaigns available!</td>
+            </tr>
+        </c:if>
+        </tbody>
+    </table>
 
 
-<%--    <!-- Add Campaign Modal -->--%>
-<%--    <div class="modal fade" id="addCampaignModal" tabindex="-1" aria-labelledby="addCampaignModalLabel" aria-hidden="true">--%>
-<%--        <div class="modal-dialog">--%>
-<%--            <div class="modal-content">--%>
-<%--                <div class="modal-header">--%>
-<%--                    <h5 class="modal-title" id="addCampaignModalLabel">Add New Campaign</h5>--%>
-<%--                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>--%>
-<%--                </div>--%>
-<%--                <div class="modal-body">--%>
-<%--                    <!-- Form to add a new campaign -->--%>
-<%--                    <form action="${pageContext.request.contextPath}/admin/campaign/addCampaign" method="post">--%>
-<%--                        <div class="mb-3">--%>
-<%--                            <label for="content" class="form-label">Content</label>--%>
-<%--                            <textarea class="form-control" id="content" name="content" required></textarea>--%>
-<%--                        </div>--%>
-<%--                        <div class="mb-3">--%>
-<%--                            <label for="voucherId" class="form-label">Voucher</label>--%>
-<%--                            <select class="form-select" id="voucherId" name="voucherId">--%>
-<%--                                <option value="">Select a voucher</option>--%>
-<%--                                <c:forEach var="voucher" items="${vouchers}">--%>
-<%--                                    <option value="${voucher.voucherId}">${voucher.code} - Discount: ${voucher.discount}%</option>--%>
-<%--                                </c:forEach>--%>
-<%--                            </select>--%>
-<%--                        </div>--%>
-<%--                        <div class="mb-3">--%>
-<%--                            <label for="images" class="form-label">Campaign Images</label>--%>
-<%--                            <input type="file" class="form-control" id="images" name="images" multiple>--%>
-<%--                        </div>--%>
-<%--                        <button type="submit" class="btn btn-primary">Add Campaign</button>--%>
-<%--                    </form>--%>
-<%--                </div>--%>
-<%--            </div>--%>
-<%--        </div>--%>
-<%--    </div>--%>
+    <!-- Add Campaign Modal -->
+    <div class="modal fade" id="addCampaignModal" tabindex="-1" aria-labelledby="addCampaignModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addCampaignModalLabel">Add New Campaign</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Form to add a new campaign -->
+                    <form action="${pageContext.request.contextPath}/admin/campaign/addCampaign" method="post">
+                        <div class="mb-3">
+                            <label for="content" class="form-label">Content</label>
+                            <textarea class="form-control" id="content" name="content" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="voucherId" class="form-label">Voucher</label>
+                            <select class="form-select" id="voucherId" name="voucherId">
+                                <option value="">Select a voucher</option>
+                                <c:forEach var="voucher" items="${vouchers}">
+                                    <option value="${voucher.voucherId}"> ${voucher.code} - Discount: ${voucher.discount}%</option>
+                                </c:forEach>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="image" class="form-label">Campaign Images</label>
+                            <input type="text" class="form-control" id="image" name="image" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Campaign</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Voucher Management Section -->
     <div class="mt-5">

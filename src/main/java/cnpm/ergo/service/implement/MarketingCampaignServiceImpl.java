@@ -21,13 +21,23 @@ public class MarketingCampaignServiceImpl implements IMarketingCampaignService{
 	}
 
 	@Override
-	public void deleteCampaign(Long Id) {
-		campaignDao.delete(Id);
+	public void deleteCampaign(MarketingCampaign campaignEntity) {
+		campaignDao.delete(campaignEntity);
 	}
 
 	@Override
 	public List<MarketingCampaign> findAllMarketingCampaign() {
 		List<MarketingCampaign> campaignEntities = campaignDao.findAll();
 		return campaignEntities;
+	}
+
+	@Override
+	public MarketingCampaign findByID(Long Id) {
+		return campaignDao.findById(Id);
+	}
+
+	@Override
+	public MarketingCampaign getLatestCampaign() {
+		return campaignDao.getLatestCampaign();
 	}
 }

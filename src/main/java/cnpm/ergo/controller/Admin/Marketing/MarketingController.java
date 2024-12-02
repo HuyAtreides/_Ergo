@@ -36,13 +36,18 @@ public class MarketingController extends HttpServlet {
 
         IProductTypeService productTypeService = new ProductTypeServiceImpl();
         List<ProductType> productTypes = productTypeService.getAllProductTypes();
-//
+
+        IMarketingCampaignService marketingCampaignService = new MarketingCampaignServiceImpl();
+        List<MarketingCampaign> marketingCampaignList = marketingCampaignService.findAllMarketingCampaign();
+
+
 //        long totalvoucher = vouchers.stream().count();
 //        int totalPages = (int) Math.ceil((double) totalvoucher / pageSize);
 
         request.setAttribute("vouchers",vouchers);
         request.setAttribute("campaigns",Campaigns);
         request.setAttribute("productTypes", productTypes);
+        request.setAttribute("campaigns", marketingCampaignList);
 
 //        request.setAttribute("currentPage", pageNo);
 //        request.setAttribute("totalPages", totalPages);

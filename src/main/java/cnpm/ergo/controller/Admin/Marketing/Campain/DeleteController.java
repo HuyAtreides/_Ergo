@@ -33,7 +33,7 @@ public class DeleteController extends HttpServlet {
             // Lấy thông tin
             Long campaingID = Long.parseLong(request.getParameter("campaignId"));
             // Tạo đối tượng Campaign
-            marketingCampaignService.deleteCampaign(campaingID);
+            marketingCampaignService.deleteCampaign(marketingCampaignService.findByID(campaingID));
             // Redirect hoặc thông báo thành công
             response.sendRedirect(request.getContextPath() + "/admin/marketing");
 

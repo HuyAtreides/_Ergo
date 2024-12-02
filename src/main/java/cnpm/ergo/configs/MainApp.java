@@ -2,10 +2,7 @@ package cnpm.ergo.configs;
 
 import cnpm.ergo.entity.*;
 import cnpm.ergo.service.implement.*;
-import cnpm.ergo.service.interfaces.IProductService;
-import cnpm.ergo.service.interfaces.IProductTypeService;
-import cnpm.ergo.service.interfaces.IVoucherByPriceService;
-import cnpm.ergo.service.interfaces.IVoucherByProductService;
+import cnpm.ergo.service.interfaces.*;
 import com.mysql.cj.conf.PropertyDefinitions;
 import jakarta.persistence.EntityManager;
 
@@ -18,27 +15,34 @@ public class MainApp {
         //insert voucher
         EntityManager entityManager = JPAConfig.getEntityManager();
         entityManager.getTransaction().begin();
+        System.out.println("khong chay");
+        MarketingCampaign marketingCampaign = new MarketingCampaign();
+        IMarketingCampaignService service = new MarketingCampaignServiceImpl();
+        System.out.println(marketingCampaign.getCampaignImages());
+        List<MarketingCampaign> list = service.findAllMarketingCampaign();
+        for(MarketingCampaign marketingCampaign1 : list)
+        {
+            if(marketingCampaign1.getCampaignImages() != null &&  marketingCampaign1.getCampaignImages().size() >0)
+            {
+                System.out.println(marketingCampaign1.getCampaignImages().get(0).getImagePath());
+            }
+            else
+            {
+                System.out.println("khong co");
+            }
+        }
+        marketingCampaign = service.findByID(Long.parseLong("19"));
+        if(marketingCampaign.getCampaignImages() != null &&  !marketingCampaign.getCampaignImages().isEmpty())
+        {
+            System.out.println(marketingCampaign.getCampaignImages().get(0).getImagePath());
+        }
+        else
+        {
+            System.out.println("khong co");
+        }
 
-        Product product = new Product();
-        product.setName("IP");
+        System.out.println("chay");
 
-        ProductType productType = new ProductType();
-        productType.setProduct(product);
-        productType.setColor("pink");
-
-        ProductType productType2 = new ProductType();
-        productType2.setProduct(product);
-        productType2.setColor("black");
-        Product product1 = productType2.getProduct();
-
-        IProductService service = new ProductServiceImpl();
-        service.addProduct(product);
-
-        IProductTypeService service1 = new ProductTypeServiceImpl();
-        service1.addProductType(productType);
-        service1.addProductType(productType2);
-
-        service1.getAllProductTypes();
 
 
         entityManager.getTransaction().commit();

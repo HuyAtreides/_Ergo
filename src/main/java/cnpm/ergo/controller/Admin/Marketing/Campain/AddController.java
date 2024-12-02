@@ -1,12 +1,11 @@
 package cnpm.ergo.controller.Admin.Marketing.Campain;
 
-import cnpm.ergo.entity.MarketingCampaign;
-import cnpm.ergo.entity.Voucher;
-import cnpm.ergo.entity.VoucherByPrice;
-import cnpm.ergo.entity.VoucherByProduct;
+import cnpm.ergo.entity.*;
+import cnpm.ergo.service.implement.CampaignImageServiceImpl;
 import cnpm.ergo.service.implement.IVoucherByPriceServiceImpl;
 import cnpm.ergo.service.implement.IVoucherByProductServiceImpl;
 import cnpm.ergo.service.implement.MarketingCampaignServiceImpl;
+import cnpm.ergo.service.interfaces.ICampaignImageService;
 import cnpm.ergo.service.interfaces.IMarketingCampaignService;
 import cnpm.ergo.service.interfaces.IVoucherByPriceService;
 import cnpm.ergo.service.interfaces.IVoucherByProductService;
@@ -17,7 +16,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @WebServlet(urlPatterns = "/admin/campaign/addCampaign")
 public class AddController extends HttpServlet {
@@ -33,47 +34,57 @@ public class AddController extends HttpServlet {
 //        }
         try {
             // Lấy thông tin chung từ form
+
             String content = request.getParameter("content");
-            int voucherID = Integer.parseInt(request.getParameter("voucherID"));
-            //xử lý ảnh
-//            List<String> imagePaths = new ArrayList<>();
-//            String uploadDir = getServletContext().getRealPath("/uploads/campaigns");
-//            for (Part part : request.getParts()) {
-//                if (part.getName().equals("images") && part.getSize() > 0) {
-//                    String fileName = Paths.get(part.getSubmittedFileName()).getFileName().toString();
-//                    File uploadFolder = new File(uploadDir);
-//                    if (!uploadFolder.exists()) uploadFolder.mkdirs();
-//                    String filePath = uploadDir + File.separator + fileName;
-//                    part.write(filePath);
-//                    imagePaths.add("/uploads/campaigns/" + fileName);
-//                }
-//            }
-
-            // Tạo đối tượng Campaign
+            System.out.println("test content" + content);
             MarketingCampaign campaign = new MarketingCampaign();
-            campaign.setContent(content);
-//            campaign.setImages(imagePaths);
 
 
+            String voucherIdParam = request.getParameter("voucherId");
 
-            //tìm loại voucher nào
-            Voucher voucher;
-            if(voucherByPriceService.findById(voucherID) == null)
-            {
-                if(voucherByProductService.findById(voucherID) == null)
+            if (voucherIdParam != null && !voucherIdParam.isEmpty()) {
+                int voucherId = Integer.parseInt(voucherIdParam); // Chuyển đổi sang kiểu số nếu cần
+
+                Voucher voucher;
+                if(voucherByPriceService.findById(voucherId) == null)
                 {
-                    return;
+                    if(voucherByProductService.findById(voucherId) == null)
+                    {
+                        return;
+                    }
+                    voucher = new VoucherByProduct();
                 }
-                voucher = new VoucherByProduct();
-            }
-            voucher = new VoucherByPrice();
+                voucher = new VoucherByPrice();
+                campaign.setVoucher(voucher);
 
-            // Gán voucher
-            voucher.setVoucherId(voucherID);
-            campaign.setVoucher(voucher);
+
+                // Xử lý với voucherId
+                System.out.println("Selected Voucher ID: " + voucherId);
+            } else {
+                System.out.println("No voucher selected.");
+            }
+            campaign.setContent(content);
 
             // Gọi service để lưu campaigns
             marketingCampaignService.addCampaign(campaign);
+
+            String image = request.getParameter("image");
+            System.out.println("test add image" + image);
+            if(image != null )
+            {
+                ICampaignImageService campaignImageService = new CampaignImageServiceImpl();
+
+                CampaignImage image1 = new CampaignImage();
+                image1.setImagePath(image);
+
+                List<CampaignImage> list = new ArrayList<>();
+                list.add(image1);
+
+                image1.setMarketingCampaign(marketingCampaignService.getLatestCampaign());
+
+                campaignImageService.addImage(image1);
+            }
+
 
             // Redirect hoặc thông báo thành công
             response.sendRedirect(request.getContextPath() + "/admin/marketing");
