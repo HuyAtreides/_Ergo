@@ -55,7 +55,6 @@ public class Message {
         entityManager.persist(message);
         entityManager.getTransaction().commit();
         entityManager.close();
-
     }
 
 }

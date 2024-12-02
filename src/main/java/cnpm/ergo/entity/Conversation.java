@@ -23,7 +23,6 @@ public class Conversation {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customerId", referencedColumnName = "customerId")
     private Customer customer;
-
     @OneToMany(mappedBy = "conversation")
     private List<Message> messages;
 }

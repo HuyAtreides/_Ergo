@@ -1,7 +1,6 @@
 package cnpm.ergo.DAO.implement;
 
 import java.util.List;
-
 import cnpm.ergo.DAO.interfaces.IConversation;
 import cnpm.ergo.configs.JPAConfig;
 import cnpm.ergo.entity.Conversation;
@@ -15,7 +14,6 @@ public class ConversationDAOImpl implements IConversation{
     public void insert(Conversation conversation) {
         EntityManager em = JPAConfig.getEntityManager();
         EntityTransaction trans = em.getTransaction();
-
         try {
             trans.begin();
             em.persist(conversation); // Thêm mới sản phẩm
@@ -31,7 +29,6 @@ public class ConversationDAOImpl implements IConversation{
     public void update(Conversation conversation) {
         EntityManager em = JPAConfig.getEntityManager();
         EntityTransaction trans = em.getTransaction();
-
         try {
             trans.begin();
             em.merge(conversation); //
@@ -69,6 +66,23 @@ public class ConversationDAOImpl implements IConversation{
         return em.find(Conversation.class, conversationId);
     }
 
+    @Override
+    public Conversation findByEmployee_EmployeeIdAndCustomer_CustomerId(int employeeId, int customerId) {
+        EntityManager em = JPAConfig.getEntityManager();
+        try {
+            TypedQuery<Conversation> query = em.createQuery(
+                    "SELECT c FROM Conversation c WHERE c.employee.userId = :employeeId AND c.customer.userId = :customerId",
+                    Conversation.class);
+            query.setParameter("employeeId", employeeId);
+            query.setParameter("customerId", customerId);
+            return query.getResultList().stream().findFirst().orElse(null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            em.close();
+        }
+    }
     @Override
     public List<Conversation> findAll() {
         EntityManager em = JPAConfig.getEntityManager();
