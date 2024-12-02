@@ -24,8 +24,8 @@ public class MarketingCampaign implements Serializable {
     @Column(name = "content", nullable = false)
     private String content;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "voucher_id", referencedColumnName = "voucherId")
+    @OneToOne
+    @JoinColumn(name = "voucher_id", referencedColumnName = "voucherId", unique = true)
     private Voucher voucher;
 
     @Column(name = "is_delete", nullable = false)

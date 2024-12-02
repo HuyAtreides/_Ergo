@@ -41,9 +41,10 @@ public class AddController extends HttpServlet {
 
 
             String voucherIdParam = request.getParameter("voucherId");
-
+            System.out.println("lay duoc ID tu form:" + voucherIdParam);
             if (voucherIdParam != null && !voucherIdParam.isEmpty()) {
                 int voucherId = Integer.parseInt(voucherIdParam); // Chuyển đổi sang kiểu số nếu cần
+                System.out.println("chuyen doi ID:" + voucherId);
 
                 Voucher voucher;
                 if(voucherByPriceService.findById(voucherId) == null)
@@ -52,18 +53,46 @@ public class AddController extends HttpServlet {
                     {
                         return;
                     }
-                    voucher = new VoucherByProduct();
+//                    voucher = new VoucherByProduct();
+                    voucher = voucherByProductService.findById(voucherId);
+                    System.out.println("loai voucher la product");
+
                 }
-                voucher = new VoucherByPrice();
+                else {
+//                    voucher = new VoucherByPrice();
+                    voucher = voucherByPriceService.findById(voucherId);
+                    System.out.println("loai voucher la price");
+                }
+
+                //nếu voucher được chọn đã thuộc campaign nào đó rồi, thì gỡ cái voucher đó ra khỏi cái cũ
+                if (voucher.getMarketingCampaign() != null) {
+                    System.out.println("go voucher cu: "+ voucher.getMarketingCampaign().getContent());
+                    voucher.getMarketingCampaign().setVoucher(null);
+                    marketingCampaignService.updateCampaign(voucher.getMarketingCampaign());
+                    System.out.println("do go voucher cu: "+ voucher.getMarketingCampaign().getVoucher());
+                }
+                else {
+                    System.out.println("voucher chua gang voi campaign nao" + voucher.getMarketingCampaign());
+                }
+
+
+                // Liên kết voucher với campaign mới
+                System.out.println("lien ket voucher da chon voi campaign moi");
+//                voucher.setMarketingCampaign(campaign);
                 campaign.setVoucher(voucher);
+                System.out.println("Lien ket thanh cong voucher:" + voucher.getCode());
+                System.out.println("Lien ket thanh cong " + voucher.getMarketingCampaign());
+                System.out.println("Lien ket thanh cong " + campaign.getVoucher().getCode());
 
 
-                // Xử lý với voucherId
-                System.out.println("Selected Voucher ID: " + voucherId);
             } else {
                 System.out.println("No voucher selected.");
             }
             campaign.setContent(content);
+            System.out.println("set conten moi");
+
+
+
 
             // Gọi service để lưu campaigns
             marketingCampaignService.addCampaign(campaign);

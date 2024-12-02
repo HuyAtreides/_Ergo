@@ -27,7 +27,7 @@ public abstract class Voucher {
 
     private boolean isDelete;
 
-    @OneToOne(mappedBy = "voucher")
+    @OneToOne(mappedBy = "voucher", cascade = CascadeType.MERGE)
     private MarketingCampaign marketingCampaign;
 
 }
