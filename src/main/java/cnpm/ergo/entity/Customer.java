@@ -40,14 +40,10 @@ public class Customer extends User{
         entityManager.getTransaction().begin();
 
         Customer customer = new Customer();
-        customer.setName("userGender12");
-        customer.setEmail("userEmail12");
-        customer.setPassword("userPassword12");
-        customer.setPhone("userPhone12");
 
         entityManager.persist(customer);
         entityManager.getTransaction().commit();
-        
+
         // Fetch all customers using NamedQuery
         TypedQuery<Customer> query = entityManager.createNamedQuery("Customer.findAll", Customer.class);
         List<Customer> customers = query.getResultList();
