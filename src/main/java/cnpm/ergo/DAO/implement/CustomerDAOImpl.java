@@ -5,7 +5,10 @@ import cnpm.ergo.configs.JPAConfig;
 import cnpm.ergo.entity.Administrator;
 import cnpm.ergo.entity.Customer;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.TypedQuery;
 
+import java.security.PublicKey;
 import java.util.List;
 
 public class CustomerDAOImpl implements ICustomerDAO {
@@ -25,6 +28,27 @@ public class CustomerDAOImpl implements ICustomerDAO {
             throw e;
         } finally {
             entityManager.close();
+        }
+    }
+
+    @Override
+    public Customer getCustomer(String email) {
+        EntityManager em = JPAConfig.getEntityManager();
+        try {
+            TypedQuery<Customer> query = em.createQuery(
+                    "SELECT c FROM Customer c WHERE c.email = :email and c.isDelete = false",
+                    Customer.class
+            );
+            query.setParameter("email", email);
+
+            // Wrap getSingleResult in a try-catch block to handle NoResultException
+            try {
+                return query.getSingleResult();
+            } catch (NoResultException e) {
+                return null; // Return null if no result is found
+            }
+        } finally {
+            em.close();
         }
     }
 
@@ -85,12 +109,14 @@ public class CustomerDAOImpl implements ICustomerDAO {
     }
 
     @Override
-    public void insert(Customer customer) {
+    public boolean insert(Customer customer) {
         EntityManager entityManager = JPAConfig.getEntityManager();
+        boolean result = false;
         try {
             entityManager.getTransaction().begin();
             entityManager.persist(customer);
             entityManager.getTransaction().commit();
+            result = true;
         } catch (RuntimeException e) {
             if (entityManager.getTransaction().isActive()) {
                 entityManager.getTransaction().rollback();
@@ -99,15 +125,19 @@ public class CustomerDAOImpl implements ICustomerDAO {
         } finally {
             entityManager.close();
         }
+        return result;
     }
 
     @Override
-    public void update(Customer customer) {
+    public boolean update(Customer customer) {
+        //update customer
+        boolean result = false;
         EntityManager entityManager = JPAConfig.getEntityManager();
         try {
             entityManager.getTransaction().begin();
             entityManager.merge(customer);
             entityManager.getTransaction().commit();
+            result = true;
         } catch (RuntimeException e) {
             if (entityManager.getTransaction().isActive()) {
                 entityManager.getTransaction().rollback();
@@ -116,7 +146,9 @@ public class CustomerDAOImpl implements ICustomerDAO {
         } finally {
             entityManager.close();
         }
+        return result;
     }
+
 
     @Override
     public void delete(int id) {

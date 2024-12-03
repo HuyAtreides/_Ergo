@@ -1,4 +1,4 @@
-package cnpm.ergo.controller.customer;
+package cnpm.ergo.controller.Customer;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

@@ -1,4 +1,4 @@
-package cnpm.ergo.controller.customer;
+package cnpm.ergo.controller.Customer;
 
 import java.io.IOException;
 import java.util.List;
