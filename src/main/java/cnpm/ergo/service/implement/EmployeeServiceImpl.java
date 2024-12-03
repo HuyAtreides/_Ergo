@@ -1,14 +1,17 @@
 package cnpm.ergo.service.implement;
 
 import cnpm.ergo.DAO.implement.EmployeeDAOImpl;
+import cnpm.ergo.DAO.implement.EmployeeDAOImpl;
 import cnpm.ergo.DAO.interfaces.IEmployeeDAO;
+import cnpm.ergo.DAO.interfaces.IEmployeeDAO;
+import cnpm.ergo.entity.Employee;
 import cnpm.ergo.entity.Employee;
 import cnpm.ergo.service.interfaces.IEmployeeService;
 
 import java.util.List;
 
 public class EmployeeServiceImpl implements IEmployeeService {
-
+	private IEmployeeDAO employeeDAO = new EmployeeDAOImpl();
     @Override
     public List<Employee> findAll(int pageNo, int pageSize) {
         // Create a new instance of the EmployeeDAOImpl
@@ -70,5 +73,25 @@ public class EmployeeServiceImpl implements IEmployeeService {
         IEmployeeDAO employeeDAO = new EmployeeDAOImpl();
         // Call the count method to return the number of employees in the database
         return employeeDAO.count();
+    }
+	@Override
+	public boolean login(String email, String password) {
+		Employee employee = employeeDAO.getEmployee(email);
+        if (employee != null) {
+            return employee.getPassword().equals(password);
+        }
+        return false;
+	}
+	@Override
+	public Employee getEmployee(String email) {
+		 return employeeDAO.getEmployee(email);
+	}
+    public static void main(String[] args) {
+        EmployeeServiceImpl employeeService = new EmployeeServiceImpl();
+        if (employeeService.login("anhQuang@gmail.com", "12345")) {
+            System.out.println("Login successful.");
+        } else {
+            System.out.println("Login failed.");
+        }
     }
 }

@@ -20,7 +20,6 @@ public class OrderServiceImpl implements IOrderService{
 	@Override
 	public void update(Order order) {
 		orderDao.update(order);
-		
 	}
 
 	@Override
@@ -42,6 +41,11 @@ public class OrderServiceImpl implements IOrderService{
 	@Override
 	public List<Order> findAll() {
 		return orderDao.findAll();
+	}
+
+	@Override
+	public List<Order> findByPage(int offset, int limit) {
+		return orderDao.findByPage(offset, limit);
 	}
 
 	@Override
