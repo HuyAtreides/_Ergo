@@ -1,4 +1,4 @@
-package cnpm.ergo.controller.customer;
+package cnpm.ergo.controller.Customer;
 
 import cnpm.ergo.configs.JPAConfig;
 import cnpm.ergo.entity.Category;

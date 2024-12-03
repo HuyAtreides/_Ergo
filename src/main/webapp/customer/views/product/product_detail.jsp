@@ -14,6 +14,8 @@
 </head>
 <body>
 	<div class="container my-5">
+		<form id="productForm" action="${pageContext.request.contextPath}/cart/add"
+			method="get">
 		<div class="row">
 			<div class="col-md-6">
 				<div class="card">
@@ -34,7 +36,7 @@
 				<div class="my-3">
 					<label for="productTypeSelect"><strong>Chọn loại
 							sản phẩm:</strong></label> <select id="productTypeSelect" class="form-control"
-						onchange="updateProductTypeDetails(this)">
+						onchange="updateProductTypeDetails(this)" name = "SelectedTypeId">
 						<c:forEach var="type" items="${product.productTypes}">
 							<option value="${type.typeId}" data-color="${type.color}"
 								data-material="${type.material}" data-price="${type.price}"
@@ -73,7 +75,7 @@
 						<button class="btn btn-outline-secondary" type="button"
 							onclick="decrementQuantity()">-</button>
 					</div>
-					<input type="text" class="form-control text-center" id="count"
+					<input type="text" class="form-control text-center" id="count" name="quantity"
 						value="${product.productTypes[0].quantity}" readonly
 						style="max-width: 80px;">
 					<div class="input-group-append">
@@ -83,13 +85,10 @@
 				</div>
 
 				<!-- Nút thêm vào giỏ -->
-				<a href="#" class="btn btn-primary"
-					onclick="submitForm(${product.productId}, ${check})">THÊM VÀO
-					GIỎ</a> <a href="#" id="heart-icon" class="btn btn-outline-danger"
-					onclick="updateFavorite(${product.productId})"> <i
-					class="fa-regular fa-heart"></i>
-				</a>
+				<button type="submit" class="btn btn-primary">Thêm vào giỏ</button>
 			</div>
+			</div>
+			</form>
 			<script>
 			function updateProductTypeDetails(select) {
 			    // Get the selected option
