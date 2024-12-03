@@ -4,16 +4,16 @@
     <title>Edit Marketing Campaign</title>
 </head>
 <body>
-<div class="show" id="addCampaignModal" tabindex="-1" aria-labelledby="addCampaignModal" aria-hidden="true">
+<div class="show" id="editCampaignModal" tabindex="-1" aria-labelledby="EditCampaignModal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addCampaignModalLabel">Add New Campaign</h5>
+                <h5 class="modal-title" id="editCampaignModalLabel">edit New Campaign</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <!-- Form to add a new campaign -->
-                <form action="${pageContext.request.contextPath}/admin/campaign/addCampaign" method="post">
+                <!-- Form to edit a new campaign -->
+                <form action="${pageContext.request.contextPath}/admin/campaign/editCampaign" method="post">
                     <div class="mb-3">
                         <label for="content" class="form-label">Content</label>
                         <input class="form-control" id="content" name="content" value="${content}" required></input>
@@ -31,7 +31,8 @@
                         <label for="image" class="form-label">Campaign Images</label>
                         <input type="text" class="form-control" id="image" name="image" value="${image}" required>
                     </div>
-                    <button type="submit" class="btn btn-primary">Add Campaign</button>
+                    <button type="submit" class="btn btn-primary">Edit Campaign</button>
+                    <input type="hidden" name="campaignId" value="${campaignId}" id="campaignId"/>
                 </form>
             </div>
         </div>

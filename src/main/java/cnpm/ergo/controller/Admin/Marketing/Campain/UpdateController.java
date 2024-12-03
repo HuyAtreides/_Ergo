@@ -26,6 +26,8 @@ import java.util.List;
 @WebServlet(urlPatterns = "/admin/campaign/editCampaign")
 public class UpdateController extends HttpServlet {
     private IMarketingCampaignService marketingCampaignService = new MarketingCampaignServiceImpl();
+    private IVoucherByPriceService voucherByPriceService = new IVoucherByPriceServiceImpl();
+    private IVoucherByProductService voucherByProductService = new IVoucherByProductServiceImpl();
 
 
 
@@ -44,6 +46,7 @@ public class UpdateController extends HttpServlet {
         request.setAttribute("vouchers",vouchers);
         // Gửi giá trị vào trang editVoucherPrice.jsp
         request.setAttribute("content", content);
+        request.setAttribute("campaignId", campaingID);
         if(image != "Rong")
             request.setAttribute("image",image);
 
@@ -59,7 +62,7 @@ public class UpdateController extends HttpServlet {
 //            response.sendRedirect(request.getContextPath() + "/admin/login");
 //            return;
 //        }
-
+        System.out.println("vo duoc controller");
         try {
             // Lấy thông tin
             Long campaingID = Long.parseLong(request.getParameter("campaignId"));
@@ -71,6 +74,56 @@ public class UpdateController extends HttpServlet {
             // Tạo đối tượng Campaign
             MarketingCampaign campaign = marketingCampaignService.findByID(campaingID);
             campaign.setContent(content);
+
+            String voucherIdParam = request.getParameter("voucherId");
+            System.out.println("lay duoc ID tu form:" + voucherIdParam);
+            if (voucherIdParam != null && !voucherIdParam.isEmpty()) {
+                int voucherId = Integer.parseInt(voucherIdParam); // Chuyển đổi sang kiểu số nếu cần
+                System.out.println("chuyen doi ID:" + voucherId);
+
+                Voucher voucher;
+                if(voucherByPriceService.findById(voucherId) == null)
+                {
+                    if(voucherByProductService.findById(voucherId) == null)
+                    {
+                        return;
+                    }
+//                    voucher = new VoucherByProduct();
+                    voucher = voucherByProductService.findById(voucherId);
+                    System.out.println("loai voucher la product");
+
+                }
+                else {
+//                    voucher = new VoucherByPrice();
+                    voucher = voucherByPriceService.findById(voucherId);
+                    System.out.println("loai voucher la price");
+                }
+
+                //nếu voucher được chọn đã thuộc campaign nào đó rồi, thì gỡ cái voucher đó ra khỏi cái cũ
+                if (voucher.getMarketingCampaign() != null) {
+                    System.out.println("go voucher cu: "+ voucher.getMarketingCampaign().getContent());
+                    voucher.getMarketingCampaign().setVoucher(null);
+                    marketingCampaignService.updateCampaign(voucher.getMarketingCampaign());
+                    System.out.println("do go voucher cu: "+ voucher.getMarketingCampaign().getVoucher());
+                }
+                else {
+                    System.out.println("voucher chua gang voi campaign nao" + voucher.getMarketingCampaign());
+                }
+
+
+                // Liên kết voucher với campaign mới
+                System.out.println("lien ket voucher da chon voi campaign moi");
+                campaign.setVoucher(voucher);
+                System.out.println("Lien ket thanh cong voucher:" + voucher.getCode());
+                System.out.println("Lien ket thanh cong " + campaign.getVoucher().getCode());
+
+//                System.out.println("Lien ket thanh cong " + voucher.getMarketingCampaign());
+
+
+            } else {
+                System.out.println("No voucher selected.");
+            }
+
             if(request.getParameter("image") != null ) {
                 if (campaign.getCampaignImages() != null && campaign.getCampaignImages().size() > 0) {
                     System.out.println(campaign.getCampaignImages().get(0).getImagePath());
@@ -84,6 +137,9 @@ public class UpdateController extends HttpServlet {
                     System.out.println("khong co");
                 }
             }
+//
+            System.out.println("CampaignId" + campaingID);
+
             marketingCampaignService.updateCampaign(campaign);
             // Redirect hoặc thông báo thành công
             response.sendRedirect(request.getContextPath() + "/admin/marketing");
