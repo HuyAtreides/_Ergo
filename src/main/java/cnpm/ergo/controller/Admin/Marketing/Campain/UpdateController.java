@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @WebServlet(urlPatterns = "/admin/campaign/editCampaign")
 public class UpdateController extends HttpServlet {
@@ -47,7 +48,7 @@ public class UpdateController extends HttpServlet {
         // Gửi giá trị vào trang editVoucherPrice.jsp
         request.setAttribute("content", content);
         request.setAttribute("campaignId", campaingID);
-        if(image != "Rong")
+        if(!Objects.equals(image, "Rong"))
             request.setAttribute("image",image);
 
         // Chuyển hướng đến trang editVoucherPrice
@@ -140,11 +141,20 @@ public class UpdateController extends HttpServlet {
                     if(testDaTontai != null)
                     {
 //                        ImageDaTao.setMarketingCampaign(null);
-                        ImageDaTao.getMarketingCampaign().getCampaignImages().removeAll(ImageDaTao.getMarketingCampaign().getCampaignImages());
+                        ImageDaTao.setMarketingCampaign(null);
+                        campaignImageService.update(ImageDaTao);
+
+                        for(CampaignImage campaignImage : campaign.getCampaignImages())
+                        {
+                            campaignImage.setMarketingCampaign(null);
+                            campaignImageService.update(campaignImage);
+                        }
+                        campaign.getCampaignImages().clear();
+
                         testDaTontai.setMarketingCampaign(null);
                         testDaTontai.setMarketingCampaign(campaign);
-                        campaignImageService.update(ImageDaTao);
                         campaignImageService.update(testDaTontai);
+//                        marketingCampaignService.updateCampaign(campaign);
                         System.out.println("da co: "+ ImageDaTao.getImagePath());
                         System.out.println("da tao: "+ testDaTontai.getImagePath());
 
@@ -152,12 +162,21 @@ public class UpdateController extends HttpServlet {
                     //đã có chưa tạo
                     else {
 //                        ImageDaTao.setMarketingCampaign(null);
-                        ImageDaTao.getMarketingCampaign().getCampaignImages().removeAll(ImageDaTao.getMarketingCampaign().getCampaignImages());
+                        ImageDaTao.setMarketingCampaign(null);
+                        campaignImageService.update(ImageDaTao);
+
+                        for(CampaignImage campaignImage : campaign.getCampaignImages())
+                        {
+                            campaignImage.setMarketingCampaign(null);
+                            campaignImageService.update(campaignImage);
+                        }
+                        campaign.getCampaignImages().clear();
 
                         CampaignImage imagetaomoi = new CampaignImage();
                         imagetaomoi.setImagePath(image);
                         imagetaomoi.setMarketingCampaign(campaign);
 
+//                        marketingCampaignService.updateCampaign(campaign);
                         campaignImageService.update(ImageDaTao);
                         campaignImageService.addImage(imagetaomoi);
                         System.out.println("da co: "+ ImageDaTao.getImagePath());
