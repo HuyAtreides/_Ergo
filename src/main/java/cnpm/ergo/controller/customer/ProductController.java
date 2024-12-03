@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import jakarta.persistence.EntityManager;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -17,14 +15,15 @@ import cnpm.ergo.configs.JPAConfig;
 import cnpm.ergo.entity.Category;
 import cnpm.ergo.entity.Product;
 import cnpm.ergo.entity.Review;
+import cnpm.ergo.entity.User;
 import cnpm.ergo.service.interfaces.IProductService;
 import cnpm.ergo.service.implement.ProductServiceImpl;
 import cnpm.ergo.service.interfaces.ICategoryService;
 import cnpm.ergo.service.implement.CategoryServiceImpl;
 import cnpm.ergo.service.implement.ReviewServiceImpl;
 import cnpm.ergo.service.interfaces.IReviewService;
-
-@WebServlet(urlPatterns = { "/products/detail", "/products/search" })
+import cnpm.ergo.service.implement.CartServiceImpl;
+@WebServlet(urlPatterns = { "/products/detail", "/products/search", "/customer/products/detail", "/customer/products/search", "/customer/cart/add" })
 public class ProductController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -33,28 +32,50 @@ public class ProductController extends HttpServlet {
 	private final IReviewService reviewService = new ReviewServiceImpl();
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-	    try {
-	        loadCommonAttributes(req);
-	        String action = req.getServletPath();
-	        switch (action) {
-	            case "/products/detail":
-	                getProductDetail(req, resp);
-	                break;
-	            case "/products/search":
-	                int page = Integer.parseInt(req.getParameter("page") != null ? req.getParameter("page") : "1");
-	                int pageSize = Integer.parseInt(req.getParameter("size") != null ? req.getParameter("size") : "12");
-	                searchProducts(req, resp);
-	                break;
-	            default:
-	                resp.sendError(HttpServletResponse.SC_NOT_FOUND);
-	        }
-	    } catch (Exception e) {
-	        System.err.println("Error in ProductController: " + e.getMessage());
-	        e.printStackTrace();
-	        resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unable to process the request.");
-	    }
-	}
+		try {
+			loadCommonAttributes(req);
+			String action = req.getServletPath();
 
+			// Phân biệt giữa khách hàng đăng nhập và người dùng không đăng nhập
+			boolean isCustomer = isCustomerSession(req);
+
+			switch (action) {
+				case "/products/detail":
+				case "/customer/products/detail":
+					getProductDetail(req, resp, isCustomer);
+					break;
+				case "/products/search":
+				case "/customer/products/search":
+					searchProducts(req, resp, isCustomer);
+					break;
+				default:
+					resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Resource not found");
+			}
+		} catch (Exception e) {
+			System.err.println("Error in ProductController: " + e.getMessage());
+			e.printStackTrace();
+			resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unable to process the request.");
+		}
+	}
+	private boolean isCustomerSession(HttpServletRequest req) {
+		HttpSession session = req.getSession(false);
+		return session != null && session.getAttribute("customer") != null;
+	}
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		try {
+			String action = req.getServletPath();
+			if ("/customer/cart/add".equals(action)) {
+				addToCart(req, resp);
+			} else {
+				resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+			}
+		} catch (Exception e) {
+			System.err.println("Error in ProductController: " + e.getMessage());
+			e.printStackTrace();
+			resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unable to process the request.");
+		}
+	}
 	 private void loadCommonAttributes(HttpServletRequest req) throws Exception {
 	        req.setAttribute("categories", categoryService.getAllCategoriesName());
 	        req.setAttribute("colors", productService.getAllColors());
@@ -165,7 +186,6 @@ public class ProductController extends HttpServlet {
 		        }
 		        req.setAttribute("pageNumbers", pageNumbers);
 
-		        // Forward to JSP
 		        req.getRequestDispatcher("/customer/views/product/product_search.jsp").forward(req, resp);
 
 		    } catch (Exception e) {
@@ -183,74 +203,98 @@ public class ProductController extends HttpServlet {
 	    }
 	    return values;
 	}
-	private void getProductDetail(HttpServletRequest req, HttpServletResponse resp)
-	        throws ServletException, IOException {
-	    try {
-	        String idParam = req.getParameter("id");
-	        if (idParam == null || idParam.isEmpty()) {
-	            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Product ID is required");
-	            return;
-	        }
+	private void getProductDetail(HttpServletRequest req, HttpServletResponse resp, boolean isCustomer)
+			throws ServletException, IOException {
+		try {
+			String idParam = req.getParameter("id");
+			if (idParam == null || idParam.isEmpty()) {
+				resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Product ID is required");
+				return;
+			}
 
-	        int productId = Integer.parseInt(idParam);
-	        Product product = productService.getProductById(productId);
-	        if (product == null) {
-	            resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Product not found");
-	            return;
-	        }
-	        List<Review> reviews = reviewService.getReviewsAll(productId);
-	        req.setAttribute("reviews", reviews);
-	        int page = 1;
-	        int pageSize = 4;
+			int productId = Integer.parseInt(idParam);
+			Product product = productService.getProductById(productId);
+			if (product == null) {
+				resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Product not found");
+				return;
+			}
 
-	        String pageParam = req.getParameter("page");
-	        if (pageParam != null && !pageParam.isEmpty()) {
-	            try {
-	                page = Integer.parseInt(pageParam);
-	            } catch (NumberFormatException e) {
-	                page = 1;
-	            }
-	        }
+			List<Review> reviews = reviewService.getReviewsAll(productId);
+			req.setAttribute("reviews", reviews);
 
-	        String sizeParam = req.getParameter("size");
-	        if (sizeParam != null && !sizeParam.isEmpty()) {
-	            try {
-	                pageSize = Integer.parseInt(sizeParam);
-	            } catch (NumberFormatException e) {
-	                pageSize = 4;
-	            }
-	        }
-	        List<Product> relatedProducts = productService.findRelatedProductsByProductId(productId, page, pageSize);
-	        
-	        if (relatedProducts == null || relatedProducts.isEmpty()) {
-	            page = 1;
-	            relatedProducts = productService.findRelatedProductsByProductId(productId, page, pageSize);
-	        }
+			int page = 1;
+			int pageSize = 4;
+			String pageParam = req.getParameter("page");
+			if (pageParam != null && !pageParam.isEmpty()) {
+				try {
+					page = Integer.parseInt(pageParam);
+				} catch (NumberFormatException e) {
+					page = 1;
+				}
+			}
 
-	        long totalRelatedProducts = productService.getTotalRelatedProducts(productId);
-	        int totalPages = (int) Math.ceil((double) totalRelatedProducts / pageSize);
+			List<Product> relatedProducts = productService.findRelatedProductsByProductId(productId, page, pageSize);
+			long totalRelatedProducts = productService.getTotalRelatedProducts(productId);
+			int totalPages = (int) Math.ceil((double) totalRelatedProducts / pageSize);
 
-	        if (page > totalPages) {
-	            page = totalPages;
-	        }
+			req.setAttribute("product", product);
+			req.setAttribute("relatedProducts", relatedProducts);
+			req.setAttribute("totalPages", totalPages);
+			req.setAttribute("currentPage", page);
 
-	        List<Integer> pageNumbers = new ArrayList<>();
-	        for (int i = 1; i <= totalPages; i++) {
-	            pageNumbers.add(i);
-	        }
+			req.getRequestDispatcher("/customer/views/product/product_detail.jsp").forward(req, resp);
+		} catch (Exception e) {
+			e.printStackTrace();
+			resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unable to retrieve product details");
+		}
+	}
 
-	        req.setAttribute("product", product);
-	        req.setAttribute("relatedProducts", relatedProducts);
-	        req.setAttribute("totalRelatedProducts", totalRelatedProducts);
-	        req.setAttribute("totalPages", totalPages);
-	        req.setAttribute("currentPage", page);
-	        req.setAttribute("pageNumbers", pageNumbers);
+	private void searchProducts(HttpServletRequest req, HttpServletResponse resp, boolean isCustomer)
+			throws ServletException, IOException {
+		try {
+			String keyword = req.getParameter("keyword");
+			String categoryName = req.getParameter("categoryName");
 
-	        req.getRequestDispatcher("/customer/views/product/product_detail.jsp").forward(req, resp);
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unable to retrieve product details");
-	    }
+			List<Product> initialProducts = productService.findByKeywordOrCategory(keyword, categoryName);
+			req.setAttribute("products", initialProducts);
+
+			req.getRequestDispatcher("/customer/views/product/product_search.jsp").forward(req, resp);
+		} catch (Exception e) {
+			e.printStackTrace();
+			resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unable to search products.");
+		}
+	}
+	private void addToCart(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		try {
+			HttpSession session = req.getSession(false);
+			if (session == null || session.getAttribute("customer") == null) {
+				resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Please log in to add products to cart");
+				return;
+			}
+			User customer = (User) session.getAttribute("customer");
+			int customerId = customer.getUserId(); // Get customer ID
+
+			String typeIdParam = req.getParameter("SelectedTypeId");
+			String quantityParam = req.getParameter("quantity");
+
+			if (typeIdParam == null || quantityParam == null) {
+				resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing required parameters");
+				return;
+			}
+
+			int typeId = Integer.parseInt(typeIdParam);
+			int quantity = Integer.parseInt(quantityParam);
+			CartServiceImpl cartService = new CartServiceImpl();
+			cartService.addProductToCart(customerId, typeId, quantity);
+			resp.setStatus(HttpServletResponse.SC_OK);
+			resp.getWriter().write("Product added to cart successfully");
+		} catch (NumberFormatException e) {
+			System.err.println("Invalid parameter format: " + e.getMessage());
+			resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid parameter format");
+		} catch (Exception e) {
+			System.err.println("Error while adding product to cart: " + e.getMessage());
+			resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unable to add product to cart");
+		}
 	}
 
 

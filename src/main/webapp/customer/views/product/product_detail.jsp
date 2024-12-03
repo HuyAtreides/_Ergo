@@ -11,11 +11,13 @@
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
 </head>
+
 <body>
 	<div class="container my-5">
-		<form id="productForm" action="${pageContext.request.contextPath}/cart/add"
-			method="get">
+		<form id="productForm" action="${pageContext.request.contextPath}/customer/cart/add"
+			method="post">
 		<div class="row">
 			<div class="col-md-6">
 				<div class="card">
@@ -283,6 +285,7 @@
 	<script
 		src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 	<script>
+
 	function incrementQuantity() {
 		const countInput = document.getElementById("count");
 		let value = parseInt(countInput.value, 10);
@@ -298,6 +301,9 @@
 			countInput.value = value - 1;
 		}
 	}
+	document.getElementById("productTypeSelect").addEventListener("change", function () {
+		document.getElementById("selectedTypeId").value = this.value;
+	});
 
 	function changePage(pageNumber) {
 		const urlParams = new URLSearchParams(window.location.search);

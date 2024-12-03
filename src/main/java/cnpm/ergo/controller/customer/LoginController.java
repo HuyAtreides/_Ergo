@@ -53,6 +53,10 @@ public class LoginController extends HttpServlet {
             request.getRequestDispatcher("/customer/views/login.jsp").forward(request, response);
         }
     }
+    private boolean isCustomerSession(HttpServletRequest req) {
+        HttpSession session = req.getSession(false); // Không tạo mới session nếu chưa tồn tại
+        return session != null && session.getAttribute("customer") != null;
+    }
 
     // New method to handle forgot password
     protected void doForgotPassword(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

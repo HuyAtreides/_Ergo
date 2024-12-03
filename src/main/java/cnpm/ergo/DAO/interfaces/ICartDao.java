@@ -17,4 +17,5 @@ public interface ICartDao {
     List<CartItem> getCartItems(int cartId);
     int count();
     void clearCart(int customerId);
+    void addToCart(int customerId, int typeId, int quantity);
 }

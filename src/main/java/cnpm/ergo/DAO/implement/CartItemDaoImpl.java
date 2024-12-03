@@ -6,12 +6,12 @@ import cnpm.ergo.DAO.interfaces.ICartItemDao;
 import cnpm.ergo.configs.JPAConfig;
 import cnpm.ergo.entity.Cart;
 import cnpm.ergo.entity.CartItem;
+import cnpm.ergo.entity.ProductType;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.TypedQuery;
 
 public class CartItemDaoImpl implements ICartItemDao {
-
 
     @Override
     public void insetCartItem(CartItem cartItem) {

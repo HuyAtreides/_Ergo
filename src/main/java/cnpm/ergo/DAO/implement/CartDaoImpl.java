@@ -5,16 +5,92 @@ import cnpm.ergo.configs.JPAConfig;
 import cnpm.ergo.entity.Cart;
 import cnpm.ergo.entity.CartItem;
 import cnpm.ergo.entity.Customer;
+import cnpm.ergo.entity.ProductType;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
+import cnpm.ergo.DAO.implement.CartItemDaoImpl;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
 public class CartDaoImpl implements ICartDao {
 
+    @Override
+    public void addToCart(int customerId, int typeId, int quantity) {
+        EntityManager em = JPAConfig.getEntityManager();
+        EntityTransaction trans = em.getTransaction();
+
+        try {
+            trans.begin();
+            Cart cart = em.createQuery("SELECT c FROM Cart c WHERE c.customer.id = :customerId", Cart.class)
+                    .setParameter("customerId", customerId)
+                    .getSingleResult();
+
+            if (cart == null) {
+                throw new IllegalArgumentException("Giỏ hàng không tồn tại.");
+            }
+            ProductType productType = em.find(ProductType.class, typeId);
+            if (productType == null) {
+                throw new IllegalArgumentException("Loại sản phẩm không tồn tại.");
+            }
+            double price = quantity * productType.getPrice();
+            CartItem existingCartItem = cart.getCartItems().stream()
+                    .filter(item -> item.getProductType().getTypeId() == typeId)
+                    .findFirst()
+                    .orElse(null);
+
+            if (existingCartItem != null) {
+                existingCartItem.setQuantity(existingCartItem.getQuantity() + quantity);
+                existingCartItem.setPrice(existingCartItem.getQuantity() * productType.getPrice());
+                em.merge(existingCartItem);
+            } else {
+                CartItem newCartItem = CartItem.builder()
+                        .cart(cart)
+                        .productType(productType)
+                        .quantity(quantity)
+                        .price(price)
+                        .build();
+
+                em.persist(newCartItem);
+                cart.getCartItems().add(newCartItem);
+                em.merge(cart);
+            }
+
+            trans.commit();
+        } catch (Exception e) {
+            if (trans.isActive()) {
+                trans.rollback();
+            }
+            throw e;
+        } finally {
+            em.close();
+        }
+    }
+    public static void main(String[] args) {
+        CartDaoImpl cartDao = new CartDaoImpl();
+        ProductTypeDaoImpl productTypeDao = new ProductTypeDaoImpl();
+
+        // Thêm loại sản phẩm mới
+        ProductType newProductType = new ProductType();
+        newProductType.setPrice(1000);
+        productTypeDao.insert(newProductType);
+        System.out.println("Added new ProductType: " + newProductType);
+
+        // Lấy danh sách ProductType
+        List<ProductType> productTypes = productTypeDao.findAll();
+        System.out.println("All ProductTypes: ");
+
+        // Thêm sản phẩm vào giỏ hàng
+        int customerId = 2;
+        int typeId = productTypes.get(0).getTypeId();
+        int quantity = 2;
+
+        cartDao.addToCart(customerId, typeId, quantity);
+        System.out.println("Product added to cart!");
+    }
 
     @Override
     public void createCart(Customer customer) {
@@ -202,4 +278,5 @@ public class CartDaoImpl implements ICartDao {
             e.printStackTrace(); // Log the exception for debugging purposes
         }
     }
+
 }
