@@ -102,16 +102,25 @@ public class AddController extends HttpServlet {
             if(image != null )
             {
                 ICampaignImageService campaignImageService = new CampaignImageServiceImpl();
+                CampaignImage testDaTontai = campaignImageService.finByPath(image);
+                if(testDaTontai != null)
+                {
+                    testDaTontai.setMarketingCampaign(null);
+                    testDaTontai.setMarketingCampaign(campaign);
+                    campaignImageService.update(testDaTontai);
+                }
+                else {
 
-                CampaignImage image1 = new CampaignImage();
-                image1.setImagePath(image);
+                    CampaignImage image1 = new CampaignImage();
+                    image1.setImagePath(image);
 
-                List<CampaignImage> list = new ArrayList<>();
-                list.add(image1);
+                    List<CampaignImage> list = new ArrayList<>();
+                    list.add(image1);
 
-                image1.setMarketingCampaign(marketingCampaignService.getLatestCampaign());
+                    image1.setMarketingCampaign(marketingCampaignService.getLatestCampaign());
 
-                campaignImageService.addImage(image1);
+                    campaignImageService.addImage(image1);
+                }
             }
 
 

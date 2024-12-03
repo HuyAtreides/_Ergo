@@ -124,17 +124,68 @@ public class UpdateController extends HttpServlet {
                 System.out.println("No voucher selected.");
             }
 
+            //xử lý image này đã có chưa, nếu có thì gỡ ra khỏi cái cũ thêm cái mới
+            // có 4 trường hợp
+//            đã có đã tạo
+//            đã có chưa tạo
+//            chưa có đã tạo
+//            chưa có chưa tạo
             if(request.getParameter("image") != null ) {
+                ICampaignImageService campaignImageService = new CampaignImageServiceImpl();
+                CampaignImage testDaTontai = campaignImageService.finByPath(image);
+
                 if (campaign.getCampaignImages() != null && campaign.getCampaignImages().size() > 0) {
-                    System.out.println(campaign.getCampaignImages().get(0).getImagePath());
-                    campaign.getCampaignImages().get(0).setImagePath(image);
-                } else {
-                    CampaignImage image1 = new CampaignImage();
-                    image1.setImagePath(image);
-                    image1.setMarketingCampaign(campaign);
-                    ICampaignImageService campaignImageService = new CampaignImageServiceImpl();
-                    campaignImageService.addImage(image1);
-                    System.out.println("khong co");
+                    CampaignImage ImageDaTao = campaign.getCampaignImages().get(0);
+                    //đã có đã tạo
+                    if(testDaTontai != null)
+                    {
+//                        ImageDaTao.setMarketingCampaign(null);
+                        ImageDaTao.getMarketingCampaign().getCampaignImages().removeAll(ImageDaTao.getMarketingCampaign().getCampaignImages());
+                        testDaTontai.setMarketingCampaign(null);
+                        testDaTontai.setMarketingCampaign(campaign);
+                        campaignImageService.update(ImageDaTao);
+                        campaignImageService.update(testDaTontai);
+                        System.out.println("da co: "+ ImageDaTao.getImagePath());
+                        System.out.println("da tao: "+ testDaTontai.getImagePath());
+
+                    }
+                    //đã có chưa tạo
+                    else {
+//                        ImageDaTao.setMarketingCampaign(null);
+                        ImageDaTao.getMarketingCampaign().getCampaignImages().removeAll(ImageDaTao.getMarketingCampaign().getCampaignImages());
+
+                        CampaignImage imagetaomoi = new CampaignImage();
+                        imagetaomoi.setImagePath(image);
+                        imagetaomoi.setMarketingCampaign(campaign);
+
+                        campaignImageService.update(ImageDaTao);
+                        campaignImageService.addImage(imagetaomoi);
+                        System.out.println("da co: "+ ImageDaTao.getImagePath());
+                        System.out.println("chua tao: "+ imagetaomoi.getImagePath());
+                    }
+                }
+                else {
+                    //chưa có đã tạo
+                    if(testDaTontai != null)
+                    {
+                        //gỡ cái cũ ra, gắn cái mới dzo
+                        testDaTontai.setMarketingCampaign(null);
+                        testDaTontai.setMarketingCampaign(campaign);
+                        campaignImageService.update(testDaTontai);
+                        System.out.println("chua co");
+                        System.out.println("da tao: "+ testDaTontai.getImagePath());
+
+                    }
+                    //chưa có chưa tạo
+                    else {
+                        CampaignImage image1 = new CampaignImage();
+                        image1.setImagePath(image);
+                        image1.setMarketingCampaign(campaign);
+
+                        campaignImageService.addImage(image1);
+                        System.out.println("chua co");
+                        System.out.println("chua tao: "+ image1.getImagePath());
+                    }
                 }
             }
 //
