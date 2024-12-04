@@ -1,4 +1,4 @@
-package cnpm.ergo.controller.customer;
+package cnpm.ergo.controller.Customer;
 
 import cnpm.ergo.service.implement.CategoryServiceImpl;
 import cnpm.ergo.service.implement.MarketingCampaignServiceImpl;
@@ -24,7 +24,7 @@ public class CustomerHomeController extends HttpServlet {
 
         //Get 10 first products
         IProductService productService = new ProductServiceImpl();
-        request.setAttribute("products", productService.getAllProducts());
+        request.setAttribute("products", productService.getAllProducts(1,10));
 
         //get all categories
         ICategoryService categoriesService = new CategoryServiceImpl();

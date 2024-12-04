@@ -3,6 +3,7 @@ package cnpm.ergo.DAO.interfaces;
 import java.util.List;
 
 import cnpm.ergo.entity.Order;
+import cnpm.ergo.entity.OrderItem;
 
 public interface IOrderDao {
 	void insert(Order order);
@@ -12,5 +13,8 @@ public interface IOrderDao {
 	List<Order> findAll();
 	List<Order> findByPage(int offset, int limit);
 	int count();
+	List<Order> getOrdersByCustomer(int customerId, String status);
+	List<Order> getAllOrdersByCustomer(int customerId);
+	List<OrderItem> findByOrderId(int orderId);
 
 }

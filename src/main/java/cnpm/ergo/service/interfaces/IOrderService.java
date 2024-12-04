@@ -3,6 +3,7 @@ package cnpm.ergo.service.interfaces;
 import java.util.List;
 
 import cnpm.ergo.entity.Order;
+import cnpm.ergo.entity.OrderItem;
 
 public interface IOrderService {
 	void insert(Order order);
@@ -12,4 +13,7 @@ public interface IOrderService {
 	List<Order> findAll();
 	List<Order> findByPage(int offset, int limit);
 	int count();
+	List<Order> getAllOrdersByCustomer(int customerId);
+	List<Order> getOrdersByCustomer(int customerId, String status);
+	List<OrderItem> getOrderItemsByOrderId(int orderId);
 }
