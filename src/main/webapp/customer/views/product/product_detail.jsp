@@ -226,7 +226,7 @@
 											onclick="updateFavorite(${product.productId})"> <i
 												class="fa fa-heart"></i>
 										</a></li>
-										<li><a href="productdetail?id=${product.productId}">
+										<li><a href="detail?id=${product.productId}">
 												<i class="fa fa-search"></i>
 										</a></li>
 										<li><a href="#"
@@ -237,7 +237,7 @@
 								</div>
 								<div class="product__item__text">
 									<h6>
-										<a href="productdetail?id=${product.productId}">${product.name}</a>
+										<a href="detail?id=${product.productId}">${product.name}</a>
 									</h6>
 									<h5>${product.productTypes[0].price}</h5>
 								</div>
