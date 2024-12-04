@@ -218,7 +218,6 @@ public class ProductController extends HttpServlet {
 				resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Product not found");
 				return;
 			}
-
 			List<Review> reviews = reviewService.getReviewsAll(productId);
 			req.setAttribute("reviews", reviews);
 
@@ -268,7 +267,7 @@ public class ProductController extends HttpServlet {
 		try {
 			HttpSession session = req.getSession(false);
 			if (session == null || session.getAttribute("customer") == null) {
-				resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Please log in to add products to cart");
+				resp.sendRedirect(req.getContextPath() + "/customer/login");
 				return;
 			}
 			User customer = (User) session.getAttribute("customer");
@@ -281,7 +280,6 @@ public class ProductController extends HttpServlet {
 				resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing required parameters");
 				return;
 			}
-
 			int typeId = Integer.parseInt(typeIdParam);
 			int quantity = Integer.parseInt(quantityParam);
 			CartServiceImpl cartService = new CartServiceImpl();
@@ -296,9 +294,4 @@ public class ProductController extends HttpServlet {
 			resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unable to add product to cart");
 		}
 	}
-
-
-
-
-
 }
