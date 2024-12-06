@@ -1,10 +1,7 @@
 package cnpm.ergo.service.implement;
 
 import cnpm.ergo.DAO.implement.EmployeeDAOImpl;
-import cnpm.ergo.DAO.implement.EmployeeDAOImpl;
 import cnpm.ergo.DAO.interfaces.IEmployeeDAO;
-import cnpm.ergo.DAO.interfaces.IEmployeeDAO;
-import cnpm.ergo.entity.Employee;
 import cnpm.ergo.entity.Employee;
 import cnpm.ergo.service.interfaces.IEmployeeService;
 

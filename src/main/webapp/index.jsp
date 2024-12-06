@@ -11,6 +11,8 @@
 <br>
 <a href="customer/home">Go to Customer</a>
 <br>
+<a href="customer/info">Go to Customer detail</a>
+<br>
 <a href="hello-servlet">Test he thong okok</a>
 </body>
 </html>
