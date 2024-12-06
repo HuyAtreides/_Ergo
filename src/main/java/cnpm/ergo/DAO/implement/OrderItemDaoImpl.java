@@ -41,6 +41,25 @@ public class OrderItemDaoImpl implements IOrderItemDao{
 	}
 
 	@Override
+	public List<OrderItem> findByProductNameForOrderItem(String productName) {
+		EntityManager em = null;
+		try {
+			em = JPAConfig.getEntityManager();
+			return em.createQuery(
+							"SELECT oi FROM OrderItem oi WHERE oi.productType.product.name LIKE :productName",
+							OrderItem.class)
+					.setParameter("productName", "%" + productName + "%")
+					.getResultList();
+		} catch (Exception e) {
+			throw new RuntimeException("Failed to retrieve OrderItems for productName: " + productName, e);
+		} finally {
+			if (em != null && em.isOpen()) {
+				em.close();
+			}
+		}
+	}
+
+	@Override
 	public void update(Order order, OrderItem orderItem) {
 		EntityManager em = JPAConfig.getEntityManager();
 	    EntityTransaction trans = em.getTransaction();
@@ -82,7 +101,7 @@ public class OrderItemDaoImpl implements IOrderItemDao{
 	        trans.begin();
 
 	        OrderItem orderItem = em.createQuery(
-	                "SELECT oi FROM OrderItem oi WHERE oi.order = :order AND oi.productType.productId = :orderItemId", 
+	                "SELECT oi FROM OrderItem oi WHERE oi.order = :order AND oi.productType.productId = :orderItemId",
 	                OrderItem.class)
 	            .setParameter("order", order)
 	            .setParameter("orderItemId", orderItemId)

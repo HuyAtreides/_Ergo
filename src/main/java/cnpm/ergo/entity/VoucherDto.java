@@ -20,8 +20,6 @@ public class VoucherDto {
         this.code = code;
         this.discount = discount;
     }
-    
-
     public VoucherDto() {
 		super();
 	}

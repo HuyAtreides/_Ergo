@@ -1,8 +1,13 @@
 package cnpm.ergo.configs;
 
 import cnpm.ergo.entity.*;
+import cnpm.ergo.service.implement.*;
+import cnpm.ergo.service.interfaces.*;
+import com.mysql.cj.conf.PropertyDefinitions;
 import jakarta.persistence.EntityManager;
 
+import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainApp {
@@ -11,19 +16,24 @@ public class MainApp {
         EntityManager entityManager = JPAConfig.getEntityManager();
         entityManager.getTransaction().begin();
 
-//        //Get voucherByProduct by id 2
-//        VoucherByProduct voucherByProduct = entityManager.find(VoucherByProduct.class, 6);
-//        //get productType by id 1
-//        ProductType productType = entityManager.find(ProductType.class, 3);
-//
-//        //add productType to voucherByProduct
-//        voucherByProduct.getProductTypes().add(productType);
-//        productType.getVoucher().add(voucherByProduct);
-//
-//        //update voucherByProduct
-//
-//        entityManager.merge(voucherByProduct);
-//        entityManager.merge(productType);
+        ICampaignImageService service = new CampaignImageServiceImpl();
+        CampaignImage image = service.finByPath("test");
+        if(image != null)
+        {
+            System.out.println("tim duoc hinh:" + image.getImagePath() );
+            image.setImagePath("updateduongdanhthanhcaikhac");
+            service.update(image)   ;
+        }
+        else
+            System.out.println("khong tim duoc");
+
+
+
+
+        System.out.println("chay");
+
+
+
         entityManager.getTransaction().commit();
         entityManager.close();
     }

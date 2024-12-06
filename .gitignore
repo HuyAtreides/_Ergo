@@ -32,8 +32,6 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-pom.xml
-
 ### VS Code ###
 .vscode/
 
@@ -52,17 +50,15 @@ buildNumber.properties
 .mvn/
 .vs/
 .smarttomcat/
-<<<<<<< HEAD
 src/main/webapp/product-images/
-=======
 src/main/resources/META-INF/persistence.xml
 src/main/java/cnpm/ergo/configs/
 src/main/webapp/product-images/
 
 src/main/webapp/product-images/
+src/main/resources/META-INF/persistence.xml
+src/main/java/cnpm/ergo/configs/
 
-
->>>>>>> bba08cda4e97399c0ba2a2efe1c2d0cb6abcc6c6
 # Eclipse m2e generat/ed files
 # Eclipse Core
 # JDT-specific (Eclipse Java Development Tools)

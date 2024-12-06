@@ -17,5 +17,6 @@ public interface IConversation {
     List<Conversation> findAll();
 
     Conversation findById(int conversationId);
+    Conversation findByEmployee_EmployeeIdAndCustomer_CustomerId(int employeeId, int customerId);
 
 }

@@ -41,5 +41,4 @@ public class Product {
 
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Wishlist> wishlists;
-
 }

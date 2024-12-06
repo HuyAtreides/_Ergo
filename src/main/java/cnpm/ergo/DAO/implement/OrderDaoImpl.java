@@ -29,8 +29,41 @@ public class OrderDaoImpl implements IOrderDao{
         } finally {
             em.close();
         }
-		
 	}
+    @Override
+    public List<OrderItem> findByOrderId(int orderId) {
+        EntityManager em = JPAConfig.getEntityManager();
+        String jpql = "SELECT oi FROM OrderItem oi WHERE oi.order.id = :orderId";
+        TypedQuery<OrderItem> query = em.createQuery(jpql, OrderItem.class);
+        query.setParameter("orderId", orderId);
+        return query.getResultList();
+    }
+    @Override
+    public List<Order> getAllOrdersByCustomer(int customerId) {
+        EntityManager em = JPAConfig.getEntityManager();
+        TypedQuery<Order> query = em.createQuery("SELECT o FROM Order o WHERE o.customer.userId = :customerId", Order.class);
+        query.setParameter("customerId", customerId);
+        List<Order> orders = query.getResultList();
+        em.close();
+        return orders;
+    }
+
+    @Override
+    public List<Order> getOrdersByCustomer(int customerId, String status) {
+        EntityManager em = JPAConfig.getEntityManager();
+        String jpql = "SELECT o FROM Order o WHERE o.customer.userId = :customerId";
+        if (status != null && !status.isEmpty()) {
+            jpql += " AND o.status = :status";
+        }
+        TypedQuery<Order> query = em.createQuery(jpql, Order.class);
+        query.setParameter("customerId", customerId);
+        if (status != null && !status.isEmpty()) {
+            query.setParameter("status", status);
+        }
+        List<Order> orders = query.getResultList();
+        em.close();
+        return orders;
+    }
 
 	@Override
 	public void update(Order order) {
