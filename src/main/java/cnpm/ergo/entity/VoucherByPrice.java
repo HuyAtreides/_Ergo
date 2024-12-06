@@ -1,6 +1,7 @@
 package cnpm.ergo.entity;
 
 import jakarta.persistence.*;
+import jdk.jfr.Name;
 import lombok.*;
 
 @NoArgsConstructor
@@ -13,8 +14,15 @@ import lombok.*;
 )
 
 @PrimaryKeyJoinColumn(name = "voucherByPriceId")
+@NamedQuery(name = "VoucherByPrice.findAll", query = "SELECT v FROM VoucherByPrice v")
+
 public class VoucherByPrice extends Voucher {
     private double lowerbound;
 
-    // Getters and Setters
+	@Override
+	public String toString() {
+		return "VoucherByPrice [lowerbound=" + lowerbound + "]";
+	}
+
+    
 }

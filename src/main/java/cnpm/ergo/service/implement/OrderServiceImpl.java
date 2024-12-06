@@ -5,6 +5,7 @@ import java.util.List;
 import cnpm.ergo.DAO.implement.OrderDaoImpl;
 import cnpm.ergo.DAO.interfaces.IOrderDao;
 import cnpm.ergo.entity.Order;
+import cnpm.ergo.entity.OrderItem;
 import cnpm.ergo.service.interfaces.IOrderService;
 
 public class OrderServiceImpl implements IOrderService{
@@ -20,7 +21,7 @@ public class OrderServiceImpl implements IOrderService{
 	@Override
 	public void update(Order order) {
 		orderDao.update(order);
-		
+
 	}
 
 	@Override
@@ -33,7 +34,10 @@ public class OrderServiceImpl implements IOrderService{
         }
 		
 	}
-
+	@Override
+    public List<OrderItem> getOrderItemsByOrderId(int orderId) {
+        return orderDao.findByOrderId(orderId);
+    }
 	@Override
 	public Order findById(int orderId) {
 		return orderDao.findById(orderId);
@@ -45,10 +49,24 @@ public class OrderServiceImpl implements IOrderService{
 	}
 
 	@Override
+	public List<Order> findByPage(int offset, int limit) {
+		return orderDao.findByPage(offset, limit);
+	}
+
+	@Override
 	public int count() {
 		return orderDao.count();
 	}
 
-	
+	@Override
+    public List<Order> getAllOrdersByCustomer(int customerId) {
+        return orderDao.getAllOrdersByCustomer(customerId);
+    }
+
+    @Override
+    public List<Order> getOrdersByCustomer(int customerId, String status) {
+        return orderDao.getOrdersByCustomer(customerId, status);
+    }
+
 	
 }

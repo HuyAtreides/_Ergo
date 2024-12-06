@@ -24,9 +24,12 @@ public class Category {
     @Column(name = "categoryName", columnDefinition = "NVARCHAR(200) NOT NULL")
     private String categoryName;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Product> products;
 
+    public String getName() {
+        return categoryName;
+    }
     public static void main(String[] args) {
         //insert category
         ICategoryDao categoryDao = new CategoryDaoImpl();

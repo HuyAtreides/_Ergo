@@ -24,11 +24,11 @@ public class Message {
     @Column(name = "timestamp", columnDefinition = "DATETIME")
     private Date timestamp;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userId", referencedColumnName = "userId")
     private User sender;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "conversationId", referencedColumnName = "conversationId")
     private Conversation conversation;
 
@@ -55,7 +55,6 @@ public class Message {
         entityManager.persist(message);
         entityManager.getTransaction().commit();
         entityManager.close();
-
     }
 
 }

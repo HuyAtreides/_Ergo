@@ -29,5 +29,4 @@ public abstract class Voucher {
 
     @OneToOne(mappedBy = "voucher", cascade = CascadeType.MERGE)
     private MarketingCampaign marketingCampaign;
-
 }

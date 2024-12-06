@@ -18,4 +18,5 @@ public interface IQuestion {
 
     void insert(Question question);
 
+    List<Question> findByIsPending();
 }
