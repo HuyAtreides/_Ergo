@@ -56,6 +56,20 @@ public class ProductServiceImpl implements IProductService {
         return productDao.count();
     }
     @Override
+    public int getProductAvailableCount() {
+        return  productDao.countAvailable();
+    }
+
+    @Override
+    public List<Product> getProductsByPage(int offset, int limit) {
+        return productDao.findProductsByPage(offset, limit);
+    }
+
+    @Override
+    public List<Product> getProductsAvailableByPage(int offset, int limit) {
+        return productDao.findProductsAvailableByPage(offset, limit);
+    }
+    @Override
     public List<Product> getAllProducts(int page, int size) {
         return productDao.findAllList(page, size);
     }
@@ -85,7 +99,5 @@ public class ProductServiceImpl implements IProductService {
     }
     public static void main(String[] args) {
     }
-
-
 }
 

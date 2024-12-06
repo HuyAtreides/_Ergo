@@ -9,6 +9,7 @@ public interface IProductService {
 	Product getProductById(int productId);
 	List<Product> getAllProducts(int page, int size);
 	int getProductCount();
+	int getProductAvailableCount();
 	List<String> getAllColors();
 	List<String> getAllMaterials();
 	List<Double> getAllHeights();
@@ -20,6 +21,7 @@ public interface IProductService {
 	List<Product> applyFiltersAfterKeywordOrCategory(List<Long> productIdsLong, String filterPrice, String[] colors,
 			String[] materials, String[] heights, String[] lengths);
 	List<Product> findByKeywordOrCategory(String keyword, String categoryName);
-	
 
+	List<Product> getProductsByPage(int offset, int limit);
+	List<Product> getProductsAvailableByPage(int offset, int limit);
 }

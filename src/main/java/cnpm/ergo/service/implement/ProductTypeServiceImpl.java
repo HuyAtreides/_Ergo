@@ -45,5 +45,11 @@ public class ProductTypeServiceImpl implements IProductTypeService {
     public int getProductTypeCount() {
         return productTypeDao.count();
     }
+
+    @Override
+    public List<ProductType> getAllProductTypesByPage(int offset, int limit) {
+        return productTypeDao.findAllByPage(offset, limit);
+    }
+
 }
 

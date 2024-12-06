@@ -50,16 +50,14 @@ buildNumber.properties
 .mvn/
 .vs/
 .smarttomcat/
+src/main/webapp/product-images/
 src/main/resources/META-INF/persistence.xml
 src/main/java/cnpm/ergo/configs/
 src/main/webapp/product-images/
 
 src/main/webapp/product-images/
-
-
 src/main/resources/META-INF/persistence.xml
 src/main/java/cnpm/ergo/configs/
-
 
 # Eclipse m2e generat/ed files
 # Eclipse Core

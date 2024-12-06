@@ -16,9 +16,8 @@ public interface IProductDao {
 	List<Product> findAll();
 
 	List<Product> searchByName(String name);
-
-    int count();
-	List<Product> findAllList(int page, int size);
+	int count();
+  List<Product> findAllList(int page, int size);
 	List<String> findAllColors();
 	List<String> findAllMaterials();
 	List<Double> findAllHeights();
@@ -30,5 +29,9 @@ public interface IProductDao {
 	List<Product> findByKeywordOrCategory(String keyword, String categoryName);
 	List<Product> applyFiltersAfterKeywordOrCategory(List<Long> productIdsLong, String filterPrice, String[] colors,
 			String[] materials, String[] heights, String[] lengths);
+	List<Product> findProductsByPage(int offset, int limit);
+	List<Product> findProductsAvailableByPage(int offset, int limit);
+	int countAvailable();
+
 }
 
