@@ -1,5 +1,6 @@
-package cnpm.ergo.controller.Admin.Customer;
+package cnpm.ergo.controller.Customer.Customer;
 
+import cnpm.ergo.entity.Customer;
 import cnpm.ergo.service.implement.CustomerServiceImpl;
 import cnpm.ergo.service.interfaces.ICustomerService;
 import jakarta.servlet.ServletException;
@@ -11,23 +12,22 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-@WebServlet(name = "AdminCustomerController", value = "/admin/customer")
-public class AdminCustomerController extends HttpServlet {
+@WebServlet(name = "CustomerController1", value = "/customer/info")
+public class CustomerController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int pageNo = 1;
-        int pageSize = 10;
-        if (request.getParameter("page") != null) {
-            pageNo = Integer.parseInt(request.getParameter("page"));
+        int id_user = 94;
+        //int pageSize = 10;
+        if (request.getParameter("id") != null) {
+            id_user = Integer.parseInt(request.getParameter("id"));
         }
         ICustomerService customerService = new CustomerServiceImpl();
         HttpSession session = request.getSession();
-        session.setAttribute("customerList", customerService.findAll(pageNo, pageSize));
-        long totalCustomers = customerService.count();
-        int totalPages = (int) Math.ceil((double) totalCustomers / pageSize);
-        request.setAttribute("currentPage", pageNo);
-        request.setAttribute("totalPages", totalPages);
-        request.getRequestDispatcher("/admin/views/customer.jsp").forward(request, response);
+        Customer customer = customerService.getCustomerById(id_user);
+        System.out.println("Customer Info: " + customer);
+        response.getWriter().println("Customer Data: " + customer);
+        session.setAttribute("customer", customer);
+        request.getRequestDispatcher("/customer/views/info_detail.jsp").forward(request, response);
     }
 
     @Override
