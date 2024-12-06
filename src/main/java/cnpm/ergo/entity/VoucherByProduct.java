@@ -8,6 +8,10 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 @Entity
+@NamedQuery(
+        name = "VoucherByProduct.findAll",
+        query = "SELECT c FROM VoucherByProduct c where c.isDelete = false"
+)
 @PrimaryKeyJoinColumn(name = "voucherByProductId")
 @NamedQuery(name = "VoucherByProduct.findAll", query = "SELECT v FROM VoucherByProduct v")
 

@@ -25,4 +25,14 @@ public class CampaignImageServiceImpl implements ICampaignImageService {
 		campaignImageDao.deleteByCampaignId(campaignId);
 	}
 
+	@Override
+	public CampaignImage finByPath(String path)
+	{
+		return campaignImageDao.finByPath(path);
+	}
+
+	@Override
+	public void update(CampaignImage image) {
+		campaignImageDao.update(image);
+	}
 }
