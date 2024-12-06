@@ -8,11 +8,21 @@ import lombok.*;
 @AllArgsConstructor
 @Data
 @Entity
+@NamedQuery(
+        name = "VoucherByPrice.findAll",
+        query = "SELECT c FROM VoucherByPrice c where c.isDelete = false "
+)
+
 @PrimaryKeyJoinColumn(name = "voucherByPriceId")
 @NamedQuery(name = "VoucherByPrice.findAll", query = "SELECT v FROM VoucherByPrice v")
 
 public class VoucherByPrice extends Voucher {
     private double lowerbound;
 
-    // Getters and Setters
+	@Override
+	public String toString() {
+		return "VoucherByPrice [lowerbound=" + lowerbound + "]";
+	}
+
+    
 }

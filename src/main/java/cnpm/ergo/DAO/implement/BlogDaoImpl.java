@@ -133,5 +133,4 @@ public class BlogDaoImpl implements IBlogDao {
 		// findIdByTitle
 		System.out.println(blogDaoImpl.findIdByTitle("Sample Title"));
 	}
-
 }

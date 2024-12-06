@@ -28,7 +28,7 @@ public class CampaignImage implements Serializable {
     private Long imageId;
 
     @ManyToOne
-    @JoinColumn(name = "campaign_id", nullable = false)
+    @JoinColumn(name = "campaign_id", nullable = true)
     private MarketingCampaign marketingCampaign;
 
     @Column(name = "image_path", nullable = false)

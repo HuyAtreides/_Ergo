@@ -1,11 +1,12 @@
 package cnpm.ergo.configs;
 
-import cnpm.ergo.DAO.implement.EmployeeDAOImpl;
 import cnpm.ergo.entity.*;
-import cnpm.ergo.service.implement.EmployeeServiceImpl;
-import cnpm.ergo.service.interfaces.IEmployeeService;
+import cnpm.ergo.service.implement.*;
+import cnpm.ergo.service.interfaces.*;
+import com.mysql.cj.conf.PropertyDefinitions;
 import jakarta.persistence.EntityManager;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,27 +15,24 @@ public class MainApp {
         //insert voucher
         EntityManager entityManager = JPAConfig.getEntityManager();
         entityManager.getTransaction().begin();
-        //Get all voucherByProduct List
-        List<VoucherByProduct> voucherByProductList = entityManager.createNamedQuery("VoucherByProduct.findAll", VoucherByProduct.class).getResultList();
-        //Get all voucherByPrice List
-        List<VoucherByPrice> voucherByPriceList = entityManager.createNamedQuery("VoucherByPrice.findAll", VoucherByPrice.class).getResultList();
 
-        List<Voucher>vouchers = new ArrayList<>();
-        for(VoucherByProduct voucherByProduct : voucherByProductList){
-            vouchers.add(voucherByProduct);
+        ICampaignImageService service = new CampaignImageServiceImpl();
+        CampaignImage image = service.finByPath("test");
+        if(image != null)
+        {
+            System.out.println("tim duoc hinh:" + image.getImagePath() );
+            image.setImagePath("updateduongdanhthanhcaikhac");
+            service.update(image)   ;
         }
-        for(VoucherByPrice voucherByPrice : voucherByPriceList){
-            vouchers.add(voucherByPrice);
-        }
+        else
+            System.out.println("khong tim duoc");
 
-        for(Voucher voucher : vouchers){
-            System.out.println(voucher.getVoucherId());
-            System.out.println(voucher.getCode());
-            if (voucher instanceof VoucherByProduct){
-                System.out.println("VoucherByProduct");
-            }
-            else System.out.println("VoucherByPrice");
-        }
+
+
+
+        System.out.println("chay");
+
+
 
         entityManager.getTransaction().commit();
         entityManager.close();

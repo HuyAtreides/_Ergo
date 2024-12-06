@@ -9,6 +9,7 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 @Entity
+@Builder
 @Table(name = "product_type")
 @NamedQuery(name = "ProductType.findAll", query = "SELECT p FROM ProductType p")
 
@@ -55,4 +56,19 @@ public class ProductType {
 
     @OneToMany(mappedBy = "productType")
     private List<CartItem> cartItems;
+    
+    @Override
+    public String toString() {
+        return "ProductType [typeId=" + typeId + 
+               ", color=" + color + 
+               ", length=" + length + 
+               ", width=" + width + 
+               ", height=" + height + 
+               ", weight=" + weight + 
+               ", material=" + material + 
+               ", price=" + price + 
+               ", quantity=" + quantity + "]";
+    }
+
+
 }
