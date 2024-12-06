@@ -64,4 +64,7 @@ public class BlogServiceImpl implements IBlogService {
     public Integer findIdByTitle(String title) {
         return blogDao.findIdByTitle(title);
     }
+    public List<Blog> searchByDate(String date) { 
+    	return blogDao.searchByDate(date); // Triển khai phương thức searchByDate 
+    	}
 }
