@@ -19,7 +19,7 @@ public class Wishlist {
     @Column(name = "wishlistId")
     private int wishlistId;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "wishlist_product",
 			joinColumns = @JoinColumn(name = "wishlistId"),
 			inverseJoinColumns = @JoinColumn(name = "productId")

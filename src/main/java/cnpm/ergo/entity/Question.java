@@ -29,7 +29,7 @@ public class Question {
     @Column(name = "questionId")
     private int questionId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userId", referencedColumnName = "userId")
     private Customer customer;
     @Column(name = "content", columnDefinition = "TEXT")

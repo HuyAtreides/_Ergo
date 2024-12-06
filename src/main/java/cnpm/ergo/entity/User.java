@@ -20,7 +20,7 @@ public abstract class User implements Serializable {
     @Column(name = "userId")
     private int userId;
 
-    @Column(name = "name", length = 100)
+    @Column(name = "name", length = 100, unique = true)
     private String name;
 
     @Column(name = "email", length = 100)
@@ -38,10 +38,10 @@ public abstract class User implements Serializable {
     @Column(name = "gender", length = 100)
     private String gender;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Log> logs;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "roleId", referencedColumnName = "roleId")
     private Role role;
 
@@ -51,13 +51,14 @@ public abstract class User implements Serializable {
     @Column(name = "isDelete", columnDefinition = "BIT")
     private Boolean isDelete;
 
-    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Message> messages;
 
-
-    public static void main(String[] args) {
-
+    @Override
+    public String toString() {
+        return "User [id=" + userId + ", name=" + name + "]";
     }
+
 }
 
 

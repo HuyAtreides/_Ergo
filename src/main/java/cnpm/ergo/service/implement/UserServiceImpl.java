@@ -8,36 +8,39 @@ import cnpm.ergo.service.interfaces.IUserService;
 import java.util.List;
 
 public class UserServiceImpl implements IUserService {
-    // Create
+
+    @Override
     public boolean addUser(User user) {
-        IUserDAO IUserDAO = new UserDAOImpl();
-        return IUserDAO.addUser(user);
+        return false;
     }
 
-    // Read
+    @Override
     public List<User> getAllUsers() {
-        IUserDAO IUserDAO = new UserDAOImpl();
-        return IUserDAO.getAllUsers();
+        return List.of();
     }
 
+    @Override
     public User getUserById(int userId) {
-        IUserDAO IUserDAO = new UserDAOImpl();
-        return IUserDAO.getUserById(userId);
+        return null;
     }
 
-    // Update
+    @Override
     public boolean updateUser(User user) {
-        IUserDAO IUserDAO = new UserDAOImpl();
-        return IUserDAO.updateUser(user);
+        return false;
     }
 
-    // Delete
+    @Override
     public boolean deleteUser(int userId) {
-        IUserDAO IUserDAO = new UserDAOImpl();
-        return IUserDAO.deleteUser(userId);
+        return false;
     }
 
-    public static void main(String[] args) {
+    @Override
+    public boolean updateCustomerPassword(String email, String newPassword) {
+        return false;
+    }
 
+    @Override
+    public boolean getUserByEmail(String email) {
+        return false;
     }
 }

@@ -27,6 +27,16 @@ public class MessageDAOImpl implements IMessage{
             em.close();
         }
     }
+
+    @Override
+    public List<Message> findByConversationId(int id) {
+        EntityManager em = JPAConfig.getEntityManager();
+        String hql = "SELECT m FROM Message m WHERE m.conversation.conversationId = :id";
+        Query query = em.createQuery(hql);
+        query.setParameter("id", id);
+        return query.getResultList();
+    }
+
     @Override
     public void update(Message message) {
         EntityManager em = JPAConfig.getEntityManager();
