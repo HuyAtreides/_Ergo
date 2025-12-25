@@ -1,4 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
+<% request.setAttribute("pageTitle", "Edit Campaign"); %>
+<%@ include file="/WEB-INF/includes/admin_header.jspf" %>
 <html>
 <head>
     <title>Edit Marketing Campaign</title>
@@ -8,8 +11,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editCampaignModalLabel">edit New Campaign</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title" id="editCampaignModalLabel">Edit Campaign</h5>
             </div>
             <div class="modal-body">
                 <!-- Form to edit a new campaign -->
@@ -31,9 +33,13 @@
                         <label for="image" class="form-label">Campaign Images</label>
                         <input type="text" class="form-control" id="image" name="image" value="${image}" required>
                     </div>
-                    <button type="submit" class="btn btn-primary">Edit Campaign</button>
+                    <!-- <button type="submit" class="btn btn-primary">Edit Campaign</button> -->
                     <input type="hidden" name="campaignId" value="${campaignId}" id="campaignId"/>
                 </form>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-secondary" href="${pageContext.request.contextPath}/admin/marketing">Cancel</a>
+                <button type="submit" form="editCampaignForm" class="btn btn-primary">Save changes</button>
             </div>
         </div>
     </div>
@@ -41,3 +47,5 @@
 
 </body>
 </html>
+
+<%@ include file="/WEB-INF/includes/admin_footer.jspf" %>

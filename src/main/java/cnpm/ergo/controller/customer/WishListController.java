@@ -3,6 +3,7 @@ package cnpm.ergo.controller.customer;
 import java.io.IOException;
 import java.util.List;
 
+import cnpm.ergo.entity.Product;
 import cnpm.ergo.entity.Wishlist;
 import cnpm.ergo.service.implement.CustomerServiceImpl;
 import cnpm.ergo.service.implement.UserServiceImpl;
@@ -25,7 +26,7 @@ public class WishListController extends HttpServlet{
 		
 		if(url.contains("/customer/wishlist"))
 		{
-			List<Wishlist> list = wishlistService.getAllWishlistByUserId();
+			List<Product> list = wishlistService.getAllWishlistByUserId(0);
 
 			req.setAttribute("wishlist", list);
 
@@ -35,7 +36,7 @@ public class WishListController extends HttpServlet{
 		{
 			int id = Integer.parseInt(req.getParameter("id"));
 
-			Wishlist wishlist = wishlistService.deleteFromWishlist();
+			wishlistService.deleteFromWishlist(0, 0);
 
 			req.getRequestDispatcher("/customer/views/wishlist.jsp").forward(req, resp);
 		}

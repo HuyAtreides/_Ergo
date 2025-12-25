@@ -1,96 +1,92 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<%@ taglib prefix="sitemesh" uri="http://www.sitemesh.org/decorator" %>
+
+<!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8" />
-  <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
-  />
-  <!-- build:js assets/vendor/js/core.js -->
-  <script src="${pageContext.request.contextPath}/admin/assets/vendor/libs/jquery/jquery.js"></script>
-  <script src="${pageContext.request.contextPath}/admin/assets/vendor/libs/popper/popper.js"></script>
-  <script src="${pageContext.request.contextPath}/admin/assets/vendor/js/bootstrap.js"></script>
-  <script src="${pageContext.request.contextPath}/admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <meta charset="utf-8" />
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+    />
 
-  <script src="${pageContext.request.contextPath}/admin/assets/vendor/js/menu.js"></script>
-  <!-- endbuild -->
+    <title><sitemesh:write property='title'>Dashboard - Analytics</sitemesh:write> | Ergo Admin</title>
+    <meta name="description" content="" />
 
-  <!-- Vendors JS -->
-  <script src="${pageContext.request.contextPath}/admin/assets/vendor/libs/apex-charts/apexcharts.js"></script>
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="${pageContext.request.contextPath}/admin/assets/img/favicon/favicon.ico" />
 
-  <!-- Main JS -->
-  <script src="${pageContext.request.contextPath}/admin/assets/js/main.js"></script>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+            href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+            rel="stylesheet"
+    />
 
-  <!-- Page JS -->
-  <script src="${pageContext.request.contextPath}/admin/assets/js/dashboards-analytics.js"></script>
+    <!-- Icons -->
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/admin/assets/vendor/fonts/boxicons.css" />
 
-  <!-- Place this tag in your head or just before your close body tag. -->
-  <script async defer src="https://buttons.github.io/buttons.js"></script>
-  <title>Dashboard - Analytics | Sneat - Bootstrap 5 HTML Admin Template - Pro</title>
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/admin/assets/vendor/css/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/admin/assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/admin/assets/css/demo.css" />
 
-  <meta name="description" content="" />
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/admin/assets/vendor/libs/apex-charts/apex-charts.css" />
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="${pageContext.request.contextPath}/admin/assets/img/favicon/favicon.ico" />
+    <!-- Helpers -->
+    <script src="${pageContext.request.contextPath}/admin/assets/vendor/js/helpers.js"></script>
 
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-          href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
-          rel="stylesheet"
-  />
+    <!-- Template config -->
+    <script src="${pageContext.request.contextPath}/admin/assets/js/config.js"></script>
 
-  <!-- Icons. Uncomment required icon fonts -->
-  <link rel="stylesheet" href="${pageContext.request.contextPath}/admin/assets/vendor/fonts/boxicons.css" />
-
-  <!-- Core CSS -->
-  <link rel="stylesheet" href="${pageContext.request.contextPath}/admin/assets/vendor/css/core.css" class="template-customizer-core-css" />
-  <link rel="stylesheet" href="${pageContext.request.contextPath}/admin/assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
-  <link rel="stylesheet" href="${pageContext.request.contextPath}/admin/assets/css/demo.css" />
-
-  <!-- Vendors CSS -->
-  <link rel="stylesheet" href="${pageContext.request.contextPath}/admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
-
-  <link rel="stylesheet" href="${pageContext.request.contextPath}/admin/assets/vendor/libs/apex-charts/apex-charts.css" />
-
-  <!-- Page CSS -->
-
-  <!-- Helpers -->
-  <script src="${pageContext.request.contextPath}/admin/assets/vendor/js/helpers.js"></script>
-
-  <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
-  <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
-  <script src="${pageContext.request.contextPath}/admin/assets/js/config.js"></script>
+    <!-- Page-specific head content -->
+    <sitemesh:write property='head'/>
 </head>
+
 <body>
-<c:choose>
-  <c:when test="${empty sessionScope['admin']}">
-    <jsp:forward page="/admin/login"/>
-    </c:when>
-    <c:otherwise>
-  <!-- Layout wrapper -->
-  <div class="layout-wrapper layout-content-navbar">
-    <div class="layout-container">
-      <%@include file="/admin/common/menu.jsp"%>
-      <!-- Layout container -->
-      <div class="layout-page">
-        <!-- Content wrapper -->
-        <div class="content-wrapper">
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+        <div class="layout-container">
+            <%@include file="/admin/common/menu.jsp"%>
 
-          <sitemesh:write property="body"/>
+            <!-- Layout container -->
+            <div class="layout-page">
+                <!-- Content wrapper -->
+                <div class="content-wrapper">
+                    <!-- Page content from decorated page -->
+                    <sitemesh:write property='body'/>
+                </div>
+                <!-- / Content wrapper -->
+            </div>
+            <!-- / Layout page -->
         </div>
-        <!-- Content wrapper -->
-      </div>
-      <!-- / Layout page -->
+
+        <!-- Overlay -->
+        <div class="layout-overlay layout-menu-toggle"></div>
     </div>
-    <!-- Overlay -->
-    <div class="layout-overlay layout-menu-toggle"></div>
-  </div>
-  </c:otherwise>
+    <!-- / Layout wrapper -->
 
-</c:choose>
+    <!-- Core JS -->
+    <script src="${pageContext.request.contextPath}/admin/assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="${pageContext.request.contextPath}/admin/assets/vendor/libs/popper/popper.js"></script>
+    <script src="${pageContext.request.contextPath}/admin/assets/vendor/js/bootstrap.js"></script>
+    <script src="${pageContext.request.contextPath}/admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="${pageContext.request.contextPath}/admin/assets/vendor/js/menu.js"></script>
 
+    <!-- Vendors JS -->
+    <script src="${pageContext.request.contextPath}/admin/assets/vendor/libs/apex-charts/apexcharts.js"></script>
+
+    <!-- Main JS -->
+    <script src="${pageContext.request.contextPath}/admin/assets/js/main.js"></script>
+
+    <!-- Page JS -->
+    <script src="${pageContext.request.contextPath}/admin/assets/js/dashboards-analytics.js"></script>
+
+    <!-- GitHub buttons -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
 </body>
 </html>

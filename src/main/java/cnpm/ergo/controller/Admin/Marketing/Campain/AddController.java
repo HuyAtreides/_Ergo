@@ -1,3 +1,4 @@
+// ...existing code...
 package cnpm.ergo.controller.Admin.Marketing.Campain;
 
 import cnpm.ergo.entity.*;
@@ -33,110 +34,66 @@ public class AddController extends HttpServlet {
 //            return;
 //        }
         try {
-            // Lấy thông tin chung từ form
-
             String content = request.getParameter("content");
-            System.out.println("test content" + content);
             MarketingCampaign campaign = new MarketingCampaign();
 
-
             String voucherIdParam = request.getParameter("voucherId");
-            System.out.println("lay duoc ID tu form:" + voucherIdParam);
             if (voucherIdParam != null && !voucherIdParam.isEmpty()) {
-                int voucherId = Integer.parseInt(voucherIdParam); // Chuyển đổi sang kiểu số nếu cần
-                System.out.println("chuyen doi ID:" + voucherId);
-
+                int voucherId = Integer.parseInt(voucherIdParam);
                 Voucher voucher;
-                if(voucherByPriceService.findById(voucherId) == null)
-                {
-                    if(voucherByProductService.findById(voucherId) == null)
-                    {
-                        return;
+                if (voucherByPriceService.findById(voucherId) == null) {
+                    if (voucherByProductService.findById(voucherId) == null) {
+                        voucher = null;
+                    } else {
+                        voucher = voucherByProductService.findById(voucherId);
                     }
-//                    voucher = new VoucherByProduct();
-                    voucher = voucherByProductService.findById(voucherId);
-                    System.out.println("loai voucher la product");
-
-                }
-                else {
-//                    voucher = new VoucherByPrice();
+                } else {
                     voucher = voucherByPriceService.findById(voucherId);
-                    System.out.println("loai voucher la price");
                 }
 
-                //nếu voucher được chọn đã thuộc campaign nào đó rồi, thì gỡ cái voucher đó ra khỏi cái cũ
-                if (voucher.getMarketingCampaign() != null) {
-                    System.out.println("go voucher cu: "+ voucher.getMarketingCampaign().getContent());
-                    voucher.getMarketingCampaign().setVoucher(null);
-                    marketingCampaignService.updateCampaign(voucher.getMarketingCampaign());
-                    System.out.println("do go voucher cu: "+ voucher.getMarketingCampaign().getVoucher());
+                if (voucher != null) {
+                    // if voucher already belongs to a campaign, detach it first
+                    if (voucher.getMarketingCampaign() != null) {
+                        voucher.getMarketingCampaign().setVoucher(null);
+                        marketingCampaignService.updateCampaign(voucher.getMarketingCampaign());
+                    }
+                    // link voucher to new campaign
+                    campaign.setVoucher(voucher);
                 }
-                else {
-                    System.out.println("voucher chua gang voi campaign nao" + voucher.getMarketingCampaign());
-                }
-
-
-                // Liên kết voucher với campaign mới
-                System.out.println("lien ket voucher da chon voi campaign moi");
-//                voucher.setMarketingCampaign(campaign);
-                campaign.setVoucher(voucher);
-                System.out.println("Lien ket thanh cong voucher:" + voucher.getCode());
-                System.out.println("Lien ket thanh cong " + voucher.getMarketingCampaign());
-                System.out.println("Lien ket thanh cong " + campaign.getVoucher().getCode());
-
-
-            } else {
-                System.out.println("No voucher selected.");
             }
+
             campaign.setContent(content);
-            System.out.println("set conten moi");
-
-
-
-
-            // Gọi service để lưu campaigns
+            // persist campaign
             marketingCampaignService.addCampaign(campaign);
 
-            String image = request.getParameter("image");
-            System.out.println("test add image" + image);
-            if(image != null )
-            {
-                ICampaignImageService campaignImageService = new CampaignImageServiceImpl();
-                CampaignImage testDaTontai = campaignImageService.finByPath(image);
-                if(testDaTontai != null)
-                {
-                    testDaTontai.setMarketingCampaign(null);
-                    testDaTontai.setMarketingCampaign(campaign);
-                    campaignImageService.update(testDaTontai);
-                }
-                else {
+            // Re-fetch the persisted campaign (with images loaded) so further updates use a managed entity
+            MarketingCampaign persisted = marketingCampaignService.getLatestCampaign();
+            if (persisted == null) {
+                // fallback to find by id if needed (if your DAO sets campaignId on the passed campaign, you can use findByID)
+                persisted = campaign;
+            }
 
+            String image = request.getParameter("image");
+            if (image != null && !image.isEmpty()) {
+                ICampaignImageService campaignImageService = new CampaignImageServiceImpl();
+                CampaignImage existing = campaignImageService.finByPath(image);
+                if (existing != null) {
+                    existing.setMarketingCampaign(persisted);
+                    campaignImageService.update(existing);
+                } else {
                     CampaignImage image1 = new CampaignImage();
                     image1.setImagePath(image);
-
-                    List<CampaignImage> list = new ArrayList<>();
-                    list.add(image1);
-
-                    image1.setMarketingCampaign(marketingCampaignService.getLatestCampaign());
-
+                    image1.setMarketingCampaign(persisted);
                     campaignImageService.addImage(image1);
                 }
             }
 
-
-            // Redirect hoặc thông báo thành công
             response.sendRedirect(request.getContextPath() + "/admin/marketing");
-
-
-
-
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            // Forward the error details to an error page
             request.setAttribute("errorMessage", "Failed to add the campaign. Please try again.");
             request.getRequestDispatcher("/errorPage.jsp").forward(request, response);
         }
-
-
     }
 }
+// ...existing code...

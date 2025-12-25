@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sitemesh>
-    <mapping path="/*" name="web" decorator="customer.jsp"/>
-    <mapping path="/employee/*" name="employee" decorator="employee.jsp"/>
-    <mapping path="/admin/*" name="admin" decorator="admin.jsp"/>
-    <mapping path="/customer/*" name="customer" decorator="customer.jsp"/>
+    <!-- Use explicit paths to decorator JSPs under WEB-INF -->
+    <mapping path="/*" name="web" decorator="/WEB-INF/decorators/customer.jsp"/>
+    <mapping path="/employee/*" name="employee" decorator="/WEB-INF/decorators/employee.jsp"/>
+    <mapping path="/customer/*" name="customer" decorator="/WEB-INF/decorators/customer.jsp"/>
+
+    <!-- keep login pages undecorated if you need them plain (uncomment to exclude) -->
+     <mapping path="/admin/*" exclude="true"/>
 </sitemesh>

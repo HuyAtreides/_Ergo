@@ -14,7 +14,7 @@ import lombok.*;
 )
 
 @PrimaryKeyJoinColumn(name = "voucherByPriceId")
-@NamedQuery(name = "VoucherByPrice.findAll", query = "SELECT v FROM VoucherByPrice v")
+//@NamedQuery(name = "VoucherByPrice.findAll", query = "SELECT v FROM VoucherByPrice v")
 
 public class VoucherByPrice extends Voucher {
     private double lowerbound;

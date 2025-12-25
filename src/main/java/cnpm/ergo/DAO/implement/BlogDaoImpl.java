@@ -34,6 +34,18 @@ public class BlogDaoImpl implements IBlogDao {
 	}
 
 	@Override
+	// TODO: provide this method implementation
+	public List<Blog> findWaitBlogByPage(int offset, int limit) {
+		return List.of();
+	}
+
+	@Override
+	// TODO: provide this method implementation
+	public int waitBlogCount() {
+		return 0;
+	}
+
+	@Override
 	public void update(Blog blog) {
 		EntityManager em = JPAConfig.getEntityManager();
 		EntityTransaction trans = em.getTransaction();
