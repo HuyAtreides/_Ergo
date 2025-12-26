@@ -1,51 +1,71 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
-<% request.setAttribute("pageTitle", "Edit Campaign"); %>
-<%@ include file="/WEB-INF/includes/admin_header.jspf" %>
-<html>
-<head>
-    <title>Edit Marketing Campaign</title>
-</head>
-<body>
-<div class="show" id="editCampaignModal" tabindex="-1" aria-labelledby="EditCampaignModal" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editCampaignModalLabel">Edit Campaign</h5>
-            </div>
-            <div class="modal-body">
-                <!-- Form to edit a new campaign -->
-                <form action="${pageContext.request.contextPath}/admin/campaign/editCampaign" method="post">
-                    <div class="mb-3">
-                        <label for="content" class="form-label">Content</label>
-                        <input class="form-control" id="content" name="content" value="${content}" required></input>
-                    </div>
-                    <div class="mb-3">
-                        <label for="voucherId" class="form-label">Voucher</label>
-                        <select class="form-select" id="voucherId" name="voucherId">
-                            <option value="">Select a voucher</option>
-                            <c:forEach var="voucher" items="${vouchers}">
-                                <option id="voucherId" value="${voucher.voucherId}">${voucher.code} - Discount: ${voucher.discount}%</option>
-                            </c:forEach>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="image" class="form-label">Campaign Images</label>
-                        <input type="text" class="form-control" id="image" name="image" value="${image}" required>
-                    </div>
-                    <!-- <button type="submit" class="btn btn-primary">Edit Campaign</button> -->
-                    <input type="hidden" name="campaignId" value="${campaignId}" id="campaignId"/>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <a class="btn btn-secondary" href="${pageContext.request.contextPath}/admin/marketing">Cancel</a>
-                <button type="submit" form="editCampaignForm" class="btn btn-primary">Save changes</button>
-            </div>
-        </div>
-    </div>
-</div>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> <%@ page
+contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %> <%
+request.setAttribute("pageTitle", "Edit Campaign"); %> <%@ include
+file="/WEB-INF/includes/admin_header.jspf" %>
 
-</body>
-</html>
+<div class="container-xxl flex-grow-1 container-p-y">
+  <div class="row">
+    <div class="col-lg-8 mx-auto">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Edit Campaign</h5>
+        </div>
+        <div class="card-body">
+          <!-- Form to edit campaign -->
+          <form
+            id="editCampaignForm"
+            action="${pageContext.request.contextPath}/admin/campaign/editCampaign"
+            method="post"
+            novalidate
+          >
+            <input type="hidden" name="campaignId" value="${campaignId}" />
+
+            <div class="mb-3">
+              <label for="content" class="form-label">Content</label>
+              <textarea class="form-control" id="content" name="content" required>
+${content}</textarea
+              >
+            </div>
+
+            <div class="mb-3">
+              <label for="voucherId" class="form-label">Voucher</label>
+              <select class="form-select" id="voucherId" name="voucherId">
+                <option value="">Select a voucher</option>
+                <c:forEach var="voucher" items="${vouchers}">
+                  <option value="${voucher.voucherId}">
+                    ${voucher.code} - Discount: ${voucher.discount}%
+                  </option>
+                </c:forEach>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="image" class="form-label">Campaign Image</label>
+              <input
+                type="text"
+                class="form-control"
+                id="image"
+                name="image"
+                value="${image}"
+              />
+            </div>
+
+            <div class="d-flex justify-content-between">
+              <a
+                class="btn btn-secondary"
+                href="${pageContext.request.contextPath}/admin/marketing"
+                >Cancel</a
+              >
+              <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <c:if test="${not empty errorMessage}">
+        <div class="alert alert-danger mt-3">${errorMessage}</div>
+      </c:if>
+    </div>
+  </div>
+</div>
 
 <%@ include file="/WEB-INF/includes/admin_footer.jspf" %>
